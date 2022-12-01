@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32328.378
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Metalkit", "Metalkit\Metalkit.csproj", "{C3673C47-E9DB-483B-8E99-92FFBA8AB92B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C3673C47-E9DB-483B-8E99-92FFBA8AB92B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3673C47-E9DB-483B-8E99-92FFBA8AB92B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3673C47-E9DB-483B-8E99-92FFBA8AB92B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3673C47-E9DB-483B-8E99-92FFBA8AB92B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {48A8268C-8493-490A-92AA-5A506071188E}
+	EndGlobalSection
+EndGlobal
