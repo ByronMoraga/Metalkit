@@ -1,0 +1,40 @@
+﻿<div class="row border-bottom">
+    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+        </div>
+        <ul class="nav navbar-top-links navbar-right">
+            <li>
+                <span class="" data-i18n="topnav.welcometext">@Session["UsuarioNombre"]</span>
+            </li>
+            <li class="dropdown">
+                <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#" aria-expanded="false">
+                    <i class="fa fa-info"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-messages dropdown-menu-right">
+                    <li>
+                        @*<div class="dropdown-messages-box">
+                            <a class="dropdown-item float-left" href="#">@Session["UsuarioNombre"]</a>
+                            <div class="media-body">
+                                <strong>Ip Local</strong> <span id="IpLocalUsuario"></span>. <br>
+                            </div>
+                        </div>*@
+                    </li>
+                    <li>
+                        <div class="dropdown-messages-box">
+                            <div class="media-body text-center ">
+                                <i class="fa fa-clock-o"></i>    Expiración de sesión en: <strong><span id="secondsIdle"></span></strong>.
+                            </div>
+                        </div>
+                    </li>
+                    <li class="dropdown-divider"></li>
+                </ul>
+            </li>
+            <li>
+                <a href="@Url.Action("CerrarSession", "Usuarios")">
+                    <i class="fa fa-sign-out"></i> Cerrar Sesión
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>

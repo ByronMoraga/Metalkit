@@ -1,0 +1,111 @@
+﻿@model IEnumerable<Metalkit.Models.Usuario>
+
+@{
+    ViewBag.Title = "Inicio";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p>
+    <a class="popup btn btn-primary" id="Agregar" href="@Url.Action("Create", "MantUsuarios")">
+        <span class="glyphicon glyphicon-plus-sign"></span> Nuevo Registro
+    </a>
+</p>
+<div class="modal fade in" style="overflow-y: scroll;" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" id="ModalAgregar">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="editModalContentAgregar">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade in" style="overflow-y: scroll;" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" id="ModalEditar">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="editModalContentEditar">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade in" style="overflow-y: scroll;" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" id="ModalEliminar">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="editModalContentEliminar">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel-body">
+    <div class="table-responsive">
+        <table class="table" style="width:100%" id="Grilla_Parametro">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Id</th>
+                    <th>Rut</th>
+                    <th>Nombre</th>
+                    <th>ApellidoPaterno</th>
+                    <th>ApellidoMaterno</th>
+                    <th>Correo</th>
+                    <th>idPerfil</th>
+                    <th>Estado</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+
+        var oTable = $("#Grilla_Parametro").DataTable({
+            //"processing": false,
+            "serverSide": true,
+            //"filter": false,
+            //"orderMulti": false,
+            "pagingType": "full_numbers",
+
+            "language": datatableIdioma(),
+            "ajax": {
+                "url": url_datatable,
+                "data": function (d) {
+                    d.filtro = "";
+                },
+                "type": "POST",
+                "datatype": "json"
+            },
+            "columns": [
+                { "data": "Id", "name": "Id", "autoWidth": true },
+                { "data": "Rut", "name": "Rut", "autoWidth": true },
+                { "data": "Nombre", "title": "Nombre", "name": "Nombre", "autoWidth": true },
+                { "data": "ApellidoPaterno", "name": "ApellidoPaterno", "autoWidth": true },
+                { "data": "ApellidoMaterno", "name": "ApellidoMaterno", "autoWidth": true },
+                { "data": "Correo", "name": "Correo", "autoWidth": true },
+                { "data": "idPerfil", "name": "idPerfil", "autoWidth": true },
+                { "data": "Estado", "name": "Estado", "title": "Estado", "autoWidth": true },
+                {
+                    "data": "id", "name": "id", "autoWidth": true, "searchable": false, "sortable": false, "render": function (data) {
+
+                        salida = '<a class="btn btn-success btn-sm" style="margin-bottom:2px" data-modal="" onclick="Editar(' + data + ')"; id="btnModalEditar" title="Editar">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Editar&nbsp;<span class="glyphicon glyphicon-pencil" />&nbsp;</a>';
+                        salida += ' <a type="button" class="btn btn-danger btn-sm" style="margin-bottom:2px" onclick="Eliminar(' + data + ')"; id="btnEliminar" title="Eliminar">&nbsp;Eliminar&nbsp;<span class="glyphicon glyphicon-trash"/></a>';
+
+                        return salida;
+                        //  return salida;
+                    }
+                },
+
+            ]
+
+        });
+    });
+</script>
+
+@section scripts
+{
+    <script>
+        var url_datatable = '@Url.Action("ObtenerConsultas", "MantUsuarios")';
+        var url_edit = '@Url.Action("Edit", "ModificaExapra")';
+    </script>
+
+    <script src="~/Js/Usuario.js"></script>
+}

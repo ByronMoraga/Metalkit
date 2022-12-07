@@ -19,12 +19,36 @@ namespace Metalkit
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js"));
+           
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/Content/animate.css",
                       "~/Content/site.css"));
+
+             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
+                      "~/Scripts/bootstrap.js"));
+            bundles.Add(new ScriptBundle("~/bundles/datatablesjs").Include(
+               "~/Scripts/DataTables/jquery.dataTables.min.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/datatablescss").Include(
+                        "~/Content/DataTables/jquery.datatables.css"));
+            bundles.Add(new ScriptBundle("~/bundles/tema").Include(
+                    "~/Scripts/metisMenu.min.js",
+                    //"~/Scripts/plugins/pace/pace.min.js",
+                    "~/Scripts/inspinia.js"));
+            bundles.Add(new ScriptBundle("~/bundles/inspinia").Include(
+                "~/Scripts/metisMenu.min.js",
+                //"~/Scripts/plugins/pace/pace.min.js",
+                "~/Scripts/inspinia.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/skinConfig").Include(
+                "~/Scripts/skin.config.min.js"));
+            bundles.Add(new ScriptBundle("~/bundles/comunes").Include(
+                "~/Scripts/htmlHelper.js",
+                "~/Scripts/funcionesGenerales.js"));
+            BundleTable.EnableOptimizations = true;
+
         }
     }
 }

@@ -1,0 +1,121 @@
+/* the norm */
+#gritter-notice-wrapper {
+	position:fixed;
+	top:60px;
+	right:20px;
+	width:301px;
+	z-index:9999;
+}
+#gritter-notice-wrapper.top-left {
+    left: 20px;
+    right: auto;
+}
+#gritter-notice-wrapper.bottom-right {
+    top: auto;
+    left: auto;
+    bottom: 20px;
+    right: 20px;
+}
+#gritter-notice-wrapper.bottom-left {
+    top: auto;
+    right: auto;
+    bottom: 20px;
+    left: 20px;
+}
+.gritter-item-wrapper {
+	position:relative;
+	margin:0 0 10px 0;
+	background:url('../images/ie-spacer.gif'); /* ie7/8 fix */ 
+}
+.gritter-top {
+	/*background:url(../images/gritter.png) no-repeat left -30px;*/
+	height:10px;
+}
+.hover .gritter-top {
+	background-position:right -30px;
+}
+.gritter-bottom {
+	/*background:url(../images/gritter.png) no-repeat left bottom;*/
+	height:8px;
+	margin:0;
+}
+.hover .gritter-bottom {
+	background-position: bottom right;
+}
+.gritter-item {
+	/*background:url(../images/gritter.png) no-repeat left -40px;*/
+	/*color:#eee;*/
+	margin-left: 1em;
+	font-size: 11px;
+	/*font-family:verdana;*/
+}
+
+.gritter-item p {
+	margin-left: 1em;
+	font-size: 12px;
+}
+
+.gritter-close {
+	display:none;
+	position:absolute;
+	top:5px;
+	right:5px;
+	background:url(../images/gritter.png) no-repeat right top transparent;
+	cursor:pointer;
+	width:25px;
+	height:25px;
+	text-indent:-9999em;
+}
+.gritter-title {
+	font-size:15px;
+	margin-left: 1em;
+	display:block;
+}
+.gritter-image {
+	width:48px;
+	height:48px;
+	float:left;
+}
+.gritter-with-image,
+.gritter-without-image {
+	padding:0;
+}
+.gritter-with-image {
+	width:220px;
+	float:right;
+}
+
+.gritter-exito{
+	background-color: #dff0d8;
+	opacity:.95;
+  	border: 1px solid transparent;
+  	border-color: #d6e9c6;
+  	border-radius: 4px;
+  	color: #3c763d;
+}
+.gritter-error{
+	background-color: #f2dede;
+	opacity:.95;
+  	border: 1px solid transparent;
+  	border-color: #ebccd1;
+  	border-radius: 4px;
+  	color: #a94442;
+}
+
+.gritter-info{
+	background-color: #d9edf7;
+	opacity:.95;
+  	border: 1px solid transparent;
+  	border-color:#bce8f1;
+  	border-radius: 4px;
+  	color: #31708f;
+}
+
+.gritter-warning{
+	background-color: #fcf8e3;
+	opacity:.95;
+  	border: 1px solid transparent;
+  	border-color:#faebcc;
+  	border-radius: 4px;
+  	color: #8a6d3b;
+}

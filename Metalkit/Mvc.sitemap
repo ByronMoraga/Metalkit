@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<mvcSiteMap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0" xsi:schemaLocation="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0 MvcSiteMapSchema.xsd">
+	<mvcSiteMapNode title="Inicio" controller="Home" action="Index" description="fa fa-home" targetFrame="Administrador">
+		<!-- Administrador,Solicitud,Médico,Teórico,Práctico,Emisión,Internet,Psicometrico-->
+		<mvcSiteMapNode title="Menú Ventas" controller="Ventas" action="index" description="fa fa-address-card" targetFrame="Administrador,Solicitud,Médico,Teórico,Práctico,Emisión,Internet,Psicometrico,Ingreso Antecedentes">
+			<mvcSiteMapNode title="Solicitud" controller="ALCMaestros" action="Index" description="fa fa-address-card" targetFrame="Administrador,Solicitud,Internet"/>
+		</mvcSiteMapNode>
+
+		<mvcSiteMapNode title="Menú Operaciones" controller="ParametrosGeneral" action="Index" description="fa fa-address-card" targetFrame="Administrador">
+			<mvcSiteMapNode title="Producción" controller="ParametrosGeneral" action="Index" description="fa fa-address-card" targetFrame="Administrador"/>
+			<mvcSiteMapNode title="Logística" controller="Logistica" action="Index" description="fa fa-address-card" targetFrame="Administrador"/>
+			<mvcSiteMapNode title="Abastecimiento" controller="Abastecimiento" action="Index" description="fa fa-address-card" targetFrame="Administrador"/>
+		</mvcSiteMapNode>
+
+	
+		<mvcSiteMapNode title="Menú Finanzas" controller="Finanzas" action="Index" description="fa fa-cogs" targetFrame="Administrador">
+			<mvcSiteMapNode title="Finanzas" controller="Finanzas" action="Index" description="fa fa-address-card" targetFrame="Administrador"/>
+		</mvcSiteMapNode>
+		<mvcSiteMapNode title="Menú Informes" controller="Informes" action="Index" description="fa fa-file" targetFrame="Administrador,Solicitud,Internet,Práctico">
+			<mvcSiteMapNode title="Informe 1" controller="Informes" action="Index" description="fa fa-file" targetFrame="Administrador,Solicitud,Internet"/>
+		</mvcSiteMapNode>
+		<mvcSiteMapNode title="Menú Mantención" controller="Informes" action="Index" description="fa fa-file" targetFrame="Administrador,Solicitud,Internet,Práctico">
+			<mvcSiteMapNode title="MantParametros" controller="MantParametros" action="Index" description="fa fa-file" targetFrame="Administrador,Solicitud,Internet"/>
+			<mvcSiteMapNode title="MantProducto" controller="MantProducto" action="Index" description="fa fa-file" targetFrame="Administrador,Solicitud,Internet"/>
+			<mvcSiteMapNode title="MantUsuarios" controller="MantUsuarios" action="Index" description="fa fa-file" targetFrame="Administrador,Solicitud,Internet"/>
+		</mvcSiteMapNode>
+		<!--<mvcSiteMapNode title="Agregar licencia" controller="Examenes" action="AgregaLicenciaEntrega" description="bg-cian" targetFrame="Administrador,Solicitud"/>-->
+
+	</mvcSiteMapNode>
+
+</mvcSiteMap>

@@ -1,0 +1,27 @@
+﻿@{ 
+    if (ViewBag.tituloModal == null) { ViewBag.tituloModal = "tituloModal"; }
+    if (ViewBag.modalSize == null) { ViewBag.modalSize = "modal-xl"; }
+}
+<div class="modal fade" id="ModalDinamico" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog-xl">
+        <div class="modal-content @ViewBag.modalSize">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">
+                    @ViewBag.tituloModal
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div id="editModalContent">
+                    @RenderBody()
+                </div>
+            </div>
+            @if (IsSectionDefined("modalFooter"))
+            {
+                <div class="modal-footer">
+                    @RenderSection("modalFooter")
+                </div>
+            }
+        </div>
+    </div>
+</div>

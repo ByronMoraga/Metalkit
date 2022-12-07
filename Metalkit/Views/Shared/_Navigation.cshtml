@@ -1,0 +1,43 @@
+﻿<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header text-center">
+                <div class="dropdown profile-element">
+                    <span>
+                        <img alt="image" src="~/images/cliente.png" />
+                    </span>
+                    <a class="dropdown-toggle" href="#">
+                        <span class="clear">
+                            <span class="block m-t-xs">
+                                <strong class="font-bold">Metalkit</strong>
+                            </span>
+                            <span class="text-muted text-xs block">Prueba</span>
+                        </span>
+                    </a>
+                </div>
+                <div class="logo-element">
+                    <img alt="image" src="~/images/cliente.png" />
+                </div>
+            </li>
+            @Html.MvcSiteMap().Menu("BootstrapMenuHelperModel")
+  
+            @*<li>
+                <a class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-search"></i>
+                    <span class="nav-label">Solicitudes </span>
+                </a>       
+                <ul class="nav nav-second-level collapse" role="menu">
+                    <li><a href="@Url.Action("index", "ADSolicitud")">En Proceso</a></li>
+                </ul>
+                <ul class="nav nav-second-level collapse" role="menu">
+                    <li><a href="/ADConsolidados">Consolidadas</a></li>
+                </ul>
+                <ul class="nav nav-second-level collapse" role="menu">
+                    <li><a href="/ADConsolidados">Ordernes de compras</a></li>
+                </ul>
+
+            </li>*@
+        </ul>
+        
+    </div>
+</nav>
