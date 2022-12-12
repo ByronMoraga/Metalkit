@@ -7,8 +7,9 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Metalkit.Models;
-using Metalkit.Negocio;
+using Metalkit.Core.Negocio;
 using Proyecto.Utilitarios;
+using System.Linq.Dynamic;
 
 namespace Metalkit.Controllers
 {
@@ -24,16 +25,13 @@ namespace Metalkit.Controllers
 
         public ActionResult ObtenerConsultas(string filtro = "")
         {
-            
             //get Start(paging start index) and length(page size for paging)
             var draw = Request.Form.GetValues("draw").FirstOrDefault();
             var start = Request.Form.GetValues("start").FirstOrDefault();
             var length = Request.Form.GetValues("length").FirstOrDefault();
-
             //Get Sort columns value
             var sortColumn = Request.Form.GetValues("columns[" + Request.Form.GetValues("order[0][column]").FirstOrDefault() + "][name]").FirstOrDefault();
             var sortColumnDir = Request.Form.GetValues("order[0][dir]").FirstOrDefault();
-
             var searchValue = Request.Form.GetValues("search[value]").FirstOrDefault();
 
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
@@ -41,15 +39,22 @@ namespace Metalkit.Controllers
             int totalRecords = 0;
 
             //busquedaPaginada(int? idArea, int? IdCentroCosto, string rutPersona, string folio, string sortColumn = "", string sortColumnDir = "")
-
-            var v = UsuarioBLL.obtenerParametro(filtro, sortColumn, sortColumnDir, searchValue);
-            totalRecords = v.Count();
-            var data = v.Skip(skip).Take(pageSize).ToList();
+            var query = UsuarioBLL.ObtenerQueryPrincipal(filtro, sortColumn, sortColumnDir, searchValue);
+            if (searchValue!="")
+            {
+                query = query.Where(d => d.Nombre.Contains(searchValue));
+            }
+            if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
+            {
+                query = query.OrderBy(sortColumn + " " + sortColumnDir);
+            }
+            totalRecords = query.Count();
+            var listado = query.Skip(skip).Take(pageSize).ToList();
 
             // Aca se colocan solamente los atributos que seran mostrados en la tabla. Ej: id y valor
-            var dataSalida = data.Select(a => new
+            var dataSalida = listado.Select(a => new
             {
-                id = a.Id,
+                Id = a.Id,
                 Rut = a.Rut,
                 Nombre = a.Nombre,
                 ApellidoPaterno = a.ApellidoPaterno,
@@ -63,11 +68,10 @@ namespace Metalkit.Controllers
 
         }
 
-
         // GET: MantUsuarios/Create
         public ActionResult Create()
         {
-            return PartialView();
+            return PartialView("_Create");
         }
 
         // POST: MantUsuarios/Create
@@ -79,28 +83,26 @@ namespace Metalkit.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Usuario.Add(usuario);
+                UsuarioBLL.Guardar(usuario);
+                //db.Usuario.Add(usuario);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            Mensajeria.SetMensaje("El usuario no tiene los permisos suficientes para ingresar.", Mensajeria.TiposMensajes.Informacion);
+            Mensajeria.SetMensaje("Usuario creado con exito", Mensajeria.TiposMensajes.Exito);
             return View(usuario);
         }
 
         // GET: MantUsuarios/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Usuario usuario = db.Usuario.Find(id);
+            Usuario usuario = UsuarioBLL.Traer(id);
+            //Usuario usuario = db.Usuario.Find(id);
             if (usuario == null)
             {
                 return HttpNotFound();
             }
-            return PartialView(usuario);
+            return PartialView("_Edit",usuario);
         }
 
         // POST: MantUsuarios/Edit/5
@@ -112,26 +114,24 @@ namespace Metalkit.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(usuario).State = EntityState.Modified;
-                db.SaveChanges();
+                UsuarioBLL.Guardar(usuario);
+                //db.Entry(usuario).State = EntityState.Modified;
+                //db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(usuario);
         }
 
         // GET: MantUsuarios/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Usuario usuario = db.Usuario.Find(id);
+            Usuario usuario = UsuarioBLL.Traer(id);
+
             if (usuario == null)
             {
                 return HttpNotFound();
             }
-            return PartialView(usuario);
+            return PartialView("_Delete",usuario);
         }
 
         // POST: MantUsuarios/Delete/5
@@ -139,9 +139,9 @@ namespace Metalkit.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Usuario usuario = db.Usuario.Find(id);
-            db.Usuario.Remove(usuario);
-            db.SaveChanges();
+            Usuario usuario = UsuarioBLL.Traer(id);
+            UsuarioBLL.Eliminar(usuario);
+           
             return RedirectToAction("Index");
         }
 

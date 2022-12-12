@@ -1,5 +1,5 @@
 ﻿var script = document.createElement('script');
-script.src = './Scripts/bootbox.min.js';
+script.src = './Scripts/assets/plugins/bootbox/bootbox.js';
 document.head.appendChild(script);
 
 function mostrarMensaje(content, tipo) {
@@ -39,7 +39,7 @@ function alert_error(msg, title, time) {
         "debug": false,
         "newestOnTop": false,
         "progressBar": false,
-        "positionClass": "toast-top-right",
+        "positionClass": "toast-top-center",
         "preventDuplicates": true,
         "onclick": null,
         "showDuration": "300",
@@ -60,7 +60,7 @@ function alert_success(msg) {
         "debug": false,
         "newestOnTop": false,
         "progressBar": false,
-        "positionClass": "toast-top-right",
+        "positionClass": "toast-top-center",
         "preventDuplicates": true,
         "onclick": null,
         "showDuration": "300",
@@ -81,7 +81,7 @@ function alert_info(msg, title, time, className) {
         "debug": false,
         "newestOnTop": false,
         "progressBar": false,
-        "positionClass": "toast-top-right",
+        "positionClass": "toast-top-center",
         "preventDuplicates": true,
         "onclick": null,
         "showDuration": "300",
@@ -102,7 +102,7 @@ function alert_warning(msg, title, time, className) {
         "debug": false,
         "newestOnTop": false,
         "progressBar": false,
-        "positionClass": "toast-top-right",
+        "positionClass": "toast-top-center",
         "preventDuplicates": true,
         "onclick": null,
         "showDuration": "300",
@@ -129,6 +129,12 @@ function errorLoginFuncionario(data) {
         $("#errorLoginFuncionario").html('<div class="alert alert-danger"><i class="clip-key"></i><strong> Error de acceso!</strong> ' + data + '</div>');
     });
 }
+
+$(".decPersonal").keyup(function () {
+    var decimal = $(this).val().replace(".", ",");
+    $(this).val(decimal);
+});
+
 
 function confirma(boton_elimina, mensaje) {
     // bootbox.confirm("¿Confirma eliminación?", function (result) { if (result) document.getElementById(boton_elimina).click(); } );

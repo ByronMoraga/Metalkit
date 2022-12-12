@@ -36,11 +36,11 @@ namespace Metalkit.Models
         public virtual DbSet<Perfil> Perfil { get; set; }
         public virtual DbSet<Producto> Producto { get; set; }
         public virtual DbSet<ProductoParametro> ProductoParametro { get; set; }
-        public virtual DbSet<Proyecto> Proyecto { get; set; }
         public virtual DbSet<Region> Region { get; set; }
         public virtual DbSet<TipoProyecto> TipoProyecto { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
         public virtual DbSet<VersionOT> VersionOT { get; set; }
         public virtual DbSet<TipoCliente> TipoCliente { get; set; }
+        public virtual DbSet<Cotizacion> Cotizacion { get; set; }
     }
 }

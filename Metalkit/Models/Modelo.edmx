@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MetalkitModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MetalkitModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Cliente">
           <Key>
             <PropertyRef Name="Id" />
@@ -28,6 +28,15 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Comuna" Type="nvarchar" MaxLength="225" />
           <Property Name="IdRegion" Type="int" />
+        </EntityType>
+        <EntityType Name="Cotizacion">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdProducto" Type="int" />
+          <Property Name="IdEntrega" Type="int" />
+          <Property Name="IdTipoProyecto" Type="int" />
         </EntityType>
         <EntityType Name="Despacho">
           <Key>
@@ -105,15 +114,6 @@
           <Property Name="IdProducto" Type="int" />
           <Property Name="IdParametro" Type="int" />
         </EntityType>
-        <EntityType Name="Proyecto">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="IdProducto" Type="int" />
-          <Property Name="IdEntrega" Type="int" />
-          <Property Name="IdTipoProyecto" Type="int" />
-        </EntityType>
         <EntityType Name="Region">
           <Key>
             <PropertyRef Name="Id" />
@@ -164,6 +164,7 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
         <EntityContainer Name="MetalkitModelStoreContainer">
           <EntitySet Name="Cliente" EntityType="Self.Cliente" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Comuna" EntityType="Self.Comuna" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cotizacion" EntityType="Self.Cotizacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Despacho" EntityType="Self.Despacho" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Entrega" EntityType="Self.Entrega" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EstadoOT" EntityType="Self.EstadoOT" Schema="dbo" store:Type="Tables" />
@@ -173,7 +174,6 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           <EntitySet Name="Perfil" EntityType="Self.Perfil" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Producto" EntityType="Self.Producto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductoParametro" EntityType="Self.ProductoParametro" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Proyecto" EntityType="Self.Proyecto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Region" EntityType="Self.Region" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TipoProyecto" EntityType="Self.TipoProyecto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
@@ -185,8 +185,7 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
     FROM [dbo].[TipoCliente] AS [TipoCliente]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MetalkitModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -290,15 +289,6 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           <Property Name="IdProducto" Type="Int32" />
           <Property Name="IdParametro" Type="Int32" />
         </EntityType>
-        <EntityType Name="Proyecto">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdProducto" Type="Int32" />
-          <Property Name="IdEntrega" Type="Int32" />
-          <Property Name="IdTipoProyecto" Type="Int32" />
-        </EntityType>
         <EntityType Name="Region">
           <Key>
             <PropertyRef Name="Id" />
@@ -356,13 +346,22 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           <EntitySet Name="Perfil" EntityType="Self.Perfil" />
           <EntitySet Name="Producto" EntityType="Self.Producto" />
           <EntitySet Name="ProductoParametro" EntityType="Self.ProductoParametro" />
-          <EntitySet Name="Proyecto" EntityType="Self.Proyecto" />
           <EntitySet Name="Region" EntityType="Self.Region" />
           <EntitySet Name="TipoProyecto" EntityType="Self.TipoProyecto" />
           <EntitySet Name="Usuario" EntityType="Self.Usuario" />
           <EntitySet Name="VersionOT" EntityType="Self.VersionOT" />
           <EntitySet Name="TipoCliente" EntityType="Self.TipoCliente" />
+          <EntitySet Name="Cotizacion" EntityType="MetalkitModel.Cotizacion" />
         </EntityContainer>
+        <EntityType Name="Cotizacion">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdProducto" Type="Int32" />
+          <Property Name="IdEntrega" Type="Int32" />
+          <Property Name="IdTipoProyecto" Type="Int32" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -480,16 +479,6 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Proyecto">
-            <EntityTypeMapping TypeName="MetalkitModel.Proyecto">
-              <MappingFragment StoreEntitySet="Proyecto">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
-                <ScalarProperty Name="IdEntrega" ColumnName="IdEntrega" />
-                <ScalarProperty Name="IdTipoProyecto" ColumnName="IdTipoProyecto" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Region">
             <EntityTypeMapping TypeName="MetalkitModel.Region">
               <MappingFragment StoreEntitySet="Region">
@@ -537,6 +526,16 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
               <MappingFragment StoreEntitySet="TipoCliente">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cotizacion">
+            <EntityTypeMapping TypeName="MetalkitModel.Cotizacion">
+              <MappingFragment StoreEntitySet="Cotizacion">
+                <ScalarProperty Name="IdTipoProyecto" ColumnName="IdTipoProyecto" />
+                <ScalarProperty Name="IdEntrega" ColumnName="IdEntrega" />
+                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

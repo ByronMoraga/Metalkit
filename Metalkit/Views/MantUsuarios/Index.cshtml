@@ -5,31 +5,64 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<p>
-    <a class="popup btn btn-primary" id="Agregar" href="@Url.Action("Create", "MantUsuarios")">
-        <span class="glyphicon glyphicon-plus-sign"></span> Nuevo Registro
-    </a>
-</p>
-<div class="modal fade in" style="overflow-y: scroll;" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" id="ModalAgregar">
+<div class="modal fade in" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModal" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div id="editModalContentAgregar">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Create</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="createContainer">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<div class="modal fade in" style="overflow-y: scroll;" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" id="ModalEditar">
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModal" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div id="editModalContentEditar">
+            <div id="editContainer">
             </div>
         </div>
     </div>
 </div>
-<div class="modal fade in" style="overflow-y: scroll;" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" id="ModalEliminar">
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModal" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div id="editModalContentEliminar">
+            <div id="deleteContainer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <i class="fa fa-info-circle"></i> Panel de acciones
+            </div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+
+                        <div class="col-sm-12">
+                            <div class="text-right">
+                                <p>
+                                    <button type="button" class="btn btn-default btn-md" data-toggle="modal" data-url="@Url.Action("Create","MantUsuarios")" id="btnAgregar">
+                                        <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Nuevo Registro
+                                    </button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
         </div>
     </div>
@@ -39,7 +72,6 @@
         <table class="table" style="width:100%" id="Grilla_Parametro">
             <thead>
                 <tr>
-                    <th></th>
                     <th>Id</th>
                     <th>Rut</th>
                     <th>Nombre</th>
@@ -55,57 +87,21 @@
         </table>
     </div>
 </div>
-<script>
-    $(document).ready(function () {
-
-        var oTable = $("#Grilla_Parametro").DataTable({
-            //"processing": false,
-            "serverSide": true,
-            //"filter": false,
-            //"orderMulti": false,
-            "pagingType": "full_numbers",
-
-            "language": datatableIdioma(),
-            "ajax": {
-                "url": url_datatable,
-                "data": function (d) {
-                    d.filtro = "";
-                },
-                "type": "POST",
-                "datatype": "json"
-            },
-            "columns": [
-                { "data": "Id", "name": "Id", "autoWidth": true },
-                { "data": "Rut", "name": "Rut", "autoWidth": true },
-                { "data": "Nombre", "title": "Nombre", "name": "Nombre", "autoWidth": true },
-                { "data": "ApellidoPaterno", "name": "ApellidoPaterno", "autoWidth": true },
-                { "data": "ApellidoMaterno", "name": "ApellidoMaterno", "autoWidth": true },
-                { "data": "Correo", "name": "Correo", "autoWidth": true },
-                { "data": "idPerfil", "name": "idPerfil", "autoWidth": true },
-                { "data": "Estado", "name": "Estado", "title": "Estado", "autoWidth": true },
-                {
-                    "data": "id", "name": "id", "autoWidth": true, "searchable": false, "sortable": false, "render": function (data) {
-
-                        salida = '<a class="btn btn-success btn-sm" style="margin-bottom:2px" data-modal="" onclick="Editar(' + data + ')"; id="btnModalEditar" title="Editar">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Editar&nbsp;<span class="glyphicon glyphicon-pencil" />&nbsp;</a>';
-                        salida += ' <a type="button" class="btn btn-danger btn-sm" style="margin-bottom:2px" onclick="Eliminar(' + data + ')"; id="btnEliminar" title="Eliminar">&nbsp;Eliminar&nbsp;<span class="glyphicon glyphicon-trash"/></a>';
-
-                        return salida;
-                        //  return salida;
-                    }
-                },
-
-            ]
-
-        });
-    });
-</script>
+<div class="theme-switch-wrapper nav-link">
+    <label class="theme-switch" for="checkbox">
+        <input type="checkbox" id="checkbox">
+        <span class="slider round"></span>
+    </label>
+</div>
 
 @section scripts
 {
     <script>
-        var url_datatable = '@Url.Action("ObtenerConsultas", "MantUsuarios")';
-        var url_edit = '@Url.Action("Edit", "ModificaExapra")';
+            @{string controller = "MantUsuarios";}
+                var url_datatable = '@Url.Action("ObtenerConsultas", controller)';
+                var url_edit = '@Url.Action("Edit", controller)';
+                var url_delete = '@Url.Action("Delete", controller)';
     </script>
 
-    <script src="~/Js/Usuario.js"></script>
+    <script src="~/Core/Js/Usuario.js"></script>
 }
