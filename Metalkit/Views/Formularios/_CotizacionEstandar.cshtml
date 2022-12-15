@@ -1,0 +1,245 @@
+﻿@model Metalkit.Models.Cotizacion
+@using Metalkit.Models;
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = null;
+    List<VMParametro> listaParametro = new List<VMParametro>();
+    listaParametro = ViewBag.listaParametros;
+
+}
+@*@using (Ajax.BeginForm("CreateEstandar", "Formularios", null, new AjaxOptions { HttpMethod = "Post", OnSuccess = "Create_Success", OnFailure = "Create_Failure" }, new { @class = "form-horizontal", role = "form" }))*@
+@using (Html.BeginForm("CreateEstandar", "Formularios", FormMethod.Post, new { @class = "form-horizontal", id = "form", name = "form", role="form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-lg-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>
+                    Detalle de proyecto Estándar
+                </h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="panel-body">
+
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label for="itramite">Modelo a cotizar</label>
+                            @Html.DropDownList("iproyecto", null, "Seleccione", htmlAttributes: new { @class = "form-control search-select", @onchange = "CargarProyecto()" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <table class="table table-striped table-hover tablaSecundaria dataTable no-footer" width="100%" id="tabla_Producto">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Código</th>
+                                    <th>Descripción</th>
+                                    <th>Superficie</th>
+                                    <th>Precio</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <table class="table table-striped table-hover tablaSecundaria dataTable no-footer Grid" width="100%">
+                            <tr>
+                                <th style="width: 15%;"><label class="control-label"><input type="checkbox" class="checkall" value="" id="checkall"> Seleccionar Todo</label></th>
+                                <th>Descripción</th>
+                                <th>Valor</th>
+                            </tr>
+                            @foreach (var item in listaParametro)
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="checkParam" value="" id="@item.Id">
+                                        @*<img src="~/Images/plus.png" />*@
+                                        <div style="display:none">
+                                            <table class="table" width="100%">
+                                                <tr>
+                                                    <th><input type="checkbox" class="checkall2" id="checkall2"> Seleccionar Todo</th>
+                                                    <th>Descripción</th>
+                                                    <th>Valor</th>
+                                                </tr>
+                                                @foreach (var item2 in item.ParamNvl2)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <input type="checkbox" class="checkParam2" value="" id="@item2.Id">
+                                                        </td>
+                                                        <td>@item2.Descripcion</td>
+                                                        <td>@item2.Valor</td>
+                                                    </tr>
+                                                }
+                                            </table>
+                                        </div>
+                                    </td>
+                                    <td>@item.Descripcion</td>
+                                    <td>@item.Valor</td>
+                                </tr>
+                            }
+                        </table>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-horizontal">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>Despacho</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="panel-body">
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label">Fecha Entrega</label>
+                        <div class="col-lg-10">
+                            <div class="input-group date col-md-5">
+                                <input type="date" class="form-control" value="03/04/2014">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label">Tipo Entrega</label>
+                        <div class="col-lg-10">
+                            <div class="i-checks"><label> <input type="radio" value="rdTipoEntrega" name="rdTipoEntrega"> <i></i> Retira Cliente </label></div>
+                            <div class="i-checks"><label> <input type="radio" value="option1" id="rdTipoEntrega" name="rdTipoEntrega"> <i></i> Despacha Metalkit </label></div>
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label">Dirección</label>
+                        <div class="col-lg-10">
+                            <input type="text" placeholder="Dirección" class="form-control" id="tbDireccion" name="tbDireccion">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label">Región</label>
+                        <div class="col-sm-10">
+                            @Html.DropDownList("iregionEnvio", null, "Seleccione", htmlAttributes: new { @class = "form-control  search-select", @onchange = "CargaComunasEnvio()" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label">Comuna</label>
+                        <div class="col-sm-10">
+                            @Html.DropDownList("icomunaEnvio", null, "Seleccione", htmlAttributes: new { @class = "form-control  search-select" })
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <div class="text-right">
+                    <button class="btn btn-primary hidden" type="button" id="btnGuardar"><i class="fa fa-check"></i>&nbsp;Guardar</button>
+                    <button class="btn btn-primary" type="button" id="btnEditar"><i class="fa fa-edit"></i>&nbsp;Editar</button>
+                    <button class="btn btn-default" type="button" id="btnLimpiar" onclick="location.reload();"><i class="fa fa-trash"></i>&nbsp;Limpiar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $(".checkParam").change(function () {
+        console.log($(this))
+        if (this.checked) {
+            $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+        } else {
+            $(this).closest("tr").next().remove();
+        }
+    });
+    $('.checkall').change(function () {
+        console.log(this.checked);
+        if (this.checked) {
+            $(".checkParam").attr('checked', 'checked');
+
+        } else {
+            $(".checkParam").removeAttr('checked');
+        }
+        const e = new Event("change");
+        const element = document.querySelector('.checkParam')
+        element.dispatchEvent(e);
+    });
+    $(".checkall2").change(function () {
+        console.log($("input[class= 'checkParam2']"));
+        if (this.checked) {
+            $("input[class='checkParam2']").attr('checked', 'checked');
+
+        } else {
+            $("input[class='checkParam2']").removeAttr('checked');
+        }
+    });
+
+</script>
+@*<script type="text/javascript">
+        //Assign Click event to Plus Image.
+        $("input[type='checkbox']").on('ifChanged', function (e) {
+            $(this).val(e.target.checked == true);
+
+            //Check if checkbox is checked or not
+            var checkboxChecked = $(this).is(':checked');
+            if (checkboxChecked) {
+                console.log($(this));
+                $("input[type='checkbox']").closest("tr").after("<tr><td></td><td colspan = '999'>" + $("input[type='checkbox']").next().html() + "</td></tr>");
+                $("input[type='checkbox']").attr("src", "/images/minus.png");
+            } else {
+                $("input[type='checkbox']").attr("src", "/images/plus.png");
+                $("input[type='checkbox']").closest("tr").next().remove();
+            }
+        });
+    </script>*@
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            desbloqueaDatos('#div_cabecera');
+            bloqueaDatos('#div_datos');
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+
+        });
+         function validarClases() {
+        var cClas = "";
+
+             $(".cClases div").each(function (index, value) {
+                 alert("ingreso")
+                var chk = $(this).hasClass("checked");
+                if (chk) {
+                    cClas = cClas + $(this).find('input').attr('id') + ":" + "true" + "_";
+
+                }
+                else {
+                    cClas = cClas + $(this).find('input').attr('id') + ":" + "false" + "_";
+                }
+            });
+            cClas = cClas.substr(0, cClas.length - 1);
+            console.log(cClas);
+
+            return cClas;
+           // $("#clasesChk").val(cClas);
+        }
+    </script>
+}

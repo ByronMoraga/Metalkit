@@ -26,7 +26,7 @@ namespace Metalkit.Controllers
             
             ViewBag.itipoproyecto = new SelectList(tipoProyecto, "Id", "Tipo");
             ViewBag.iregion = new SelectList(region, "Id", "Region1");
-            ViewBag.icomuna = new SelectList(comuna, "Id", "Region1");
+            ViewBag.icomuna = new SelectList(comuna, "Id", "Comuna1");
             return View(db.Cotizacion.ToList());
 
         }
@@ -114,14 +114,53 @@ namespace Metalkit.Controllers
         }
 
         // GET: CotizacionEstandar/Create
-        public ActionResult Create()
+        public ActionResult CreateEstandar()
         {
-            ViewBag.detalleProducto = new List<Producto>();
+            var listParametros= Parametro_ParametroNvl2BLL.TraerTodos();
+            List<Region> region = RegionBLL.TraerTodos();
+            List<Comuna> comuna = new List<Comuna>();
+           
+
+            var listaParametro = new List<VMParametro>();
+            foreach (var item in listParametros)
+            {
+                VMParametro obj = new VMParametro();
+                obj.Id = item.Parametro.Id;
+                obj.Descripcion = item.Parametro.Descripcion;
+                obj.Valor = item.Parametro.Valor;
+                obj.ParamNvl2 = ParametroNivel2BLL.TraerTodos().Where(a => a.Id == item.IdParametroNivel2).ToList();
+                listaParametro.Add(obj);
+            }
+            ViewBag.iregionEnvio = new SelectList(region, "Id", "Region1");
+            ViewBag.icomunaEnvio = new SelectList(comuna, "Id", "Comuna1");
+            ViewBag.listaParametros = listaParametro;
+
             List<Producto> proyecto = ProductoBLL.TraerTodos();
-            ViewBag.param = ParametroBLL.TraerTodos();
+            ViewBag.iproyecto = new SelectList(proyecto, "Id", "Descripcion");
+            
+            return PartialView("_CotizacionEstandar");
+        }
+        public ActionResult CreatePersonalizada()
+        {
+            var listParametros = Parametro_ParametroNvl2BLL.TraerTodos();
+
+            var listaParametro = new List<VMParametro>();
+            foreach (var item in listParametros)
+            {
+                VMParametro obj = new VMParametro();
+                obj.Id = item.Parametro.Id;
+                obj.Descripcion = item.Parametro.Descripcion;
+                obj.Valor = item.Parametro.Valor;
+                obj.ParamNvl2 = ParametroNivel2BLL.TraerTodos().Where(a => a.Id == item.IdParametroNivel2).ToList();
+                listaParametro.Add(obj);
+            }
+
+            ViewBag.listaParametros = listaParametro;
+
+            List<Producto> proyecto = ProductoBLL.TraerTodos();
             ViewBag.iproyecto = new SelectList(proyecto, "Id", "Descripcion");
 
-            return PartialView("CotizacionEstandar");
+            return PartialView("_CotizacionPersonalizada");
         }
 
         // POST: CotizacionEstandar/Create
@@ -129,16 +168,40 @@ namespace Metalkit.Controllers
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,IdProducto,IdEntrega,IdTipoProyecto")] Cotizacion proyecto)
+        public ActionResult CreateEstandar(FormCollection form)
         {
-            if (ModelState.IsValid)
+            Cliente cliente = new Cliente();
+            Producto_Parametro producto_parametro = new Producto_Parametro();
+            Cotizacion cotizacion = new Cotizacion();
+            Despacho despacho = new Despacho();
+            EstadoOT estado = new EstadoOT();
+
+            try
             {
-                db.Cotizacion.Add(proyecto);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                cliente = ClienteBLL.TraerPorRut(Utilidades.RutSinDV(form["tbRutBusqueda"]));
+                cliente.RazonSocial = form["tbRazonSocial"];
+                cliente.Direccion = form["tbDireccion"];
+                cliente.RazonSocial = form["iComuna"];
+                cliente.RazonSocial = form["tbGiro"];
+                cliente.RazonSocial = form["tbNombre"];
+                cliente.RazonSocial = form["tbApellido"];
+                cliente.RazonSocial = form["tbCorreo"];
+                cliente.RazonSocial = form["tbTelefono"];
+
+                producto_parametro.IdProducto = int.Parse(form["iproyecto"]);
+                producto_parametro.IdParametro = int.Parse(form["iparametro"]);
+
+                cotizacion.IdTipoProyecto = int.Parse(form["itipoproyecto"]);
+                cotizacion.IdProducto = producto_parametro.Id;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
 
-            return View(proyecto);
+            return View();
         }
 
         // GET: CotizacionEstandar/Edit/5
@@ -211,7 +274,7 @@ namespace Metalkit.Controllers
               });
             return Json(listaTeo);
         }
-        public ActionResult MostrarProyecto(int? id)
+        public ActionResult MostrarProyecto(int id)
         {
             var obj = TipoProyectoBLL.TraerTodos();
 
@@ -247,15 +310,26 @@ namespace Metalkit.Controllers
         public JsonResult Continuar(string rut)
         {
             int numeroRut = Utilidades.RutSinDV(rut);
-            var obj = ClienteBLL.TraerPorRut(numeroRut);
-            //var salida = new
-            //{
-            //    COD_CLIENTE = obj.,
-            //    NOM_CORTO = "CLIENTE",
-            //    NOM_RAZON_SOCIAL = "CLIENTE"
-            //};
-          
-            return new JsonResult { Data = obj, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            var data = ClienteBLL.TraerPorRut(numeroRut);
+
+            var salida = new
+            {
+                Id = data.Id,
+                Rut = data.Rut + data.Dv,
+                RazonSocial = data.RazonSocial,
+                Direccion = data.Direccion,
+                IdRegion = (int)ComunaBLL.Traer((int)data.IdComuna).IdRegion,
+                IdComuna = (int)data.IdComuna,
+                Giro = data.Giro,
+                NombreContacto = data.NombreContacto,
+                ApellidoContacto = data.ApellidoContacto,
+                CorreoContacto = data.CorreoContacto,
+                TelefonoContacto = data.TelefonoContacto
+
+            };
+
+           
+            return new JsonResult { Data = salida, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
         protected override void Dispose(bool disposing)
         {

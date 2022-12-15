@@ -12,163 +12,137 @@
     ViewBag.Breadcrumb = "Formulario de cotización / Index";
 
 }
+<div class="row">
+    <div class="col-lg-6">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>Datos de la empresa</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="panel-body">
+                    <div class="form-group row" id="div_cabecera">
+                        <label for="tbRut" class="col-lg-2 col-form-label">Rut</label>
+                        <div class="col-lg-6">
+                            <input type="text" class="form-control col-md-4 input_rut" id="tbRutBusqueda" name="tbRutBusqueda" placeholder="Ingrese rut">
+                        </div>
+                        <div class="col-lg-4">
+                            <button type="button" class="btn btn-success btn-sm" onclick="Continuar()" id="btnContinuar" title="Continuar">Continuar</button>
+                        </div>
+                    </div>
+                    <div id="div_datos_empresa">
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">Razón Social</label>
 
-<div class="ibox col-md-12">
-    <div class="ibox-title" id="div_cabecera">
-        <div class="row">
-            <div class="col-md-4">
-                <input type="text" class="form-control" id="tbRutBusqueda" name="tbRutBusqueda" placeholder="Ingrese rut">
+                            <div class="col-lg-10">
+                                <input type="text" placeholder="Razón Social" class="form-control" id="tbRazonSocial" name="tbRazonSocial">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">Dirección</label>
+                            <div class="col-lg-10">
+                                <input type="text" placeholder="Dirección" class="form-control" id="tbDireccion" name="tbDireccion">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Región</label>
+                            <div class="col-sm-10">
+                                @Html.DropDownList("iregion", null, "Seleccione", htmlAttributes: new { @class = "form-control  search-select", @onchange = "CargaComunas()" })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Comuna</label>
+                            <div class="col-sm-10">
+                                @Html.DropDownList("icomuna", null, "Seleccione", htmlAttributes: new { @class = "form-control  search-select" })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">Giro</label>
+
+                            <div class="col-lg-10">
+                                <input type="text" placeholder="Giro" class="form-control" id="tbGiro" name="tbGiro">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
-            <div class="col-md-6">
-                <button type="button" class="btn btn-success btn-sm" onclick="Continuar()" id="btnContinuar" title="Continuar">Continuar</button>
-            </div>
-        </div>
-        <div class="ibox-tools">
-            <a class="collapse-link">
-                <i class="fa fa-chevron-up"></i>
-            </a>
         </div>
     </div>
-    <div class="ibox-content" id="div_datos">
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="ibox ">
-                        <div class="ibox-title">
-                            <h5>Datos de la empresa</h5>
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="ibox-content">
-                            <div class="panel-body">
-                                <div class="form-group row">
-                                    <label for="tbRut" class="col-lg-2 col-form-label">Rut</label>
 
-                                    <div class="col-lg-10">
-                                        <input type="text" placeholder="Rut" id="tbRut" name="tbRut" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-2 col-form-label">Razón Social</label>
+    <div class="col-lg-6" id="div_datos_cliente">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>Datos del cliente</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="panel-body">
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label">Nombre</label>
 
-                                    <div class="col-lg-10">
-                                        <input type="text" placeholder="Razón Social" class="form-control" id="tbRazonSocial" name="tbRazonSocial">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-2 col-form-label">Dirección</label>
-                                    <div class="col-lg-10">
-                                        <input type="text" placeholder="ej: Pasaje a 1514" class="form-control" id="tbRut" name="txtRut">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label">Region</label>
-                                    <div class="col-sm-10">
-                                        @{
-                                            @Html.DropDownList("iregion", null, "Seleccione", htmlAttributes: new { @class = "form-control fondo search-select", @onchange = "CargaComunas()" })
-                                        }
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label">Comuna</label>
-                                    <div class="col-sm-10">
-                                        @{
-                                            @Html.DropDownList("icomuna", null, "Seleccione", htmlAttributes: new { @class = "form-control fondo search-select" })
-                                        }
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-2 col-form-label">Giro</label>
-
-                                    <div class="col-lg-10">
-                                        <input type="text" placeholder="Giro" class="form-control" id="tbGiro" name="tbGiro">
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col-lg-10">
+                            <input type="text" placeholder="Nombre" class="form-control" id="tbNombre" name="tbNombre">
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="ibox ">
-                        <div class="ibox-title">
-                            <h5>Datos del cliente</h5>
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                            </div>
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label">Apellido</label>
+
+                        <div class="col-lg-10">
+                            <input type="text" placeholder="Apellido" class="form-control" id="tbApellido" name="tbApellido">
                         </div>
-                        <div class="ibox-content">
-                            <div class="panel-body">
-                                <div class="form-group row">
-                                    <label class="col-lg-2 col-form-label">Nombre</label>
-
-                                    <div class="col-lg-10">
-                                        <input type="text" placeholder="Nombre" class="form-control" id="tbNombre" name="tbNombre">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-2 col-form-label">Apellido</label>
-
-                                    <div class="col-lg-10">
-                                        <input type="text" placeholder="Apellido" class="form-control" id="tbApellido" name="tbApellido">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-2 col-form-label">Correo</label>
-                                    <div class="col-lg-10">
-                                        <input type="text" placeholder="Correo" class="form-control" id="tbCorreo" name="tbCorreo">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-2 col-form-label">Telefono</label>
-                                    <div class="col-lg-10">
-                                        <input type="text" placeholder="Telefono" class="form-control" id="tbTelefono" name="tbTelefono">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-2 col-form-label">Giro</label>
-                                    <div class="col-lg-10">
-                                        <input type="text" placeholder="Giro" class="form-control" id="tbGiro" name="tbGiro">
-                                    </div>
-                                </div>
-
-                            </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label">Correo</label>
+                        <div class="col-lg-10">
+                            <input type="text" placeholder="Correo" class="form-control" id="tbCorreo" name="tbCorreo">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label">Teléfono</label>
+                        <div class="col-lg-10">
+                            <input type="text" placeholder="Telefono" class="form-control" id="tbTelefono" name="tbTelefono">
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="ibox">
-                        <div class="ibox-content">
-                            <div class="panel-body">
-
-                                <div class="row">
-                                    <div class="col-md-4 form-group">
-                                        <label for="itramite">Tipo Proyecto</label>
-                                        @{
-
-                                            @Html.DropDownList("itipoproyecto", null, "Seleccione", htmlAttributes: new { @class = "form-control fondo search-select", @onchange = "MostrarProyectoSeleccionado()" })
-
-                                        }
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="ibox-content">
+                <div class="text-right">
+                    <button class="btn btn-primary hidden" type="button" id="btnGuardar" name="btnGuardar"><i class="fa fa-check"></i>&nbsp;Guardar</button>
+                    <button class="btn btn-primary" type="button" id="btnEditar" name="btnGuardar"><i class="fa fa-edit"></i>&nbsp;Editar</button>
+                    <button class="btn btn-default" type="button" id="btnLimpiar" onclick="location.reload();"><i class="fa fa-trash"></i>&nbsp;Limpiar</button>
                 </div>
-            </div>
-            <div class="row">
-                <div id="estandar_container">
-                </div>
-
             </div>
         </div>
+    </div>
+</div>
+<div class="row" id="div_tipoProyecto">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-content">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label for="itramite">Tipo Proyecto</label>
+                            @Html.DropDownList("itipoproyecto", null, "Seleccione", htmlAttributes: new { @class = "form-control  search-select", @onchange = "MostrarProyectoSeleccionado()" })
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div id="container">
     </div>
 </div>
 
@@ -185,466 +159,26 @@
         var url_datatable2 = '@Url.Action("ObtenerConsultas2", controller)';
         var url_continuar = '@Url.Action("Continuar", controller)';
         var url_delete = '@Url.Action("Delete", controller)';
-        var url_create = '@Url.Action("Create", controller)';
+        var url_createEstandar = '@Url.Action("CreateEstandar", controller)';
+        var url_createPersonalizada = '@Url.Action("CreatePersonalizada", controller)';
         var url_mostrarproyecto = '@Url.Action("MostrarProyecto", controller)';
         var url_cargarproyecto = '@Url.Action("CargarProyecto", controller)';
-    var listado = '@Url.Action("GetProductosDetalle", controller)';
 
     </script>
 
     <script src="~/Core/Js/Formularios.js"></script>
 
     <script>
-
-
         $(document).ready(function () {
             desbloqueaDatos('#div_cabecera');
-            bloqueaDatos('#div_datos');
+            bloqueaDatos('#div_datos_empresa');
+            bloqueaDatos('#div_datos_cliente');
+            bloqueaDatos('#div_datos_cliente');
             $('.i-checks').iCheck({
                 checkboxClass: 'icheckbox_square-green',
                 radioClass: 'iradio_square-green',
             });
-           
+            $('.input_rut').rut();
         });
-        //dt.ajax.reload();
-
-        function cargaGrilla() {
-            var oTable = $("#tabla_Producto").DataTable({
-                //"processing": false,
-                "serverSide": true,
-                //"filter": false,
-                //"orderMulti": false,
-                "pagingType": "full_numbers",
-
-                "language": datatableIdioma(),
-                "ajax": {
-                    "url": url_datatable,
-                    "data": function (d) {
-                        d.filtro = "";
-                    },
-                    "type": "POST",
-                    "datatype": "json"
-                },
-
-
-                "columns": [
-                    { "data": "id", "name": "id", "autoWidth": true },
-                    { "data": "codigo", "name": "codigo", "autoWidth": true },
-                    { "data": "descripcion", "title": "descripcion", "name": "Descripcion", "autoWidth": true },
-                    { "data": "superficie", "name": "superficie", "autoWidth": true },
-                    { "data": "precio", "name": "precio", "autoWidth": true }
-
-                ],
-                dom: 'Bfrtip',
-                buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
-                ]
-
-            });
-        }
-        function cargaGrilla2()
-        { Grid_VM; }
-        var Grid_VM;
-        //Config Grid DataTables
-        $(function () {
-            Grid_VM = {
-                dt: null,
-                init: function () {
-                    dt = $("#tabla_Parametro").DataTable({
-                        "serverSide": true,
-                        "processing": true,
-                        //"lengthMenu": [[10, 25, 50, 100, 99999], [10, 25, 50, 100, 'TODOS']],
-                        //"order": [[0, "DESC"]],
-                        "scrollY": "500px",
-                        "scrollCollapse": true,
-                        "paging": false,
-                        "language": datatableIdioma(),
-                        "ajax": {
-                            "url": url_datatable2,
-                            "data": function (d) {
-                                d.filtro = ""
-                            },
-                            "type": "POST",
-                            "datatype": "json"
-                        },
-                        columnDefs: [{
-                            orderable: false,
-                            className: 'select-checkbox',
-                            targets: 0
-                        }],
-                        select: {
-                            style: 'os',
-                            selector: 'td:first-child'
-                        },
-                        "columns": [
-                            { "data": "id", "visible": true },
-                            { "data": "descripcion", "visible": true },
-                            { "data": "valor", "visible": true },
-                            {
-                                "data": null,
-                                "className": 'details-control',
-                                "visible": true,
-                                "render": function (data) {
-                                    return ' <a class=""><span class="fa fa-edit"></span>&nbsp&nbspEditar</a> '
-
-                                }
-                            }
-                        ]
-
-                    });
-
-
-                    $('#tabla_Parametro tbody').on('click', 'td.details-control', function () {
-                        var resultado = null;
-                        var tr = $(this).closest('tr');
-                        var row = dt.row(tr);
-
-                        $.ajax({
-                            type: "POST",
-                            url: listado,
-                            contentType: "application/json; charset=utf-8",
-                            data: "{'id': " + row.data().id + "}",
-                            dataType: "json",
-                            success: function (result) {
-                                if (row.child.isShown()) {
-                                    // This row is already open - close it
-                                    row.child.hide();
-                                    tr.removeClass('shown');
-                                }
-                                else {
-                                    // Open this row
-                                    row.child(format(/*row.data()*/result)).show();
-                                    tr.addClass('shown');
-                                }
-                            },
-                            error: function (xhr) {
-                                //debugger;
-                                console.log(xhr.responseText);
-                                alert("Error has occurred..");
-                            }
-                        });
-
-
-                    });
-                    ////Export Data Buttons
-                    //new $.fn.dataTable.Buttons(dt, {
-                    //    buttons: [
-                    //        {
-                    //            extend: 'copyHtml5', exportOptions: { columns: "thead th:not(.noExport)" },
-                    //            text: '<i class="fa fa-files-o   btn-default">&nbsp&nbspCopiar</i>',
-                    //            titleAttr: 'Copy'
-                    //        },
-                    //        {
-                    //            extend: 'excelHtml5', exportOptions: { columns: "thead th:not(.noExport)" },
-                    //            text: '<i class="fa fa-file-excel-o  btn-default">&nbsp&nbspExcel</i>',
-                    //            titleAttr: 'Excel'
-                    //        },
-                    //        {
-                    //            extend: 'csvHtml5', exportOptions: { columns: "thead th:not(.noExport)" },
-                    //            text: '<i class="fa fa-file-text-o  btn-default">&nbsp&nbspCSV</i>',
-                    //            titleAttr: 'CSV'
-                    //        },
-                    //        {
-                    //            extend: 'pdfHtml5', exportOptions: { columns: "thead th:not(.noExport)" },
-                    //            text: '<i class="fa fa-file-pdf-o  btn-default">&nbsp&nbspPDF</i>',
-                    //            titleAttr: 'PDF'
-                    //        }
-                    //    ]
-                    //});
-
-                    ////Set the location of buttons
-                    //dt.buttons().container()
-                    //    .appendTo($('.panel-body:eq(0)', dt.table().container()));
-                },
-                refresh: function () {
-                    dt.ajax.reload();
-                }
-            };
-
-            // Advanced Search Modal Search button click handler
-            $('#buscar').on("click", Grid_VM.refresh);
-
-            // Initialize the Datatables
-            Grid_VM.init();
-            //BOTONES DENTRO DE GRILLA
-            //Edit Row
-            $('#tabla_Parametro').on("click", ".edit_row", function (event) {
-
-                event.preventDefault();
-
-                var url = $(this).attr("href");
-
-                console.log('Edición:');
-                console.log(url);
-
-                $.get(url, function (data) {
-                    //$('#create_Container').html('');
-                    //$('#edit_Container').html(data);
-                    //$('#div_EditModal').modal('show');
-
-                    //espero y lanzo el foco al primer control de datos
-                    setTimeout(function () {
-                        //$('#GLOSA_MOTIVO').focus();
-                        //$('#USU_CREA').prop('readonly', true);
-                        //$('#FECHA_CREA').prop('readonly', true);
-                        //$('#TIPO_FUNC').prop("disabled", false);
-                        //$('#TIPO_FUNC').prop("readonly", true);
-                    }, 500);
-
-                });
-
-            });
-
-            //Delete Row
-            $('#tabla_Parametro').on("click", ".delete_row", function (event) {
-
-                event.preventDefault();
-
-                var url = $(this).attr("href");
-                console.log('Eliminación:');
-                console.log(url);
-
-                $.get(url, function (data) {
-                    console.log('Trajo la info');
-                    $('#delete_Container').html(data);
-
-                    $('#div_DeleteModal').modal('show');
-                });
-
-            });
-
-            //Cerrar Row
-            $('#tabla_Parametro').on("click", ".cerrar_row", function (event) {
-
-                event.preventDefault();
-
-                var url = $(this).attr("href");
-                console.log('Cerrar:');
-                console.log(url);
-
-                $.get(url, function (data) {
-                    console.log('Trajo la info');
-                    $('#cerrar_Container').html(data);
-                    $('#div_CerrarModal').modal('show');
-                });
-
-            });
-            //FIN: BOTONES DENTRO DE GRILLA
-        });
-
-        function format(d) {
-            console.log(d);
-
-            return '<table class="table table-striped">' +
-                '<thead>' +
-                '<tr>' +
-                '<th>' +
-                '<label class="control-label col-md-2">Id</label>' +
-                '</th>' +
-                '<th>' +
-                '<label class="control-label col-md-2">Descripcion</label>' +
-                '</th>' +
-                '<th>' +
-                '<label class="control-label col-md-2">Valor</label>' +
-                '</th>' +
-                '<th>' +
-                '<label class="control-label col-md-2"></label>' +
-                '</th>' +
-                '</tr>' +
-                '</thead>' +
-                '<tbody>' +
-
-
-                callback(d) +
-
-                //'<tr>' +
-                //traeClase(d) +
-                //'</tr>' +
-                '<tr>' +
-                '<td>' +
-                                @*@{ string llaves = item.id.ToString();
-                                    <button type="button" class="btn btn-link" onclick="ModificarRestriccion('@llaves',2)"><span class="fa fa fa-eraser"></span>&nbsp;&nbsp;quitar</button>
-        }*@
-        '</td>' +
-            '</tr>' +
-            '</tbody>' +
-            '</table>';
-
-
-
-
-    }
-
-        var contador = 0;
-        function callback(data) {
-            var salida = '';
-            console.log("ctm")
-            console.log(data);
-            $.each(data, function (ind, elem) {
-                salida += '<tr><td>' + elem['id'] + '</td>' + '<td>' + elem['Descripcion'] + '</td>' + '<td>' + elem['Valor'] + '</td>' +
-                    '<td>' +
-
-                    '<a href="' + url_edit + '?idSolicitud=' + elem['idmaestro'] + '&idExamen=' + elem['idexamenPrac'] + '" class="btn btn-success btn-rounded "><span class="fa fa-edit"></span></a>'
-
-                    //+ + = kie+ NAN +
-                    + ' </td></tr>';
-
-            });
-
-            return salida;
-        }
-        function CargarProyecto() {
-            var identificador = $("#iproyecto :selected").val();
-            $.get(url_cargarproyecto + '?id=' + identificador, function (data) {
-                var id_control_foco = '#L14_NUMRUT';
-                console.log(data);
-
-                switch (data) {
-                    case "Ok":
-                        cargaGrilla();
-                        break;
-                    default:
-                        console.log(data.responseText);
-                }
-            });
-        }
-        var oTable = $("#Grilla_Parametro").DataTable({
-            //"processing": false,
-            "serverSide": true,
-            //"filter": false,
-            //"orderMulti": false,
-            "pagingType": "full_numbers",
-
-            "language": datatableIdioma(),
-            "ajax": {
-                "url": url_datatable,
-                "data": function (d) {
-                    d.filtro = "";
-                },
-                "type": "POST",
-                "datatype": "json"
-            },
-
-
-            "columns": [
-                { "data": "Id", "name": "Id", "autoWidth": true },
-                { "data": "Rut", "name": "Rut", "autoWidth": true },
-                { "data": "Nombre", "title": "Nombre", "name": "Nombre", "autoWidth": true },
-                { "data": "ApellidoPaterno", "name": "ApellidoPaterno", "autoWidth": true },
-                { "data": "ApellidoMaterno", "name": "ApellidoMaterno", "autoWidth": true },
-                { "data": "Correo", "name": "Correo", "autoWidth": true },
-                { "data": "idPerfil", "name": "idPerfil", "autoWidth": true },
-                { "data": "Estado", "name": "Estado", "title": "Estado", "autoWidth": true },
-                {
-                    "data": "Id", "name": "Id", "autoWidth": true, "searchable": false, "sortable": false, "render": function (data) {
-
-                        salida = '<a class="editclass btn-success btn-sm" href="' + url_edit + '?id=' + data + '"' + ' title="Editar">Editar&nbsp;<span class="glyphicon glyphicon-pencil" /></a> ';
-                        salida += '<a class="deleteclass btn btn-danger btn-sm" href="' + url_delete + '?id=' + data + '"' + ' title="Editar">Eliminar&nbsp;<span class="glyphicon glyphicon-trash" /></a> ';
-
-                        return salida;
-                        //  return salida;
-                    }
-                },
-
-            ],
-            dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
-
-        });
-
-        function Continuar() {
-            //llaves para id
-            var rut = $('#tbRutBusqueda').val();
-            console.log(rut);
-            url = url_continuar + '?rut=' + rut;
-
-            $.get(url, function (data) {
-                console.log(data);
-                //espero y lanzo el foco al primer control de datos
-                setTimeout(function () {
-                    desbloqueaDatos('#div_datos');
-                    bloqueaDatos('#div_cabecera');
-                    $('#tbRut').val(data.Rut + data.Dv);
-                    //$('#tbRazonSocial').val(data.RazonSocial);
-                    //$('#tbDireccion').val(data.Direccion);
-                    //$('#tbRegion').val(data.Region);
-                    //$('#tbComuna').val(data.Comuna);
-                    //$('#tbGiro').val(data.Giro);
-                    //$('#tbNombre').val(data.NombreContacto);
-                    //$('#tbApellido').val(data.ApellidoContacto);
-                    //$('#tbCorreo').val(data.CorreoContacto);
-                    //$('#tbTelefono').val(data.TelefonoContacto);
-                    $('#tbRut').focus();
-
-                }, 500);
-            });
-        }
-        function CargaComunas() {
-            var identificador = $("#iregion :selected").val();
-            $.ajax({
-                url: url_cargarcomunas,
-                type: "post",
-                data: {
-                    id: identificador
-                },
-                success: function (response) {
-                    if (!response.error) {
-                        $.each(response, function (i, e) {
-                            $('#icomuna').append('<option value="' + e.Value + '">' + e.Text + '</option>');
-                        });
-                        //BusquedaAgrupamiento();
-                    }
-                    //BuscarAgrupacionMTT(identificador);
-
-
-                },
-                error: function (xhr) {
-                    //$this.loadingButton({ accion: "reset" });
-                }
-            });
-        }
-
-        function MostrarProyectoSeleccionado() {
-            var identificador = $("#itipoproyecto :selected").val();
-            var url = url_mostrarproyecto + 'id?=' + identificador
-            $.get(url_mostrarproyecto, function (data) {
-                var id_control_foco = '#L14_NUMRUT';
-                console.log(data);
-
-                switch (data) {
-                    case "CotizacionEstandar":
-                        carga_modificar();
-
-                        //$('#Nombres').prop('readonly', true);
-                        //$('#Clases').focus();
-                        break;
-                    case "CotizacionPersonalizada":
-                        carga_modificar();
-                        break;
-                    default:
-                        console.log(data.responseText);
-                }
-            });
-        }
-        function carga_modificar() {
-            url = url_create;
-
-            $.get(url, function (data) {
-                ////lleno y despliego el dialogo de edición
-                $('#estandar_container').html(data);
-                //$('#div_EditModal').modal('show');
-
-                //espero y lanzo el foco al primer control de datos
-                setTimeout(function () {
-                    //$('#Clases').focus();
-                    //$('#Nombres').prop('readonly', true);
-                    //$('#L14_FECDURAC').prop('readonly', true);
-
-                }, 500);
-            });
-
-        }
     </script>
-}
+    }

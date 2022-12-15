@@ -7,18 +7,18 @@ using System.Web;
 
 namespace Metalkit.Core.Datos
 {
-    public class ComunaDAO: DbContext
+    public class ParametroNivel2DAO: DbContext
     {
         private MetalkitEntities _dbContext;
 
-        public ComunaDAO()
+        public ParametroNivel2DAO()
         {
             if (_dbContext == null)
                 _dbContext = new MetalkitEntities();
         }
-        internal IQueryable<Comuna> ObtenerQueryPrincipal(string filtro, string sortColumn, string sortCulumnDir, string searchValue)
+        internal IQueryable<ParametroNivel2> ObtenerQueryPrincipal(string filtro, string sortColumn, string sortCulumnDir, string searchValue)
         {
-            IQueryable<Comuna> query = (from a in _dbContext.Comuna select a);
+            IQueryable<ParametroNivel2> query = (from a in _dbContext.ParametroNivel2 select a);
 
             try
             {
@@ -33,11 +33,11 @@ namespace Metalkit.Core.Datos
 
             return query;
         }
-        internal Comuna Traer(int id)
+        internal ParametroNivel2 Traer(int id)
         {
-            var entidad = (Comuna)null;
+            var entidad = (ParametroNivel2)null;
 
-            var query = from ent in _dbContext.Comuna
+            var query = from ent in _dbContext.ParametroNivel2
                         where ent.Id == id
                         select ent;
 
@@ -45,33 +45,24 @@ namespace Metalkit.Core.Datos
 
             return entidad;
         }
-        internal List<Comuna> TraerXRegion(int id)
-        {
-            var lista = new List<Comuna>();
 
-            var query = from ent in _dbContext.Comuna
-                        where ent.IdRegion == id
-                        select ent;
-            lista = query.ToList();
-            return lista;
-        }
-        internal List<Comuna> TraerTodos()
+        internal List<ParametroNivel2> TraerTodos()
         {
-            var lista = new List<Comuna>();
+            var lista = new List<ParametroNivel2>();
 
-            var query = from ent in _dbContext.Comuna
+            var query = from ent in _dbContext.ParametroNivel2
                         select ent;
             lista = query.ToList();
             return lista;
         }
 
-        internal bool Guardar(Comuna data)
+        internal bool Guardar(ParametroNivel2 data)
         {
             var guardado = false;
 
             try
             {
-                if (_dbContext.Comuna.Any(o => o.Id == data.Id))
+                if (_dbContext.ParametroNivel2.Any(o => o.Id == data.Id))
                 {
                     _dbContext.Entry(data).State = EntityState.Modified;
                 }
@@ -87,12 +78,12 @@ namespace Metalkit.Core.Datos
             }
             return guardado;
         }
-        internal bool Eliminar(Comuna data) 
+        internal bool Eliminar(ParametroNivel2 data) 
         {
             var guardado = false;
             try
             {
-                _dbContext.Comuna.Remove(data);
+                _dbContext.ParametroNivel2.Remove(data);
                 _dbContext.SaveChanges();
                 var contador = _dbContext.SaveChanges();
                 guardado = contador > 0;

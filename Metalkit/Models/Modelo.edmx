@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="MetalkitModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="MetalkitModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Cliente">
           <Key>
             <PropertyRef Name="Id" />
@@ -88,6 +88,23 @@
           <Property Name="Valor" Type="int" />
           <Property Name="Vigente" Type="bit" />
         </EntityType>
+        <EntityType Name="Parametro_ParametroNvl2">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdParametro" Type="int" />
+          <Property Name="IdParametroNivel2" Type="int" />
+        </EntityType>
+        <EntityType Name="ParametroNivel2">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="250" />
+          <Property Name="Valor" Type="int" />
+          <Property Name="Vigente" Type="bit" />
+        </EntityType>
         <EntityType Name="Perfil">
           <Key>
             <PropertyRef Name="Id" />
@@ -106,7 +123,7 @@
           <Property Name="Precio" Type="nchar" MaxLength="10" />
           <Property Name="Imagen" Type="image" />
         </EntityType>
-        <EntityType Name="ProductoParametro">
+        <EntityType Name="Producto_Parametro">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -161,6 +178,30 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           <Property Name="Fecha" Type="datetime2" Precision="7" />
           <Property Name="Usuario" Type="int" />
         </EntityType>
+        <Association Name="FK_Parametro_ParametroNvl2_Parametro">
+          <End Role="Parametro" Type="Self.Parametro" Multiplicity="0..1" />
+          <End Role="Parametro_ParametroNvl2" Type="Self.Parametro_ParametroNvl2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Parametro">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Parametro_ParametroNvl2">
+              <PropertyRef Name="IdParametro" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Parametro_ParametroNvl2_ParametroNivel2">
+          <End Role="ParametroNivel2" Type="Self.ParametroNivel2" Multiplicity="0..1" />
+          <End Role="Parametro_ParametroNvl2" Type="Self.Parametro_ParametroNvl2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ParametroNivel2">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Parametro_ParametroNvl2">
+              <PropertyRef Name="IdParametroNivel2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="MetalkitModelStoreContainer">
           <EntitySet Name="Cliente" EntityType="Self.Cliente" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Comuna" EntityType="Self.Comuna" Schema="dbo" store:Type="Tables" />
@@ -171,9 +212,11 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           <EntitySet Name="EstadoVersion" EntityType="Self.EstadoVersion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IdTipoEntrega" EntityType="Self.IdTipoEntrega" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Parametro" EntityType="Self.Parametro" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Parametro_ParametroNvl2" EntityType="Self.Parametro_ParametroNvl2" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ParametroNivel2" EntityType="Self.ParametroNivel2" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Perfil" EntityType="Self.Perfil" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Producto" EntityType="Self.Producto" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ProductoParametro" EntityType="Self.ProductoParametro" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Producto_Parametro" EntityType="Self.Producto_Parametro" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Region" EntityType="Self.Region" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TipoProyecto" EntityType="Self.TipoProyecto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
@@ -184,8 +227,17 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
     [TipoCliente].[Tipo] AS [Tipo]
     FROM [dbo].[TipoCliente] AS [TipoCliente]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK_Parametro_ParametroNvl2_Parametro" Association="Self.FK_Parametro_ParametroNvl2_Parametro">
+            <End Role="Parametro" EntitySet="Parametro" />
+            <End Role="Parametro_ParametroNvl2" EntitySet="Parametro_ParametroNvl2" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Parametro_ParametroNvl2_ParametroNivel2" Association="Self.FK_Parametro_ParametroNvl2_ParametroNivel2">
+            <End Role="ParametroNivel2" EntitySet="ParametroNivel2" />
+            <End Role="Parametro_ParametroNvl2" EntitySet="Parametro_ParametroNvl2" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MetalkitModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -212,6 +264,15 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Comuna1" Type="String" MaxLength="225" FixedLength="false" Unicode="true" />
           <Property Name="IdRegion" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Cotizacion">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdProducto" Type="Int32" />
+          <Property Name="IdEntrega" Type="Int32" />
+          <Property Name="IdTipoProyecto" Type="Int32" />
         </EntityType>
         <EntityType Name="Despacho">
           <Key>
@@ -262,6 +323,27 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Valor" Type="Int32" />
           <Property Name="Vigente" Type="Boolean" />
+          <NavigationProperty Name="Parametro_ParametroNvl2" Relationship="Self.FK_Parametro_ParametroNvl2_Parametro" FromRole="Parametro" ToRole="Parametro_ParametroNvl2" />
+        </EntityType>
+        <EntityType Name="Parametro_ParametroNvl2">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdParametro" Type="Int32" />
+          <Property Name="IdParametroNivel2" Type="Int32" />
+          <NavigationProperty Name="Parametro" Relationship="Self.FK_Parametro_ParametroNvl2_Parametro" FromRole="Parametro_ParametroNvl2" ToRole="Parametro" />
+          <NavigationProperty Name="ParametroNivel2" Relationship="Self.FK_Parametro_ParametroNvl2_ParametroNivel2" FromRole="Parametro_ParametroNvl2" ToRole="ParametroNivel2" />
+        </EntityType>
+        <EntityType Name="ParametroNivel2">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Valor" Type="Int32" />
+          <Property Name="Vigente" Type="Boolean" />
+          <NavigationProperty Name="Parametro_ParametroNvl2" Relationship="Self.FK_Parametro_ParametroNvl2_ParametroNivel2" FromRole="ParametroNivel2" ToRole="Parametro_ParametroNvl2" />
         </EntityType>
         <EntityType Name="Perfil">
           <Key>
@@ -281,7 +363,7 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           <Property Name="Precio" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="Imagen" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
-        <EntityType Name="ProductoParametro">
+        <EntityType Name="Producto_Parametro">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -334,34 +416,59 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Tipo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <Association Name="FK_Parametro_ParametroNvl2_Parametro">
+          <End Role="Parametro" Type="Self.Parametro" Multiplicity="0..1" />
+          <End Role="Parametro_ParametroNvl2" Type="Self.Parametro_ParametroNvl2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Parametro">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Parametro_ParametroNvl2">
+              <PropertyRef Name="IdParametro" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Parametro_ParametroNvl2_ParametroNivel2">
+          <End Role="ParametroNivel2" Type="Self.ParametroNivel2" Multiplicity="0..1" />
+          <End Role="Parametro_ParametroNvl2" Type="Self.Parametro_ParametroNvl2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ParametroNivel2">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Parametro_ParametroNvl2">
+              <PropertyRef Name="IdParametroNivel2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="MetalkitEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Cliente" EntityType="Self.Cliente" />
           <EntitySet Name="Comuna" EntityType="Self.Comuna" />
+          <EntitySet Name="Cotizacion" EntityType="Self.Cotizacion" />
           <EntitySet Name="Despacho" EntityType="Self.Despacho" />
           <EntitySet Name="Entrega" EntityType="Self.Entrega" />
           <EntitySet Name="EstadoOT" EntityType="Self.EstadoOT" />
           <EntitySet Name="EstadoVersion" EntityType="Self.EstadoVersion" />
           <EntitySet Name="IdTipoEntrega" EntityType="Self.IdTipoEntrega" />
           <EntitySet Name="Parametro" EntityType="Self.Parametro" />
+          <EntitySet Name="Parametro_ParametroNvl2" EntityType="Self.Parametro_ParametroNvl2" />
+          <EntitySet Name="ParametroNivel2" EntityType="Self.ParametroNivel2" />
           <EntitySet Name="Perfil" EntityType="Self.Perfil" />
           <EntitySet Name="Producto" EntityType="Self.Producto" />
-          <EntitySet Name="ProductoParametro" EntityType="Self.ProductoParametro" />
+          <EntitySet Name="Producto_Parametro" EntityType="Self.Producto_Parametro" />
           <EntitySet Name="Region" EntityType="Self.Region" />
           <EntitySet Name="TipoProyecto" EntityType="Self.TipoProyecto" />
           <EntitySet Name="Usuario" EntityType="Self.Usuario" />
           <EntitySet Name="VersionOT" EntityType="Self.VersionOT" />
           <EntitySet Name="TipoCliente" EntityType="Self.TipoCliente" />
-          <EntitySet Name="Cotizacion" EntityType="MetalkitModel.Cotizacion" />
+          <AssociationSet Name="FK_Parametro_ParametroNvl2_Parametro" Association="Self.FK_Parametro_ParametroNvl2_Parametro">
+            <End Role="Parametro" EntitySet="Parametro" />
+            <End Role="Parametro_ParametroNvl2" EntitySet="Parametro_ParametroNvl2" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Parametro_ParametroNvl2_ParametroNivel2" Association="Self.FK_Parametro_ParametroNvl2_ParametroNivel2">
+            <End Role="ParametroNivel2" EntitySet="ParametroNivel2" />
+            <End Role="Parametro_ParametroNvl2" EntitySet="Parametro_ParametroNvl2" />
+          </AssociationSet>
         </EntityContainer>
-        <EntityType Name="Cotizacion">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdProducto" Type="Int32" />
-          <Property Name="IdEntrega" Type="Int32" />
-          <Property Name="IdTipoProyecto" Type="Int32" />
-        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -391,6 +498,16 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Comuna1" ColumnName="Comuna" />
                 <ScalarProperty Name="IdRegion" ColumnName="IdRegion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cotizacion">
+            <EntityTypeMapping TypeName="MetalkitModel.Cotizacion">
+              <MappingFragment StoreEntitySet="Cotizacion">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
+                <ScalarProperty Name="IdEntrega" ColumnName="IdEntrega" />
+                <ScalarProperty Name="IdTipoProyecto" ColumnName="IdTipoProyecto" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -450,6 +567,25 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Parametro_ParametroNvl2">
+            <EntityTypeMapping TypeName="MetalkitModel.Parametro_ParametroNvl2">
+              <MappingFragment StoreEntitySet="Parametro_ParametroNvl2">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdParametro" ColumnName="IdParametro" />
+                <ScalarProperty Name="IdParametroNivel2" ColumnName="IdParametroNivel2" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ParametroNivel2">
+            <EntityTypeMapping TypeName="MetalkitModel.ParametroNivel2">
+              <MappingFragment StoreEntitySet="ParametroNivel2">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Valor" ColumnName="Valor" />
+                <ScalarProperty Name="Vigente" ColumnName="Vigente" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Perfil">
             <EntityTypeMapping TypeName="MetalkitModel.Perfil">
               <MappingFragment StoreEntitySet="Perfil">
@@ -470,9 +606,9 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ProductoParametro">
-            <EntityTypeMapping TypeName="MetalkitModel.ProductoParametro">
-              <MappingFragment StoreEntitySet="ProductoParametro">
+          <EntitySetMapping Name="Producto_Parametro">
+            <EntityTypeMapping TypeName="MetalkitModel.Producto_Parametro">
+              <MappingFragment StoreEntitySet="Producto_Parametro">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
                 <ScalarProperty Name="IdParametro" ColumnName="IdParametro" />
@@ -526,16 +662,6 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
               <MappingFragment StoreEntitySet="TipoCliente">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Tipo" ColumnName="Tipo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Cotizacion">
-            <EntityTypeMapping TypeName="MetalkitModel.Cotizacion">
-              <MappingFragment StoreEntitySet="Cotizacion">
-                <ScalarProperty Name="IdTipoProyecto" ColumnName="IdTipoProyecto" />
-                <ScalarProperty Name="IdEntrega" ColumnName="IdEntrega" />
-                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

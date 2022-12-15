@@ -27,20 +27,22 @@ namespace Metalkit.Models
     
         public virtual DbSet<Cliente> Cliente { get; set; }
         public virtual DbSet<Comuna> Comuna { get; set; }
+        public virtual DbSet<Cotizacion> Cotizacion { get; set; }
         public virtual DbSet<Despacho> Despacho { get; set; }
         public virtual DbSet<Entrega> Entrega { get; set; }
         public virtual DbSet<EstadoOT> EstadoOT { get; set; }
         public virtual DbSet<EstadoVersion> EstadoVersion { get; set; }
         public virtual DbSet<IdTipoEntrega> IdTipoEntrega { get; set; }
         public virtual DbSet<Parametro> Parametro { get; set; }
+        public virtual DbSet<Parametro_ParametroNvl2> Parametro_ParametroNvl2 { get; set; }
+        public virtual DbSet<ParametroNivel2> ParametroNivel2 { get; set; }
         public virtual DbSet<Perfil> Perfil { get; set; }
         public virtual DbSet<Producto> Producto { get; set; }
-        public virtual DbSet<ProductoParametro> ProductoParametro { get; set; }
+        public virtual DbSet<Producto_Parametro> Producto_Parametro { get; set; }
         public virtual DbSet<Region> Region { get; set; }
         public virtual DbSet<TipoProyecto> TipoProyecto { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
         public virtual DbSet<VersionOT> VersionOT { get; set; }
         public virtual DbSet<TipoCliente> TipoCliente { get; set; }
-        public virtual DbSet<Cotizacion> Cotizacion { get; set; }
     }
 }

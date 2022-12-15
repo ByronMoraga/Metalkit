@@ -43,7 +43,16 @@
     ]
 
 });
-
+function Busqueda() {
+    muestraContenidoModal('GrillaParametros', 'Denegaciones', 'Busqueda', 'get', {
+        beforeSend: function () {
+            //$this.loadingButton({ accion: "loading" })
+        },
+        complete: function () {
+            //$this.loadingButton({ accion: "reset" })
+        }
+    }, '', 'grande');
+}
 ////metodos get
 $("#btnAgregar").on("click", function () {
 

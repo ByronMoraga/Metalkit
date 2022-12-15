@@ -12,10 +12,10 @@ namespace Metalkit.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Parametro
+    public partial class ParametroNivel2
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Parametro()
+        public ParametroNivel2()
         {
             this.Parametro_ParametroNvl2 = new HashSet<Parametro_ParametroNvl2>();
         }

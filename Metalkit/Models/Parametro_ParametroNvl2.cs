@@ -12,10 +12,13 @@ namespace Metalkit.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ProductoParametro
+    public partial class Parametro_ParametroNvl2
     {
         public int Id { get; set; }
-        public Nullable<int> IdProducto { get; set; }
         public Nullable<int> IdParametro { get; set; }
+        public Nullable<int> IdParametroNivel2 { get; set; }
+    
+        public virtual Parametro Parametro { get; set; }
+        public virtual ParametroNivel2 ParametroNivel2 { get; set; }
     }
 }
