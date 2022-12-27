@@ -1,43 +1,23 @@
-﻿<nav class="navbar-default navbar-static-side" role="navigation">
-    <div class="sidebar-collapse">
-        <ul class="nav metismenu" id="side-menu">
-            <li class="nav-header text-center">
-                <div class="dropdown profile-element">
-                    <span>
-                        <img alt="image" src="~/images/cliente.png" />
-                    </span>
-                    <a class="dropdown-toggle" href="#">
-                        <span class="clear">
-                            <span class="block m-t-xs">
-                                <strong class="font-bold">Metalkit</strong>
-                            </span>
-                            <span class="text-muted text-xs block">Prueba</span>
-                        </span>
-                    </a>
-                </div>
-                <div class="logo-element">
-                    <img alt="image" src="~/images/cliente.png" />
-                </div>
-            </li>
-            @Html.MvcSiteMap().Menu("BootstrapMenuHelperModel")
-  
-            @*<li>
-                <a class="dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-search"></i>
-                    <span class="nav-label">Solicitudes </span>
-                </a>       
-                <ul class="nav nav-second-level collapse" role="menu">
-                    <li><a href="@Url.Action("index", "ADSolicitud")">En Proceso</a></li>
-                </ul>
-                <ul class="nav nav-second-level collapse" role="menu">
-                    <li><a href="/ADConsolidados">Consolidadas</a></li>
-                </ul>
-                <ul class="nav nav-second-level collapse" role="menu">
-                    <li><a href="/ADConsolidados">Ordernes de compras</a></li>
-                </ul>
+﻿<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="index3.html" class="brand-link">
+        <img src="dist/img/AdminLTELogo.png" alt=" Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">Metalkit</span>
 
-            </li>*@
-        </ul>
-        
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                @Html.MvcSiteMap().Menu("BootstrapMenuHelperModel")
+
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
     </div>
-</nav>
+    <!-- /.sidebar -->
+</aside>

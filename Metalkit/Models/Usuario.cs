@@ -14,6 +14,14 @@ namespace Metalkit.Models
     
     public partial class Usuario
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Usuario()
+        {
+            this.EstadoOT_VersionOT = new HashSet<EstadoOT_VersionOT>();
+            this.Parametro = new HashSet<Parametro>();
+            this.VersionOT = new HashSet<VersionOT>();
+        }
+    
         public int Id { get; set; }
         public string Rut { get; set; }
         public string Nombre { get; set; }
@@ -23,5 +31,12 @@ namespace Metalkit.Models
         public string Contraseña { get; set; }
         public Nullable<int> idPerfil { get; set; }
         public Nullable<bool> Estado { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EstadoOT_VersionOT> EstadoOT_VersionOT { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Parametro> Parametro { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<VersionOT> VersionOT { get; set; }
     }
 }

@@ -117,25 +117,6 @@ function alert_warning(msg, title, time, className) {
     Command: toastr["warning"](msg, "Alerta")
 }
 
-
-function errorLoginAdmin(data) {
-    $(document).ready(function () {
-        $("#errorLoginAdmin").html('<div class="alert alert-danger"><i class="clip-key"></i><strong> Error de acceso!</strong> ' + data + '</div>');
-    });
-}
-
-function errorLoginFuncionario(data) {
-    $(document).ready(function () {
-        $("#errorLoginFuncionario").html('<div class="alert alert-danger"><i class="clip-key"></i><strong> Error de acceso!</strong> ' + data + '</div>');
-    });
-}
-
-$(".decPersonal").keyup(function () {
-    var decimal = $(this).val().replace(".", ",");
-    $(this).val(decimal);
-});
-
-
 function confirma(boton_elimina, mensaje) {
     // bootbox.confirm("¿Confirma eliminación?", function (result) { if (result) document.getElementById(boton_elimina).click(); } );
     bootbox.confirm({

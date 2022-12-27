@@ -16,8 +16,11 @@ namespace Metalkit.Models
     {
         public int Id { get; set; }
         public Nullable<int> OT { get; set; }
-        public Nullable<int> EstadoVersion { get; set; }
+        public Nullable<int> IdEstadoVersion { get; set; }
         public Nullable<System.DateTime> Fecha { get; set; }
-        public Nullable<int> Usuario { get; set; }
+        public Nullable<int> IdUsuario { get; set; }
+    
+        public virtual EstadoOT_VersionOT EstadoOT_VersionOT { get; set; }
+        public virtual Usuario Usuario { get; set; }
     }
 }

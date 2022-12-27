@@ -1,3 +1,23 @@
+body, html, a, nav-link, .modal {
+    font-family: 'BrownLight Regular' !important;
+    font-size: 14px !important;
+}
+/*h3 {
+    font-family: 'Brown BoldItalic' !important;*/
+    /*font-size: 14px !important;*/
+/*}
+h2 {
+    font-family: 'Brown Bold' !important;*/
+    /*font-size: 14px !important;*/
+/*}*/
+.card-title {
+    float: left;
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin: 0;
+    font-family: 'Brown Bold';
+}
+
 div .modal-dialog-xl {
     width: 90% !important;
     margin: 1em 10em !important;
@@ -377,7 +397,7 @@ input.error {
     background-color: #ffffff;
     border-color: #ffffff;
     color: #1c84c6;
-    font-size: 35px !important;
+    font-size: 27px !important;
     padding-right: 10px;
 }
 

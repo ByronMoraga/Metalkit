@@ -38,15 +38,11 @@ namespace Metalkit
 
             bundles.Add(new ScriptBundle("~/bundles/tema").Include(
                      "~/Scripts/plugins/metisMenu/metisMenu.min.js",
-                     //"~/Scripts/plugins/pace/pace.min.js",
-                     "~/Scripts/app/adminlte.min.js",
                      "~/Scripts/app/inspinia.js"));
             // Inspinia script
             bundles.Add(new ScriptBundle("~/bundles/inspinia").Include(
                       "~/Scripts/plugins/metisMenu/metisMenu.min.js",
-                      //"~/Scripts/plugins/pace/pace.min.js",
                       "~/Scripts/app/inspinia.js"
-                       //"~/Scripts/app/adminlte.min.js"
                       ));
 
             // Inspinia skin config script

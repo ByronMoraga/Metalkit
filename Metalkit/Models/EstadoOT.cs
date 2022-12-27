@@ -14,8 +14,17 @@ namespace Metalkit.Models
     
     public partial class EstadoOT
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public EstadoOT()
+        {
+            this.EstadoOT_VersionOT = new HashSet<EstadoOT_VersionOT>();
+        }
+    
         public int Id { get; set; }
         public string Estado { get; set; }
         public Nullable<bool> Activo { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EstadoOT_VersionOT> EstadoOT_VersionOT { get; set; }
     }
 }

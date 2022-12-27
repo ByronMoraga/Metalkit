@@ -15,7 +15,9 @@ namespace Metalkit.Models
     public partial class Comuna
     {
         public int Id { get; set; }
-        public string Comuna1 { get; set; }
+        public string Nombre { get; set; }
         public Nullable<int> IdRegion { get; set; }
+    
+        public virtual Region Region { get; set; }
     }
 }

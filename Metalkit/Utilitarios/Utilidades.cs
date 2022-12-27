@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using System.Web.ModelBinding;
 
 namespace Proyecto.Utilitarios
 {
@@ -51,22 +52,29 @@ namespace Proyecto.Utilitarios
             /// <returns>Número de Rut sin dígito verificador</returns>
             public static int RutSinDV(string rut)
             {
+            int rutnumero = 0;
+            try
+            {
                 if (rut.IndexOf("-") != -1)
                 {
                     rut = rut.Replace(".", "").Replace("-", "").Trim();
                     rut = rut.Substring(0, rut.Length - 1);
                 }
             
-                int rutnumero = int.Parse(rut);
-                return rutnumero;
+                rutnumero = int.Parse(rut);
             }
-
-            /// <summary>
-            /// Método que retorna el dígito verificador
-            /// </summary>
-            /// <param name="rut">Rut</param>
-            /// <returns>Dígito verificador de un rut</returns>
-            public static string DV(string rut)
+            catch (Exception)
+            {
+                rutnumero = 0;
+            }
+            return rutnumero;
+        }
+        /// <summary>
+        /// Método que retorna el dígito verificador
+        /// </summary>
+        /// <param name="rut">Rut</param>
+        /// <returns>Dígito verificador de un rut</returns>
+        public static string DV(string rut)
             {
                 var dv = rut.Substring(rut.Length - 1, 1);
                 return dv;

@@ -8,7 +8,7 @@ namespace Metalkit.Models
         public int Id { get; set; }
         public string Descripcion { get; set; }
         public int? Valor { get; set; }
-        public List<ParametroNivel2> ParamNvl2 { get; set; }
+        public List<SubParametro> ParamNvl2 { get; set; }
 
     }
 }

@@ -1,0 +1,128 @@
+﻿@model Metalkit.Models.Cliente
+
+@{
+    ViewBag.Title = "CreateCliente";
+    Layout = null;
+
+
+}
+@using (Html.BeginForm("CreateCliente", "Formularios", FormMethod.Post, new { @class = "formModal form-validacion ", id = "formSolcitud", name = "formSolcitud" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="card card-primary">
+        <div class="card-header">
+            <div class="card-title">
+                Formulario contacto
+            </div>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Datos de la empresa</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row" id="div_cabecera">
+                                <label for="tbRutBusqueda" class="col-lg-3 col-form-label">Rut</label>
+                                <div class="col-lg-7">
+                                    <input type="text" class="form-control input_rut" id="tbRutBusqueda" name="tbRutBusqueda" placeholder="Ingrese rut">
+                                </div>
+                                <button type="button" class="btn btn-success btn-sm" onclick="Continuar()" id="btnContinuar" title="Continuar">Continuar</button>
+                            </div>
+                            <div id="div_datos_empresa">
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label">Razón Social</label>
+
+                                    <div class="col-lg-9">
+                                        <input type="text" placeholder="Razón Social" class="form-control" id="tbRazonSocial" name="tbRazonSocial">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label">Dirección</label>
+                                    <div class="col-lg-9">
+                                        <input type="text" placeholder="Dirección" class="form-control" id="tbDireccion" name="tbDireccion">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label">Región</label>
+                                    <div class="col-lg-9">
+                                        @Html.DropDownList("iregion", null, "Seleccione", htmlAttributes: new { @class = "form-control  search-select", @onchange = "CargaComunas()" })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label">Comuna</label>
+                                    <div class="col-lg-9">
+                                        @Html.DropDownList("icomuna", null, "Seleccione", htmlAttributes: new { @class = "form-control  search-select" })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label">Giro</label>
+                                    <div class="col-lg-9">
+                                        <input type="text" placeholder="Giro" class="form-control" id="tbGiro" name="tbGiro">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6" id="div_datos_cliente">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Datos del cliente</div>
+                        </div>
+                        <div class="card-body" style="padding-bottom: 100px; ">
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label">Nombre</label>
+
+                                <div class="col-lg-9">
+                                    <input type="text" placeholder="Nombre" class="form-control" id="tbNombre" name="tbNombre">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label">Apellido</label>
+
+                                <div class="col-lg-9">
+                                    <input type="text" placeholder="Apellido" class="form-control" id="tbApellido" name="tbApellido">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label">Correo</label>
+                                <div class="col-lg-9">
+                                    <input type="text" placeholder="Correo" class="form-control" id="tbCorreo" name="tbCorreo">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label">Teléfono</label>
+                                <div class="col-lg-9">
+                                    <input type="text" placeholder="Telefono" class="form-control" id="tbTelefono" name="tbTelefono">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="text-right">
+
+                        <button class="btn btn-primary disabled" type="button" id="b_guardar" name="b_guardar"><i class="fa fa-check"></i>&nbsp;Guardar</button>
+                        <button class="btn btn-primary" type="button" id="b_editar" name="b_editar"><i class="fa fa-edit"></i>&nbsp;Editar</button>
+                        <button class="btn btn-default" type="button" id="b_Limpiar" onclick="location.reload();"><i class="fa fa-trash"></i>&nbsp;Limpiar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+
+
+@section Scripts {
+    
+}

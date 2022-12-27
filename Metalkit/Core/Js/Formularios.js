@@ -1,23 +1,58 @@
-﻿function Continuar() {
+﻿function CargaInicial()
+{
+    desbloqueaDatos('#div_cabecera');
+    bloqueaDatos('#div_datos_empresa');
+    bloqueaDatos('#div_datos_cliente');
+    bloqueaDatos('#div_tipo_proyecto');
+    $("#b_editar").removeClass("disabled");
+    $("#b_guardar").addClass("disabled");
+    $('.input_rut').rut();
+
+    
+}
+function Continuar() {
     //llaves para id
     var rut = $('#tbRutBusqueda').val();
+    if (rut == "") {
+        alert_warning('para continuar. Ingrese un rut');
+        return;
+    }
     console.log(rut);
     url = url_continuar + '?rut=' + rut;
 
     $.get(url, function (data) {
+        if (data == "") {
+            alert_warning('debe ingresar un rut valido');
+            return;
+        }
         console.log(data);
-        desbloqueaDatos('#div_datos');
-        bloqueaDatos('#div_cabecera');
+            bloqueaDatos('#div_cabecera');
+        if (data == "") {
+            $("#b_guardar").removeClass("disabled");
+            $("#b_editar").addClass("disabled");
+            desbloqueaDatos('#div_datos_empresa');
+            desbloqueaDatos('#div_datos_cliente');
+        } else {
+            bloqueaDatos('#div_datos_empresa');
+            bloqueaDatos('#div_datos_cliente');
+            desbloqueaDatos('#div_tipo_proyecto');
 
-        $('#tbRazonSocial').val(data.RazonSocial);
-        $('#tbDireccion').val(data.Direccion);
-        $('#iregion').val(data.IdRegion);
-        $('#tbGiro').val(data.Giro);
-        $('#tbNombre').val(data.NombreContacto);
-        $('#tbApellido').val(data.ApellidoContacto);
-        $('#tbCorreo').val(data.CorreoContacto);
-        $('#tbTelefono').val(data.TelefonoContacto);
-        CargaComunas();
+            $('#tbRazonSocial').val(data.RazonSocial);
+            $('#tbDireccion').val(data.Direccion);
+            $('#iregion').val(data.IdRegion);
+            $('#tbGiro').val(data.Giro);
+            $('#tbNombre').val(data.NombreContacto);
+            $('#tbApellido').val(data.ApellidoContacto);
+            $('#tbCorreo').val(data.CorreoContacto);
+            $('#tbTelefono').val(data.TelefonoContacto);
+
+            $("#b_editar").removeClass("disabled");
+            $("#b_guardar").addClass("disabled");
+        }
+        setTimeout(function () {
+            CargaComunas();
+
+        }, 500);
         //espero y lanzo el foco al primer control de datos
         setTimeout(function () {
             $('#iComuna').val(data.IdComuna);
@@ -26,6 +61,9 @@
         }, 500);
     });
 }
+$("#iComuna").change(function () {
+    $("#ComunaSelected").val($("#iComuna").val());
+});
 
 function cargaGrilla() {
     var oTable = $("#tabla_Producto").DataTable({
@@ -82,7 +120,8 @@ function CargaComunas() {
         success: function (response) {
             if (!response.error) {
                 $.each(response, function (i, e) {
-                    $('#icomuna').append('<option value="' + e.Value + '">' + e.Text + '</option>');
+                    $('#icomuna').append($("<option></option>").val(e.Value).html(e.Text));
+                    //$('#icomuna').append('<option> </option>'.val(e.Value).html(e.Text));
                 });
             }
         },
@@ -156,15 +195,46 @@ function MostrarProyectoSeleccionado() {
     });
 }
 
-$("btnEditar").click(function () {
-    $("btnGuardar").removeClass("hidden");
-    $("btnEditar").addClass("hidden");
+$("#b_editar").click(function () {
+    $("#b_guardar").removeClass("disabled");
+    $("#b_editar").addClass("disabled");
+    desbloqueaDatos('#div_datos_empresa');
+    desbloqueaDatos('#div_datos_cliente');
+    bloqueaDatos('#div_tipo_proyecto');
 });
+$('#b_guardar').on('click', function (e) {
+    e.preventDefault();
 
-$("btnGuardar").click(function () {
-    $("btnEditar").removeClass("hidden");
-    $("btnGuardar").addClass("hidden");
+    $.ajax({
+        type: "POST",
+        url: url_createCliente,
+        data: $('#formSolcitud').serialize(),
+        success: function (data) {
+            if (data.status) {
+
+                alert_success('Dato almacenado con éxito.');//exito);
+                bloqueaDatos('#div_datos_empresa');
+                bloqueaDatos('#div_datos_cliente');
+                $("#b_editar").removeClass("disabled");
+                $("#b_guardar").addClass("disabled");
+                desbloqueaDatos('#div_tipo_proyecto');
+            }
+            else {
+                alert_error(data.error);
+            }
+
+        }
+    });
 });
+//$("#b_guardar").click(function () {
+//    $("#formSolcitud").submit();
+//    bloqueaDatos('#div_datos_empresa');
+//    bloqueaDatos('#div_datos_cliente');
+//    $("#b_editar").removeClass("disabled");
+//    $("#b_guardar").addClass("disabled");
+//    desbloqueaDatos('#div_tipo_proyecto');
+    
+//});
 
 ///**** Create Ajax Form CallBack ********/
 function CreateEstandar_Success(data) {
@@ -198,7 +268,7 @@ function CreateEstandar_Success(data) {
         //    $('#TipoDenegacion').select();
         //}, 500);
 
-        alert_success('OK', 'Registro Ingresado Exitosamente.');
+        alert_success('Registro Ingresado Exitosamente.');
     }
 }
 

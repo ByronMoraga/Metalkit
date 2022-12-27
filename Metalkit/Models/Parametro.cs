@@ -17,15 +17,19 @@ namespace Metalkit.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Parametro()
         {
-            this.Parametro_ParametroNvl2 = new HashSet<Parametro_ParametroNvl2>();
+            this.Parametro_SubParametro = new HashSet<Parametro_SubParametro>();
         }
     
         public int Id { get; set; }
         public string Descripcion { get; set; }
         public Nullable<int> Valor { get; set; }
         public Nullable<bool> Vigente { get; set; }
+        public Nullable<System.DateTime> FechaModificacion { get; set; }
+        public Nullable<int> IdTipoParametro { get; set; }
+        public Nullable<int> IdUsuario { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Parametro_ParametroNvl2> Parametro_ParametroNvl2 { get; set; }
+        public virtual ICollection<Parametro_SubParametro> Parametro_SubParametro { get; set; }
+        public virtual Usuario Usuario { get; set; }
     }
 }

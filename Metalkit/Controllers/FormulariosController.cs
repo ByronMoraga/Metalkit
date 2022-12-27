@@ -20,14 +20,16 @@ namespace Metalkit.Controllers
         // GET: CotizacionEstandar
         public ActionResult Index()
         {
+
             List<TipoProyecto> tipoProyecto = TipoProyectoBLL.TraerTodos();
             List<Region> region = RegionBLL.TraerTodos();
             List<Comuna> comuna = new List<Comuna>();
-            
+
             ViewBag.itipoproyecto = new SelectList(tipoProyecto, "Id", "Tipo");
-            ViewBag.iregion = new SelectList(region, "Id", "Region1");
-            ViewBag.icomuna = new SelectList(comuna, "Id", "Comuna1");
-            return View(db.Cotizacion.ToList());
+            ViewBag.iregion = new SelectList(region, "Id", "Nombre");
+            ViewBag.icomuna = new SelectList(comuna, "Id", "Nombre");
+
+            return View();
 
         }
 
@@ -66,7 +68,7 @@ namespace Metalkit.Controllers
                 codigo = a.Codigo,
                 descripcion = a.Descripcion,
                 superficie = a.Superficie,
-                precio = a.Precio,
+                precio = a.Valor,
             }).ToList();
 
             return Json(new { draw = draw, recordsFiltered = totalRecords, recordsTotal = totalRecords, data = dataSalida }, JsonRequestBehavior.AllowGet);
@@ -114,12 +116,24 @@ namespace Metalkit.Controllers
         }
 
         // GET: CotizacionEstandar/Create
-        public ActionResult CreateEstandar()
+        public ActionResult CreateCliente()
         {
-            var listParametros= Parametro_ParametroNvl2BLL.TraerTodos();
+            List<TipoProyecto> tipoProyecto = TipoProyectoBLL.TraerTodos();
             List<Region> region = RegionBLL.TraerTodos();
             List<Comuna> comuna = new List<Comuna>();
-           
+
+            ViewBag.itipoproyecto = new SelectList(tipoProyecto, "Id", "Tipo");
+            ViewBag.iregion = new SelectList(region, "Id", "Nombre");
+            ViewBag.icomuna = new SelectList(comuna, "Id", "Nombre");
+
+            return PartialView("_CreateCliente");
+        }
+        public ActionResult CreateEstandar()
+        {
+            var listParametros = Parametro_SubParametroBLL.TraerTodos();
+            List<Region> region = RegionBLL.TraerTodos();
+            List<Comuna> comuna = new List<Comuna>();
+
 
             var listaParametro = new List<VMParametro>();
             foreach (var item in listParametros)
@@ -128,37 +142,21 @@ namespace Metalkit.Controllers
                 obj.Id = item.Parametro.Id;
                 obj.Descripcion = item.Parametro.Descripcion;
                 obj.Valor = item.Parametro.Valor;
-                obj.ParamNvl2 = ParametroNivel2BLL.TraerTodos().Where(a => a.Id == item.IdParametroNivel2).ToList();
+                obj.ParamNvl2 = SubParametroBLL.TraerTodos().Where(a => a.Id == item.IdSubParametro).ToList();
                 listaParametro.Add(obj);
             }
-            ViewBag.iregionEnvio = new SelectList(region, "Id", "Region1");
-            ViewBag.icomunaEnvio = new SelectList(comuna, "Id", "Comuna1");
+            ViewBag.iregionEnvio = new SelectList(region, "Id", "Nombre");
+            ViewBag.icomunaEnvio = new SelectList(comuna, "Id", "Nombre");
             ViewBag.listaParametros = listaParametro;
 
             List<Producto> proyecto = ProductoBLL.TraerTodos();
             ViewBag.iproyecto = new SelectList(proyecto, "Id", "Descripcion");
-            
+
             return PartialView("_CotizacionEstandar");
         }
         public ActionResult CreatePersonalizada()
         {
-            var listParametros = Parametro_ParametroNvl2BLL.TraerTodos();
-
-            var listaParametro = new List<VMParametro>();
-            foreach (var item in listParametros)
-            {
-                VMParametro obj = new VMParametro();
-                obj.Id = item.Parametro.Id;
-                obj.Descripcion = item.Parametro.Descripcion;
-                obj.Valor = item.Parametro.Valor;
-                obj.ParamNvl2 = ParametroNivel2BLL.TraerTodos().Where(a => a.Id == item.IdParametroNivel2).ToList();
-                listaParametro.Add(obj);
-            }
-
-            ViewBag.listaParametros = listaParametro;
-
-            List<Producto> proyecto = ProductoBLL.TraerTodos();
-            ViewBag.iproyecto = new SelectList(proyecto, "Id", "Descripcion");
+            //ViewBag.iproyecto = new SelectList(proyecto, "Id", "Descripcion");
 
             return PartialView("_CotizacionPersonalizada");
         }
@@ -171,28 +169,32 @@ namespace Metalkit.Controllers
         public ActionResult CreateEstandar(FormCollection form)
         {
             Cliente cliente = new Cliente();
-            Producto_Parametro producto_parametro = new Producto_Parametro();
             Cotizacion cotizacion = new Cotizacion();
             Despacho despacho = new Despacho();
             EstadoOT estado = new EstadoOT();
-
+            Parametro_SubParametro parametro_subparametro;
+            Producto_Parametro producto_Parametro;
+            List<SubParametro> listSubParam = new List<SubParametro>();
             try
             {
                 cliente = ClienteBLL.TraerPorRut(Utilidades.RutSinDV(form["tbRutBusqueda"]));
-                cliente.RazonSocial = form["tbRazonSocial"];
-                cliente.Direccion = form["tbDireccion"];
-                cliente.RazonSocial = form["iComuna"];
-                cliente.RazonSocial = form["tbGiro"];
-                cliente.RazonSocial = form["tbNombre"];
-                cliente.RazonSocial = form["tbApellido"];
-                cliente.RazonSocial = form["tbCorreo"];
-                cliente.RazonSocial = form["tbTelefono"];
+                foreach (var item in listSubParam)
+                {
+                    Parametro_SubParametroBLL.Guardar(parametro_subparametro = new Parametro_SubParametro()
+                    {
+                        IdParametro = 1,
+                        IdSubParametro = item.Id
+                    });
+                    Producto_ParametroBLL.Guardar(producto_Parametro = new Producto_Parametro()
+                    {
+                        Id = 1,
+                        IdProducto = int.Parse(form["iproducto"]),
+                        IdParametro = parametro_subparametro.Id
+                    });
+                }
 
-                producto_parametro.IdProducto = int.Parse(form["iproyecto"]);
-                producto_parametro.IdParametro = int.Parse(form["iparametro"]);
-
-                cotizacion.IdTipoProyecto = int.Parse(form["itipoproyecto"]);
-                cotizacion.IdProducto = producto_parametro.Id;
+          
+                cotizacion.IdTipoProyecto = 1;
 
             }
             catch (Exception)
@@ -202,6 +204,39 @@ namespace Metalkit.Controllers
             }
 
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateCliente(FormCollection form)
+        {
+            Cliente cliente = new Cliente();
+            bool status = false;
+            string mensaje = "";
+            try
+            {
+                cliente = ClienteBLL.TraerPorRut(Utilidades.RutSinDV(form["tbRutBusqueda"]));
+                cliente.Rut= Utilidades.RutSinDV(form["tbRutBusqueda"]);
+                cliente.Dv= Utilidades.DV(form["tbRutBusqueda"]);
+                cliente.RazonSocial = form["tbRazonSocial"];
+                cliente.Direccion = form["tbDireccion"];
+                cliente.IdComuna = Convert.ToByte(form["iComuna"]);
+                cliente.Giro = form["tbGiro"];
+                cliente.NombreContacto = form["tbNombre"];
+                cliente.ApellidoContacto = form["tbApellido"];
+                cliente.CorreoContacto = form["tbCorreo"];
+                cliente.TelefonoContacto = form["tbTelefono"];
+
+                ClienteBLL.Guardar(cliente);
+                mensaje = "Registro almacenado Correctamente";
+                status = true;
+            }
+            catch (Exception ex)
+            {
+                mensaje = ex.Message;
+                status = true;
+            }
+            return Json(new { mensaje, status }, JsonRequestBehavior.AllowGet);
         }
 
         // GET: CotizacionEstandar/Edit/5
@@ -232,7 +267,7 @@ namespace Metalkit.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View("CotizacionEstandar",proyecto);
+            return View("CotizacionEstandar", proyecto);
         }
 
         // GET: CotizacionEstandar/Delete/5
@@ -267,7 +302,7 @@ namespace Metalkit.Controllers
               //.Where(x => x.Id == id)
               .Select(a => new
               {
-                  id= a.Id,
+                  id = a.Id,
                   descripcion = a.Descripcion,
                   valor = a.Valor,
 
@@ -278,7 +313,7 @@ namespace Metalkit.Controllers
         {
             var obj = TipoProyectoBLL.TraerTodos();
 
-            if (id==1)
+            if (id == 1)
             {
                 return Content("CotizacionEstandar");
 
@@ -292,12 +327,12 @@ namespace Metalkit.Controllers
         [HttpPost]
         public JsonResult CargarComunas(int id)
         {
-            var obj = ComunaBLL.TraerTodos().Where(a=>a.IdRegion == id);
+            var obj = ComunaBLL.TraerTodos().Where(a => a.IdRegion == id);
 
             IEnumerable<SelectListItem> listado = obj.Select(p => new SelectListItem
             {
                 Value = p.Id.ToString(),
-                Text = p.Comuna1.ToString()
+                Text = p.Nombre.ToString()
             }).ToList();
             return Json(listado, JsonRequestBehavior.AllowGet);
         }
@@ -309,28 +344,46 @@ namespace Metalkit.Controllers
         }
         public JsonResult Continuar(string rut)
         {
-            int numeroRut = Utilidades.RutSinDV(rut);
-            var data = ClienteBLL.TraerPorRut(numeroRut);
-
-            var salida = new
+            try
             {
-                Id = data.Id,
-                Rut = data.Rut + data.Dv,
-                RazonSocial = data.RazonSocial,
-                Direccion = data.Direccion,
-                IdRegion = (int)ComunaBLL.Traer((int)data.IdComuna).IdRegion,
-                IdComuna = (int)data.IdComuna,
-                Giro = data.Giro,
-                NombreContacto = data.NombreContacto,
-                ApellidoContacto = data.ApellidoContacto,
-                CorreoContacto = data.CorreoContacto,
-                TelefonoContacto = data.TelefonoContacto
+                int numeroRut = Utilidades.RutSinDV(rut);
 
-            };
+                var data = ClienteBLL.TraerPorRut(numeroRut);
+                if (data != null)
+                {
 
-           
-            return new JsonResult { Data = salida, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                    var salida = new
+                    {
+                        Id = data.Id,
+                        Rut = data.Rut + data.Dv,
+                        RazonSocial = data.RazonSocial,
+                        Direccion = data.Direccion,
+                        IdRegion = (int)ComunaBLL.Traer((int)data.IdComuna).IdRegion,
+                        IdComuna = (int)data.IdComuna,
+                        Giro = data.Giro,
+                        NombreContacto = data.NombreContacto,
+                        ApellidoContacto = data.ApellidoContacto,
+                        CorreoContacto = data.CorreoContacto,
+                        TelefonoContacto = data.TelefonoContacto
+                    };
+
+                    return new JsonResult { Data = salida, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+
+                }
+                else
+                {
+
+                    var salida = "";
+                    return new JsonResult { Data = salida, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                }
+            }
+            catch (Exception)
+            {
+                var salida = "";
+                return new JsonResult { Data = salida, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
         }
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing)

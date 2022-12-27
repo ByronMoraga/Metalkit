@@ -14,6 +14,12 @@ namespace Metalkit.Models
     
     public partial class Cliente
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Cliente()
+        {
+            this.Cotizacion = new HashSet<Cotizacion>();
+        }
+    
         public int Id { get; set; }
         public Nullable<int> Rut { get; set; }
         public string Dv { get; set; }
@@ -25,5 +31,8 @@ namespace Metalkit.Models
         public string ApellidoContacto { get; set; }
         public string CorreoContacto { get; set; }
         public string TelefonoContacto { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Cotizacion> Cotizacion { get; set; }
     }
 }

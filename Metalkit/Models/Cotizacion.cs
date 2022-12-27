@@ -15,8 +15,14 @@ namespace Metalkit.Models
     public partial class Cotizacion
     {
         public int Id { get; set; }
-        public Nullable<int> IdProducto { get; set; }
+        public Nullable<int> IdProductoParametro { get; set; }
         public Nullable<int> IdEntrega { get; set; }
         public Nullable<int> IdTipoProyecto { get; set; }
+        public Nullable<int> IdCliente { get; set; }
+    
+        public virtual Cliente Cliente { get; set; }
+        public virtual Entrega Entrega { get; set; }
+        public virtual Producto_Parametro Producto_Parametro { get; set; }
+        public virtual TipoProyecto TipoProyecto { get; set; }
     }
 }

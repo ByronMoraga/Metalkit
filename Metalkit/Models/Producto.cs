@@ -18,7 +18,7 @@ namespace Metalkit.Models
         public string Codigo { get; set; }
         public string Descripcion { get; set; }
         public Nullable<int> Superficie { get; set; }
-        public string Precio { get; set; }
+        public Nullable<int> Valor { get; set; }
         public byte[] Imagen { get; set; }
     }
 }

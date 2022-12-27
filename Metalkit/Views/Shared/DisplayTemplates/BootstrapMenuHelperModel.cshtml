@@ -4,81 +4,106 @@
 
 
 @helper  TopMenu(List<SiteMapNodeModel> nodeList)
-    {
-var rol = "Administrador";
-//var rol = Session["perfil"].ToString();
-
-
-foreach (SiteMapNodeModel node in nodeList)
 {
+    var rol = "Administrador";
+    //var rol = Session["perfil"].ToString();
 
-    if (node.TargetFrame.Contains(rol))
+
+    foreach (SiteMapNodeModel node in nodeList)
     {
 
-        string url = node.IsClickable ? node.Url : "#";
-
-        if (!node.Children.Any())
+        if (node.TargetFrame.Contains(rol))
         {
 
-                    <li>
-                        <a href="@url">
+            string url = node.IsClickable ? node.Url : "#";
+
+
+            if (!node.Children.Any())
+            {
+
+                <li class="nav-item">
+                    <a href="@url" class="nav-link">
+                        <i class="@node.Description"></i>
+                        <span class="nav-label">@node.Title</span>
+                    </a>
+                </li>
+            }
+            else
+            {
+                if (node.IsInCurrentPath)
+                {
+                    <li class="nav-item menu-is-opening menu-open">
+                        <a class="nav nav-link">
                             <i class="@node.Description"></i>
-                            <span class="nav-label">@node.Title</span>
-                        </a>
+                            <span class="nav-label">@node.Title </span>
+                            <i class="right fas fa-angle-left"></i>
+                        </a>@DropDownMenu(node.Children)
                     </li>
                 }
                 else
                 {
-
-                    <li>
-                        <a class="dropdown-toggle" data-toggle="dropdown">
+                    <li class="nav-item">
+                        <a class="nav nav-link">
                             <i class="@node.Description"></i>
                             <span class="nav-label">@node.Title </span>
+                            <i class="right fas fa-angle-left"></i>
                         </a>@DropDownMenu(node.Children)
                     </li>
                 }
 
-if (node != nodeList.Last())
+            }
+        }
+
+        if (node != nodeList.Last())
+        {
+            <li class="divider-vertical"></li>
+        }
+
+    }
+
+}
+
+
+@helper DropDownMenu(SiteMapNodeModelList nodeList)
 {
-                    <li class="divider-vertical"></li>
+    var rol = "Administrador";
+    //var rol = Session["perfil"].ToString();
+
+    <ul class="nav nav-treeview" style="padding: 0px 0px 0px 15px;">
+        @foreach (SiteMapNodeModel node in nodeList)
+        {
+
+            if (node.TargetFrame.Contains(rol))
+            {
+                if (node.Title == "Separator")
+                {
+                    <li class="divider"></li>
+                    continue;
                 }
+
+                string url = node.IsClickable ? node.Url : "#";
+                if (node.IsCurrentNode)
+                {
+                    <li class="nav-item"><a class="nav nav-link active" style="width: 219px;" href="@url">@node.Title</a></li>
+                }
+                else
+                {
+
+                    if (!node.Children.Any())
+                    {
+                        <li class="nav-item"><a class="nav nav-link" style="width: 219px;" href="@url">@node.Title</a></li>
+                    }
+                    else
+                    {
+                        <li class="nav-item"><a class="nav nav-link active" style="width: 219px;" href="@url">@node.Title</a>@DropDownMenu(node.Children)</li>
+                    }
+                }
+
 
             }
 
         }
-
-}
-
-@helper DropDownMenu(SiteMapNodeModelList nodeList)
-    {
-var rol = "Administrador";
-//var rol = Session["perfil"].ToString();
-        <ul class="nav nav-second-level collapse" role="menu">
-            @foreach (SiteMapNodeModel node in nodeList)
-            {
-                if (node.TargetFrame.Contains(rol))
-                {
-                    if (node.Title == "Separator")
-                    {
-                        <li class="divider"></li>
-                        continue;
-                    }
-
-                    string url = node.IsClickable ? node.Url : "#";
-
-                    if (!node.Children.Any())
-                    {
-                        <li><a href="@url">@node.Title</a></li>
-                    }
-                    else
-                    {
-                        <li class="dropdown-submenu"><a href="@url">@node.Title</a>@DropDownMenu(node.Children)</li>
-                    }
-
-                }
-
-            }
-        </ul>
+    </ul>
 }
 
 @TopMenu(Model.Nodes)

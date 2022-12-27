@@ -14,8 +14,17 @@ namespace Metalkit.Models
     
     public partial class Producto_Parametro
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Producto_Parametro()
+        {
+            this.Cotizacion = new HashSet<Cotizacion>();
+        }
+    
         public int Id { get; set; }
         public Nullable<int> IdProducto { get; set; }
         public Nullable<int> IdParametro { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Cotizacion> Cotizacion { get; set; }
     }
 }

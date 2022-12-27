@@ -1,0 +1,42 @@
+﻿/*.sidebar-mini .main-sidebar .nav-link2, .sidebar-mini-md .main-sidebar .nav-link2, .sidebar-mini-xs .main-sidebar .nav-link2 {
+    width: calc(250px - 0.5rem * 2);
+    transition: width ease-in-out .3s;
+}
+.nav-sidebar .nav-item > .nav-link2 {
+    position: relative;
+}
+[class*=sidebar-dark-] .nav-sidebar > .nav-item > .nav-treeview {
+    background-color: transparent;
+    display: block;
+    padding: 0px 0px 0px 15px;
+    width: 235px;
+}
+
+[class*=sidebar-dark-] .nav-treeview > .nav-item > .nav-link2.active, [class*=sidebar-dark-] .nav-treeview > .nav-item > .nav-link2.active:focus, [class*=sidebar-dark-] .nav-treeview > .nav-item > .nav-link2.active:hover {
+    background-color: rgba(255,255,255,.9);
+    color: #343a40;
+    width: 220px;
+}
+[class*=sidebar-dark-] .nav-sidebar > .nav-item > .nav-treeview {
+    background-color: transparent;
+    padding: 0px 0px 0px 15px;
+}
+.nav-sidebar .nav-item > .nav-link {
+    margin-bottom: 0.2rem;
+}
+
+.nav-pills .nav-link2 {
+    color: #6c757d;
+}
+
+.nav-pills .nav-link2 {
+    border-radius: 0.25rem;
+}
+
+.nav-link2 {
+    display: block;
+    padding: 0.5rem 1rem;
+}
+.sidebar-mini .nav-sidebar .nav-link2{
+    white-space: nowrap;
+}*/

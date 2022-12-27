@@ -9,8 +9,8 @@ namespace Metalkit.Core.Datos
 {
     public class ClienteDAO: DbContext
     {
-        private MetalkitEntities _dbContext;
-
+        //private MetalkitEntities _dbContext;
+        private MetalkitEntities _dbContext = new MetalkitEntities();
         public ClienteDAO()
         {
             if (_dbContext == null)
@@ -35,6 +35,7 @@ namespace Metalkit.Core.Datos
         }
         internal Cliente Traer(int id)
         {
+
             var entidad = (Cliente)null;
 
             var query = from ent in _dbContext.Cliente

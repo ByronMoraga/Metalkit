@@ -54,11 +54,11 @@ namespace Metalkit.Controllers
             var dataSalida = listado.Select(a => new
             {
                 Id = a.Id,
-                Rut = a.Codigo,
-                Nombre = a.Descripcion,
-                ApellidoPaterno = a.Superficie,
-                ApellidoMaterno = a.Precio,
-                Correo = a.Imagen
+                Codigo = a.Codigo,
+                Descripcion = a.Descripcion,
+                Superficie = a.Superficie,
+                Valor = a.Valor,
+                Imagen = a.Imagen
             }).ToList();
 
             return Json(new { draw = draw, recordsFiltered = totalRecords, recordsTotal = totalRecords, data = dataSalida }, JsonRequestBehavior.AllowGet);

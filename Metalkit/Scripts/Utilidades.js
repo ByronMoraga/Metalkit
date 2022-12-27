@@ -49,7 +49,7 @@ function desbloqueaDatos(nombre_div) {
 }
 
 function muestraContenidoModal(accion, controlador, titulo, metodo, data, eventos, tipoModal) {
-    var link = "@Url.Action("varTipo", "varControlador")";
+    var link = "@Url.Action('varTipo', 'varControlador')";
     tipoModal = tipoModal || "";
     openModal(accion, controlador, link, titulo, metodo, data, tipoModal, eventos);
 }
