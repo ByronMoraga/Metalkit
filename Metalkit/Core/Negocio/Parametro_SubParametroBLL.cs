@@ -24,6 +24,10 @@ namespace Metalkit.Core.Negocio
         {
             return _objDAO.TraerTodos();
         }
+        public static List<Parametro_SubParametro> TraerPorParametro(int id)
+        {
+            return _objDAO.TraerPorParametro(id);
+        }
 
         public static bool Guardar(Parametro_SubParametro obj)
         {

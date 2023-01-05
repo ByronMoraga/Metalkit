@@ -1,0 +1,101 @@
+﻿@model IEnumerable<Metalkit.Models.VMSubParametro>
+@using Metalkit.Models;
+
+@{
+    ViewBag.Title = "Sub Parametros";
+    Layout = null;
+
+}
+@using (Html.BeginForm("GrillaSubParametros", "Formularios", FormMethod.Post, new { @class = "form-horizontal", id = "form", name = "form", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <input id="tbIdParametro" value="@ViewBag.idParametro" hidden/>
+    <table id="grilla_parametros" class="table table-gral table-sm table-hover table-bordered">
+        <thead class="table-head">
+            <tr>
+                <th class="oculto">id</th>
+                <th><input type="checkbox" id="checkBoxAll" class="custom-checkbox" /></th>
+                <th>Descripción</th>
+                <th>Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                                <tr>
+                                    <td class="oculto">
+                                        @Html.HiddenFor(modelItem => item.Id)
+                                    </td>
+                                    <td>
+                                        @*@Html.CheckBoxFor(modelItem => item.Seleccionado)*@
+                                        <input type="checkbox" name="checks[]" value="@item.Id" checked="@item.Seleccionado" class="custom-checkbox chkCheckBoxId" />
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Descripcion)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Valor)
+                                    </td>
+
+                                </tr>
+                            }
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-sm-12 text-right" id="botonesFooter">
+
+            <button type="submit" class="btn btn-success" id="b_grabarSubParametro" onclick="grabarSubParametro()">
+                <span class="fa fa-check"></span> Guardar
+            </button>
+            <a href="#" class="btn btn-default" data-dismiss="modal">
+                <i class="fa fa-remove"></i> Cerrar
+            </a>
+        </div>
+    </div>
+
+}
+<script>
+    $(".modal-footer").html("");
+    $("#botonesFooter").appendTo(".modal-footer");
+
+    $(document).ready(function () {
+        $('#checkBoxAll').click(function () {
+            if ($(this).is(":checked")) {
+                $(".chkCheckBoxId").prop("checked", true)
+            }
+            else {
+                $(".chkCheckBoxId").prop("checked", false)
+            }
+        });
+    });
+    $('#myCheckAll').click(function () {
+        var chk = $(this).is(':checked');
+        var cnt = $('input[type=checkbox]', "#grilla_parametros").length;
+        $('input[type=checkbox]', "#grilla_parametros").each(function () {
+            if (chk) {
+                $(this).attr('checked', 'checked');
+            }
+            else {
+                $(this).removeAttr('checked');
+            }
+        });
+
+
+
+    });
+
+    function grabarSubParametro() {
+        var arr = $('[name="checks[]"]:checked').map(function () {
+            return this.value;
+        }).get();
+
+        $.ajax({
+            type: "GET",
+            url: url_carga_subparametros,
+            data: $('#form').serialize() + "&idParametro=" + tbIdParametro.value + "&arrid=" + JSON.stringify(arr),
+            success: function (data) {
+                alert_success('Dato almacenado con éxito.');//exito);
+            }
+        });
+    }
+</script>

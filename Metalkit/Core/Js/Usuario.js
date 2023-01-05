@@ -28,7 +28,7 @@
         {
             "data": "Id", "name": "Id", "autoWidth": true, "searchable": false, "sortable": false, "render": function (data) {
                 
-                salida = '<a class="editclass btn-success btn-sm" href="' + url_edit + '?id=' + data + '"' + ' title="Editar">Editar&nbsp;<span class="glyphicon glyphicon-pencil" /></a> ';
+                salida = '<a class="editclass btn btn-success btn-sm" href="' + url_edit + '?id=' + data + '"' + ' title="Editar">Editar&nbsp;<span class="glyphicon glyphicon-pencil" /></a> ';
                 salida += '<a class="deleteclass btn btn-danger btn-sm" href="' + url_delete + '?id=' + data + '"' + ' title="Editar">Eliminar&nbsp;<span class="glyphicon glyphicon-trash" /></a> ';
 
                 return salida;

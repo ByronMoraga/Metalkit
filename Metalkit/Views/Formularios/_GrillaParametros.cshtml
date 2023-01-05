@@ -1,0 +1,42 @@
+﻿@model List<Metalkit.Models.VMParametro>
+
+@{
+    ViewBag.Title = "Producto Seleccionado";
+    Layout = null;
+
+}
+<table id="grilla_parametros" class="table table-gral table-chica table-hover table-bordered">
+    <thead class="table-head">
+        <tr>
+            <th class="oculto">id</th>
+            <th>Descripción</th>
+            <th>Valor</th>
+            <th>Contenido</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td class="oculto">
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Valor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Total_SubParametros_guardados)/@Html.DisplayFor(modelItem => item.Total_SubParametros)
+            </td>
+            <td>
+                <a class="editclass btn btn-link-tabla" id="Editar" onclick="CargaModal_SubParametros(@item.Id)" title="Editar">
+                    <span class="fa fa-edit"></span>
+                </a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

@@ -55,7 +55,16 @@ namespace Metalkit.Core.Datos
             lista = query.ToList();
             return lista;
         }
+        internal List<Parametro_SubParametro> TraerPorParametro(int id)
+        {
+            var lista = new List<Parametro_SubParametro>();
 
+            var query = from ent in _dbContext.Parametro_SubParametro
+                        where ent.IdParametro == id
+                        select ent;
+            lista = query.ToList();
+            return lista;
+        }
         internal bool Guardar(Parametro_SubParametro data)
         {
             var guardado = false;

@@ -12,12 +12,12 @@ namespace Metalkit.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SubParametro
+    public partial class sysdiagrams
     {
-        public int Id { get; set; }
-        public string Descripcion { get; set; }
-        public Nullable<int> Valor { get; set; }
-        public Nullable<bool> Vigente { get; set; }
-        public Nullable<int> IdParametro { get; set; }
+        public string name { get; set; }
+        public int principal_id { get; set; }
+        public int diagram_id { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }

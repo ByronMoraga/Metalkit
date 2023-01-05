@@ -1,4 +1,5 @@
 ﻿@model Metalkit.Models.VMCliente
+@using Metalkit.Models;
 @{
 
     ViewBag.Title = "Index";
@@ -7,23 +8,16 @@
     DateTime today = DateTime.Today;
     string hoy = today.ToString("dd/MM/yyyy");
     string fechaHoy = today.ToString("yyyy-MM-dd");
-
+    List<Producto> lista_productos = new List<Producto>();
+    lista_productos = ViewBag.lista_parametros;
     ViewBag.Title = "Formulario de Cotización";
     ViewBag.Breadcrumb = "Formulario de cotización / Index";
 
+
 }
-@Html.Partial("_CreateCliente")
+@Html.Action("CreateCliente")
 
-<div class="card card-primary" id="div_tipo_proyecto">
-    <div class="card-body">
-        <div class="col-md-4 form-group">
-            <label for="itramite">Tipo Proyecto</label>
-            @Html.DropDownList("itipoproyecto", null, "Seleccione", htmlAttributes: new { @class = "form-control  search-select", @onchange = "MostrarProyectoSeleccionado()" })
-        </div>
-    </div>
-</div>
-
-<div id="container">
+<div id="container_Cotizacion">
 </div>
 
 
@@ -32,29 +26,32 @@
     <script>
         @{string controller = "Formularios";}
         var url_cargarcomunas = '@Url.Action("CargarComunas", controller)';
-        var url_datatable = '@Url.Action("ObtenerConsultas", controller)';
-        var url_datatable2 = '@Url.Action("ObtenerConsultas2", controller)';
+        var url_grillaProductos = '@Url.Action("ObtenerConsultas", controller)';
+        var url_grillaParametros = '@Url.Action("GrillaParametros", controller)';
         var url_continuar = '@Url.Action("Continuar", controller)';
         var url_delete = '@Url.Action("Delete", controller)';
         var url_createCliente = '@Url.Action("CreateCliente", controller)';
         var url_createEstandar = '@Url.Action("CreateEstandar", controller)';
         var url_createPersonalizada = '@Url.Action("CreatePersonalizada", controller)';
         var url_mostrarproyecto = '@Url.Action("MostrarProyecto", controller)';
-        var url_cargarproyecto = '@Url.Action("CargarProyecto", controller)';
+        var url_carga_subparametros = '@Url.Action("GrillaSubParametros", controller)';
+        var url_carga_productoSeleccionado= '@Url.Action("GrillaProductoSeleccionado", controller)';
 
+        var url_carga_parametros = '@Url.Action("GrillaParametros", controller)';
+        var url_carga_productos= '@Url.Action("GrillaProductos", controller)';
+
+        var url_edit = '@Url.Action("Create", controller)';
+        var url_grid = '@Url.Action("ObtenerConsultas", controller)';
+        var listado = '@Url.Action("GetAreasForCompany", controller)';
     </script>
 
     <script src="~/Core/Js/Formularios.js"></script>
 
     <script>
         $(document).ready(function () {
-            $('.i-checks').iCheck({
-                checkboxClass: 'icheckbox_square-green',
-                radioClass: 'iradio_square-green',
-            });
-            CargaInicial()
-
+            CargaInicial();
         });
     </script>
+
 
 }

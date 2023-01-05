@@ -1,0 +1,62 @@
+﻿@model List<Metalkit.Models.VMProducto>
+
+@{
+    ViewBag.Title = "Producto Seleccionado";
+    Layout = null;
+   
+}
+<table id="grilla_productoSeleccionado" class="table table-gral table-chica table-hover table-bordered">
+    <thead class="table-head">
+        <tr>
+            <th class="Oculto">id</th>
+            <th>Código</th>
+            <th>Descripción</th>
+            <th>Superficie</th>
+            <th>Valor</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Count == 0)
+        {
+            <tr class="campo-vacio">
+                <td colspan="5">Sin Datos</td>
+                <td class="campo-vacio">
+                    <a class="editclass btn btn-link-tabla" id="Editar" onclick="CargaModal_Productos()" title="Editar">
+                        <span class="fa fa-edit"></span>
+                    </a>
+                </td>
+            </tr>
+
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td class="Oculto">
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Codigo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Descripcion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Superficie)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Valor)
+                    </td>
+                    <td>
+                        <a class="editclass btn btn-link-tabla" id="Editar" onclick="CargaModal_Productos(@item.Id)" title="Editar">
+                            <span class="fa fa-edit"></span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>

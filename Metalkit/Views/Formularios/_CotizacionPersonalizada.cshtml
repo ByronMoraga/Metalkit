@@ -12,7 +12,7 @@
 @using (Html.BeginForm("CreatePersonalizada", "Formularios", FormMethod.Post, new { @class = "form-horizontal", id = "form", name = "form", role = "form" }))
 {
     @Html.AntiForgeryToken()
-    <div class="card card-primary">
+    <div class="card card-primary card-fijo">
         <div class="card-header">
             <div class="card-title">
                 Detalle de proyecto Estándar
@@ -55,14 +55,14 @@
            @* }*@
             <div class="row">
                 <div class="col-md-6">
-                    <table class="table table-striped table-hover tablaSecundaria dataTable no-footer" id="tabla_Producto">
+                    <table class="table table-striped table-hover tablaSecundaria dataTable no-footer" id="tabla_Producto2">
                         <thead>
                             <tr>
                                 <th>Id</th>
                                 <th>Código</th>
                                 <th>Descripción</th>
                                 <th>Superficie</th>
-                                <th>Precio</th>
+                                <th>Valor</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -70,47 +70,11 @@
                     </table>
                 </div>
                 <div class="col-md-6">
-                    <table class="table table-striped table-hover tablaSecundaria dataTable no-footer">
-                        <tr>
-                            <th style="width: 15%;"><label class="control-label"><input type="checkbox" class="checkall" value="" id="checkall"> </label></th>
-                            <th>Descripción</th>
-                            <th>Valor</th>
-                        </tr>
-                        @foreach (var item in listaParametro)
-                        {
-                            <tr>
-                                <td>
-                                    <input type="checkbox" class="checkParam" value="" id="@item.Id">
-                                    @*<img src="~/Images/plus.png" />*@
-                                    <div style="display:none">
-                                        <table class="table table-striped table-hover tablaSecundaria dataTable no-footer" width="50%">
-                                            <tr>
-                                                <th><input type="checkbox" class="checkall2" id="checkall2"> Seleccionar Todo</th>
-                                                <th>Descripción</th>
-                                                <th>Valor</th>
-                                            </tr>
-                                            @foreach (var item2 in item.ParamNvl2)
-                                            {
-                                                <tr>
-                                                    <td>
-                                                        <input type="checkbox" class="checkParam2" value="" id="@item2.Id">
-                                                    </td>
-                                                    <td>@item2.Descripcion</td>
-                                                    <td>@item2.Valor</td>
-                                                </tr>
-                                            }
-                                        </table>
-                                    </div>
-                                </td>
-                                <td>@item.Descripcion</td>
-                                <td>@item.Valor</td>
-                            </tr>
-                        }
-                    </table>
+                    
                 </div>
             </div>
 
-            <div class="card card-primary">
+            <div class="card card-primary card-fijo">
                 <div class="card-header">
                     <div class="card-title">
                         Despacho
@@ -172,81 +136,4 @@
 
 
 
-}
-
-<script type="text/javascript">
-    $(".checkParam").change(function () {
-        console.log($(this))
-        if (this.checked) {
-            $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
-        } else {
-            $(this).closest("tr").next().remove();
-        }
-    });
-    $('.checkall').change(function () {
-        console.log(this.checked);
-        if (this.checked) {
-            $(".checkParam").attr('checked', 'checked');
-
-        } else {
-            $(".checkParam").removeAttr('checked');
-        }
-        const e = new Event("change");
-        const element = document.querySelector('.checkParam')
-        element.dispatchEvent(e);
-    });
-    $(".checkall2").change(function () {
-        console.log($("input[class= 'checkParam2']"));
-        if (this.checked) {
-            $("input[class='checkParam2']").attr('checked', 'checked');
-
-        } else {
-            $("input[class='checkParam2']").removeAttr('checked');
-        }
-    });
-
-</script>
-@*<script type="text/javascript">
-        //Assign Click event to Plus Image.
-        $("input[type='checkbox']").on('ifChanged', function (e) {
-            $(this).val(e.target.checked == true);
-
-            //Check if checkbox is checked or not
-            var checkboxChecked = $(this).is(':checked');
-            if (checkboxChecked) {
-                console.log($(this));
-                $("input[type='checkbox']").closest("tr").after("<tr><td></td><td colspan = '999'>" + $("input[type='checkbox']").next().html() + "</td></tr>");
-                $("input[type='checkbox']").attr("src", "/images/minus.png");
-            } else {
-                $("input[type='checkbox']").attr("src", "/images/plus.png");
-                $("input[type='checkbox']").closest("tr").next().remove();
-            }
-        });
-    </script>*@
-
-@section Scripts {
-    <script>
-
-        function validarClases() {
-
-        var cClas = "";
-
-             $(".cClases div").each(function (index, value) {
-                 alert("ingreso")
-                var chk = $(this).hasClass("checked");
-                if (chk) {
-                    cClas = cClas + $(this).find('input').attr('id') + ":" + "true" + "_";
-
-                }
-                else {
-                    cClas = cClas + $(this).find('input').attr('id') + ":" + "false" + "_";
-                }
-            });
-            cClas = cClas.substr(0, cClas.length - 1);
-            console.log(cClas);
-
-            return cClas;
-           // $("#clasesChk").val(cClas);
-        }
-    </script>
 }

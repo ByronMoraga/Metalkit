@@ -296,6 +296,9 @@
     <Compile Include="Models\SubParametro.cs">
       <DependentUpon>Modelo.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\sysdiagrams.cs">
+      <DependentUpon>Modelo.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TipoCliente.cs">
       <DependentUpon>Modelo.tt</DependentUpon>
     </Compile>
@@ -314,8 +317,11 @@
     <Compile Include="Models\VersionOT.cs">
       <DependentUpon>Modelo.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModel\Cliente.cs" />
     <Compile Include="Models\VMCliente.cs" />
-    <Compile Include="Models\VMParametros.cs" />
+    <Compile Include="Models\VMProducto.cs" />
+    <Compile Include="Models\VMSubParametro.cs" />
+    <Compile Include="Models\VMParametro.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -1484,6 +1490,9 @@
     <Content Include="Content\plugins\fullcalendar\main.min.js" />
     <Content Include="Content\plugins\icheck-bootstrap\icheck-bootstrap.css" />
     <Content Include="Content\plugins\icheck-bootstrap\icheck-bootstrap.min.css" />
+    <Content Include="Content\plugins\iCheck\blue%402x.png" />
+    <Content Include="Content\plugins\iCheck\blue.css" />
+    <Content Include="Content\plugins\iCheck\blue.png" />
     <Content Include="Content\plugins\iCheck\custom.css" />
     <Content Include="Content\plugins\iCheck\green%402x.png" />
     <Content Include="Content\plugins\iCheck\green.png" />
@@ -2697,6 +2706,7 @@
     <Content Include="Scripts\dist\js\adminlte.js.map" />
     <Content Include="Scripts\dist\js\adminlte.min.js.map" />
     <None Include="Scripts\_references.js" />
+    <Content Include="Views\Formularios\_GrillaSubParametros.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\CanonicalHelperModel.ascx" />
     <Content Include="Views\Shared\DisplayTemplates\MenuHelperModel.ascx" />
     <Content Include="Views\Shared\DisplayTemplates\MetaRobotsHelperModel.ascx" />
@@ -2769,8 +2779,6 @@
     <Content Include="Views\MantProductos\_Edit.cshtml" />
     <Content Include="Views\MantProductos\Index.cshtml" />
     <Content Include="Views\Formularios\_CotizacionPersonalizada.cshtml" />
-    <Content Include="Views\Formularios\Delete.cshtml" />
-    <Content Include="Views\Formularios\FormularioDatos.cshtml" />
     <Content Include="Views\Formularios\_CotizacionEstandar.cshtml" />
     <Content Include="Views\Formularios\Index.cshtml" />
     <Content Include="Views\MantRegiones\Create.cshtml" />
@@ -2779,6 +2787,9 @@
     <Content Include="Views\MantRegiones\Edit.cshtml" />
     <Content Include="Views\MantRegiones\Index.cshtml" />
     <Content Include="Views\Formularios\_CreateCliente.cshtml" />
+    <Content Include="Views\Formularios\_GrillaProducto.cshtml" />
+    <Content Include="Views\Formularios\_GrillaProductoSeleccionado.cshtml" />
+    <Content Include="Views\Formularios\_GrillaParametros.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

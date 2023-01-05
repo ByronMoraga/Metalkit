@@ -1,0 +1,63 @@
+﻿@model List<Metalkit.Models.VMProducto>
+@{
+    ViewBag.Title = "Productos";
+    Layout = null;
+    //List<SubParametro> listaSubParametros = List<SubParametro>();
+    var lista_productos = ViewBag.lista_productos;
+
+}
+@using (Ajax.BeginForm("CreateProducto", "Formularios", null, new AjaxOptions { HttpMethod = "POST", OnBegin = "OnBeginRequest", OnSuccess = "OnSuccessRequest", OnComplete = "OnCompleteRequest", OnFailure = "OnFailureRequest", Confirm = "¿Desea agregar un país?" }, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <table id="grilla_productos" class="table table-gral table-chica table-hover table-bordered">
+        <thead class="table-head">
+            <tr>
+                <th class="oculto">Id</th>
+                <th>Código</th>
+                <th>Descripción</th>
+                <th>Superficie</th>
+                <th>Valor</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="oculto">
+                        @Html.HiddenFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Codigo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Descripcion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Superficie)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Valor)
+                    </td>
+                    <td>
+                        <a class="editclass btn btn-link-tabla" id="Editar" onclick="Carga_GrillaProductoSeleccionado(@item.Id)" title="Editar">
+                            <span class="fa fa-edit"></span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-sm-12 text-right" id="botonesFooter">
+
+        </div>
+    </div>
+
+}
+<script>
+    $(".modal-footer").html("");
+    $("#botonesFooter").appendTo(".modal-footer");
+
+
+</script>

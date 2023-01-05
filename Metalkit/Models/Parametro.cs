@@ -18,6 +18,7 @@ namespace Metalkit.Models
         public Parametro()
         {
             this.Parametro_SubParametro = new HashSet<Parametro_SubParametro>();
+            this.Parametro_SubParametro1 = new HashSet<Parametro_SubParametro>();
         }
     
         public int Id { get; set; }
@@ -30,6 +31,8 @@ namespace Metalkit.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Parametro_SubParametro> Parametro_SubParametro { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Parametro_SubParametro> Parametro_SubParametro1 { get; set; }
         public virtual Usuario Usuario { get; set; }
     }
 }

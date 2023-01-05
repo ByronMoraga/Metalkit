@@ -19,6 +19,6 @@ namespace Metalkit.Models
         public Nullable<int> IdSubParametro { get; set; }
     
         public virtual Parametro Parametro { get; set; }
-        public virtual SubParametro SubParametro { get; set; }
+        public virtual Parametro Parametro1 { get; set; }
     }
 }

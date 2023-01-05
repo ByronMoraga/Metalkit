@@ -7,8 +7,10 @@ namespace Metalkit.Models
     {
         public int Id { get; set; }
         public string Descripcion { get; set; }
+        [DisplayFormat(DataFormatString = "{0:C}")]
         public int? Valor { get; set; }
-        public List<SubParametro> ParamNvl2 { get; set; }
+        public int Total_SubParametros{ get; set; }
+        public int Total_SubParametros_guardados { get; set; }
 
     }
 }

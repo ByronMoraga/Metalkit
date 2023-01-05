@@ -50,16 +50,11 @@ namespace Metalkit.Controllers
 
             //busquedaPaginada(int? idArea, int? IdCentroCosto, string rutPersona, string folio, string sortColumn = "", string sortColumnDir = "")
             var query = ProductoBLL.ObtenerQueryPrincipal(filtro, sortColumn, sortColumnDir, searchValue);
-            if (searchValue != "")
+            List<Producto> listado = query.ToList();
+            if (!string.IsNullOrEmpty(filtro))
             {
-                query = query.Where(d => d.Descripcion.Contains(searchValue));
+                listado = listado.Where(d => d.Id == int.Parse(filtro)).ToList();
             }
-            if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
-            {
-                //query = query.OrderBy(sortColumn + " " + sortColumnDir);
-            }
-            totalRecords = query.Count();
-            var listado = query.ToList();
 
             // Aca se colocan solamente los atributos que seran mostrados en la tabla. Ej: id y valor
             var dataSalida = listado.Select(a => new
@@ -68,46 +63,6 @@ namespace Metalkit.Controllers
                 codigo = a.Codigo,
                 descripcion = a.Descripcion,
                 superficie = a.Superficie,
-                precio = a.Valor,
-            }).ToList();
-
-            return Json(new { draw = draw, recordsFiltered = totalRecords, recordsTotal = totalRecords, data = dataSalida }, JsonRequestBehavior.AllowGet);
-
-        }
-
-        public ActionResult ObtenerConsultas2(string filtro = "")
-        {
-            //get Start(paging start index) and length(page size for paging)
-            var draw = Request.Form.GetValues("draw").FirstOrDefault();
-            var start = Request.Form.GetValues("start").FirstOrDefault();
-            var length = Request.Form.GetValues("length").FirstOrDefault();
-            //Get Sort columns value
-            var sortColumn = Request.Form.GetValues("columns[" + Request.Form.GetValues("order[0][column]").FirstOrDefault() + "][name]").FirstOrDefault();
-            var sortColumnDir = Request.Form.GetValues("order[0][dir]").FirstOrDefault();
-            var searchValue = Request.Form.GetValues("search[value]").FirstOrDefault();
-
-            int pageSize = length != null ? Convert.ToInt32(length) : 0;
-            int skip = start != null ? Convert.ToInt32(start) : 0;
-            int totalRecords = 0;
-
-            //busquedaPaginada(int? idArea, int? IdCentroCosto, string rutPersona, string folio, string sortColumn = "", string sortColumnDir = "")
-            var query = ParametroBLL.ObtenerQueryPrincipal(filtro, sortColumn, sortColumnDir, searchValue);
-            if (searchValue != "")
-            {
-                query = query.Where(d => d.Descripcion.Contains(searchValue));
-            }
-            if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
-            {
-                //query = query.OrderBy(sortColumn + " " + sortColumnDir);
-            }
-            totalRecords = query.Count();
-            var listado = query.ToList();
-
-            // Aca se colocan solamente los atributos que seran mostrados en la tabla. Ej: id y valor
-            var dataSalida = listado.Select(a => new
-            {
-                id = a.Id,
-                descripcion = a.Descripcion,
                 valor = a.Valor,
             }).ToList();
 
@@ -130,27 +85,14 @@ namespace Metalkit.Controllers
         }
         public ActionResult CreateEstandar()
         {
-            var listParametros = Parametro_SubParametroBLL.TraerTodos();
             List<Region> region = RegionBLL.TraerTodos();
             List<Comuna> comuna = new List<Comuna>();
-
-
-            var listaParametro = new List<VMParametro>();
-            foreach (var item in listParametros)
-            {
-                VMParametro obj = new VMParametro();
-                obj.Id = item.Parametro.Id;
-                obj.Descripcion = item.Parametro.Descripcion;
-                obj.Valor = item.Parametro.Valor;
-                obj.ParamNvl2 = SubParametroBLL.TraerTodos().Where(a => a.Id == item.IdSubParametro).ToList();
-                listaParametro.Add(obj);
-            }
+           
             ViewBag.iregionEnvio = new SelectList(region, "Id", "Nombre");
             ViewBag.icomunaEnvio = new SelectList(comuna, "Id", "Nombre");
-            ViewBag.listaParametros = listaParametro;
 
             List<Producto> proyecto = ProductoBLL.TraerTodos();
-            ViewBag.iproyecto = new SelectList(proyecto, "Id", "Descripcion");
+            //ViewBag.iproyecto = new SelectList(proyecto, "Id", "Descripcion");
 
             return PartialView("_CotizacionEstandar");
         }
@@ -193,7 +135,7 @@ namespace Metalkit.Controllers
                     });
                 }
 
-          
+
                 cotizacion.IdTipoProyecto = 1;
 
             }
@@ -211,16 +153,16 @@ namespace Metalkit.Controllers
         public ActionResult CreateCliente(FormCollection form)
         {
             Cliente cliente = new Cliente();
-            bool status = false;
-            string mensaje = "";
+            bool success = false;
+            string message = "";
             try
             {
                 cliente = ClienteBLL.TraerPorRut(Utilidades.RutSinDV(form["tbRutBusqueda"]));
-                cliente.Rut= Utilidades.RutSinDV(form["tbRutBusqueda"]);
-                cliente.Dv= Utilidades.DV(form["tbRutBusqueda"]);
+                cliente.Rut = Utilidades.RutSinDV(form["tbRutBusqueda"]);
+                cliente.Dv = Utilidades.DV(form["tbRutBusqueda"]);
                 cliente.RazonSocial = form["tbRazonSocial"];
                 cliente.Direccion = form["tbDireccion"];
-                cliente.IdComuna = Convert.ToByte(form["iComuna"]);
+                cliente.IdComuna = Convert.ToByte(form["icomuna"]);
                 cliente.Giro = form["tbGiro"];
                 cliente.NombreContacto = form["tbNombre"];
                 cliente.ApellidoContacto = form["tbApellido"];
@@ -228,17 +170,20 @@ namespace Metalkit.Controllers
                 cliente.TelefonoContacto = form["tbTelefono"];
 
                 ClienteBLL.Guardar(cliente);
-                mensaje = "Registro almacenado Correctamente";
-                status = true;
+                message = "Registro almacenado Correctamente";
+                success = true;
             }
             catch (Exception ex)
             {
-                mensaje = ex.Message;
-                status = true;
+                message = ex.Message;
+                success = false;
             }
-            return Json(new { mensaje, status }, JsonRequestBehavior.AllowGet);
-        }
 
+            return PartialView("_CreateCliente", cliente);
+
+            //return new JsonResult { Data = new { success, message } };
+
+        }
         // GET: CotizacionEstandar/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -336,12 +281,6 @@ namespace Metalkit.Controllers
             }).ToList();
             return Json(listado, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult CargarProyecto(int id)
-        {
-            ViewBag.detalleProducto = ProductoBLL.Traer(id);
-
-            return Content("Ok");
-        }
         public JsonResult Continuar(string rut)
         {
             try
@@ -383,7 +322,134 @@ namespace Metalkit.Controllers
                 return new JsonResult { Data = salida, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
             }
         }
-        
+        [HttpGet]
+        public ActionResult GrillaParametros()
+        {
+            List<Parametro> listaParametros = ParametroBLL.TraerTodos();
+            List<VMParametro> listaVMParametro = new List<VMParametro>();
+            foreach (var item in listaParametros)
+            {
+                VMParametro vm = new VMParametro();
+                vm.Id = item.Id;
+                vm.Descripcion = item.Descripcion;
+                vm.Valor = item.Valor;
+                vm.Total_SubParametros = SubParametroBLL.TraerPorParametro(item.Id).Count;
+                vm.Total_SubParametros_guardados = Parametro_SubParametroBLL.TraerPorParametro(item.Id).Count;
+                listaVMParametro.Add(vm);
+            }
+
+            return View("_GrillaParametros", listaVMParametro);
+        }
+        [HttpPost]
+        public ActionResult GrillaSubParametros(int idParametro, string[] arrid)
+        {
+            //Session["IdsSubParametros"] = arrid;
+
+            foreach (var item in arrid)
+            {
+                string idTr = item.Replace("[", "").Replace("\"", "").Replace("]", "");
+
+                Parametro_SubParametro dato = new Parametro_SubParametro();
+                dato.IdParametro = idParametro;
+                dato.IdSubParametro = int.Parse(idTr);
+                Parametro_SubParametroBLL.Guardar(dato);
+            }
+            //var listado_subParametros = SubParametroBLL.TraerTodos();
+            //foreach (var item in lista_VMSubParametros)
+            //{
+            //    Parametro_SubParametro dato = new Parametro_SubParametro();
+            //    dato.IdParametro = item.Id;
+            //    dato.IdSubParametro = item.Id;
+            //}
+
+            //return PartialView("_GrillaSubParametros", lista_VMSubParametros);
+            return PartialView("_GrillaSubParametros");
+        }
+        [HttpGet]
+        public ActionResult GrillaSubParametros(int id)
+        {
+            var listado_subParametros = SubParametroBLL.TraerTodos();
+            List<VMSubParametro> lista_VMSubParametros = new List<VMSubParametro>();
+            List<Parametro_SubParametro> lista_Parametro_SubParametros = new List<Parametro_SubParametro>();
+            lista_Parametro_SubParametros = Parametro_SubParametroBLL.TraerPorParametro(id);
+            foreach (var item in listado_subParametros)
+            {
+                VMSubParametro dato = new VMSubParametro();
+                dato.Id = item.Id;
+                dato.IdParametro = item.IdParametro;
+                dato.Descripcion = item.Descripcion;
+                dato.Valor = item.Valor;
+                dato.Seleccionado = false;
+                foreach (var item2 in lista_Parametro_SubParametros)
+                {
+                    if (item2.IdSubParametro==item.Id)
+                    {
+                        dato.Seleccionado = true;
+                    }
+                }
+                lista_VMSubParametros.Add(dato);
+            }
+            ViewBag.IdParametro = id;
+
+            return PartialView("_GrillaSubParametros", lista_VMSubParametros);
+        }
+        public ActionResult GrillaProductos(int id=0)
+        {
+            List<VMProducto> listaProductosVM = new List<VMProducto>();
+
+            List<Producto> listaProductos = new List<Producto>();
+            
+            listaProductos = ProductoBLL.TraerTodos();
+            
+            foreach (var item in listaProductos)
+            {
+                VMProducto vm = new VMProducto();
+                vm.Id = item.Id;
+                vm.Codigo = item.Codigo;
+                vm.Descripcion = item.Descripcion;
+                vm.Superficie = item.Superficie;
+                vm.Valor = item.Valor;
+                vm.Imagen = item.Imagen;
+                listaProductosVM.Add(vm);
+
+            }
+            return PartialView("_GrillaProducto", listaProductosVM);
+        }
+        public PartialViewResult GrillaProductoSeleccionado(int id = 0)
+        {
+            List<VMProducto> listaProductosVM = new List<VMProducto>();
+            List<Producto> listaProductos = new List<Producto>();
+
+            if (id != 0) { }
+            listaProductos = db.Producto.Where(a => a.Id == id).ToList();
+
+            foreach (var item in listaProductos)
+            {
+                VMProducto vm = new VMProducto();
+                vm.Id = item.Id;
+                vm.Codigo = item.Codigo;
+                vm.Descripcion = item.Descripcion;
+                vm.Superficie = item.Superficie;
+                vm.Valor = item.Valor;
+                vm.Imagen = item.Imagen;
+                listaProductosVM.Add(vm);
+
+            }
+            return PartialView("_GrillaProductoSeleccionado", listaProductosVM);
+        }
+
+        [HttpPost]
+        public JsonResult GetAreasForCompany(int id)
+        {
+            var listaTeo = db.Parametro
+                .Select(a => new
+                {
+                    id = a.Id,
+                    descripcion = a.Descripcion,
+                    valor = a.Valor
+                });
+            return Json(listaTeo);
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

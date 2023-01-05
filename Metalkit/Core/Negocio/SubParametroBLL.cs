@@ -19,12 +19,15 @@ namespace Metalkit.Core.Negocio
         {
             return _objDAO.Traer(id);
         }
-
+        
         public static List<SubParametro> TraerTodos()
         {
             return _objDAO.TraerTodos();
         }
-
+        public static List<SubParametro> TraerPorParametro(int id)
+        {
+            return _objDAO.TraerPorParametro(id);
+        }
         public static bool Guardar(SubParametro obj)
         {
             return _objDAO.Guardar(obj);

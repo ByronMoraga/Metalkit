@@ -39,6 +39,7 @@ namespace Metalkit.Models
         public virtual DbSet<Producto_Parametro> Producto_Parametro { get; set; }
         public virtual DbSet<Region> Region { get; set; }
         public virtual DbSet<SubParametro> SubParametro { get; set; }
+        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<TipoEntrega> TipoEntrega { get; set; }
         public virtual DbSet<TipoParametro> TipoParametro { get; set; }
         public virtual DbSet<TipoProyecto> TipoProyecto { get; set; }

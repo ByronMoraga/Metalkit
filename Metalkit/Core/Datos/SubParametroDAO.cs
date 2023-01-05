@@ -45,7 +45,6 @@ namespace Metalkit.Core.Datos
 
             return entidad;
         }
-
         internal List<SubParametro> TraerTodos()
         {
             var lista = new List<SubParametro>();
@@ -55,7 +54,16 @@ namespace Metalkit.Core.Datos
             lista = query.ToList();
             return lista;
         }
+        internal List<SubParametro> TraerPorParametro(int id)
+        {
+            var lista = new List<SubParametro>();
 
+            var query = from ent in _dbContext.SubParametro
+                        where ent.IdParametro == id
+                        select ent;
+            lista = query.ToList();
+            return lista;
+        }
         internal bool Guardar(SubParametro data)
         {
             var guardado = false;

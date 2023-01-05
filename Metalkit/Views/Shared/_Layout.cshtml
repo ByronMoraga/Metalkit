@@ -8,35 +8,42 @@
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="~/Content/plugins/fontawesome-free/css/all.min.css">
+    @*<link rel="stylesheet" href="~/Content/plugins/fontawesome-free/css/all.min.css">*@
+    <script src="https://kit.fontawesome.com/aac341931c.js" crossorigin="anonymous"></script>
+    <link href="~/Content/animate.css" rel="stylesheet" />
+
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Tempusdominus Bootstrap 4 -->
-    <link rel="stylesheet" href="~/Content/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css"/>
+    <link rel="stylesheet" href="~/Content/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" />
     <!-- iCheck -->
-    <link rel="stylesheet" href="~/Content/plugins/icheck-bootstrap/icheck-bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/Content/plugins/icheck-bootstrap/icheck-bootstrap.min.css" />
     <!-- JQVMap -->
-    <link rel="stylesheet" href="~/Content/plugins/jqvmap/jqvmap.min.css"/>
+    <link rel="stylesheet" href="~/Content/plugins/jqvmap/jqvmap.min.css" />
     <!-- Theme style -->
-    <link rel="stylesheet" href="~/Content/dist/css/adminlte.min.css"/>
+    <link rel="stylesheet" href="~/Content/dist/css/adminlte.min.css" />
     <!-- overlayScrollbars -->
-    <link rel="stylesheet" href="~/Content/plugins/overlayScrollbars/css/OverlayScrollbars.min.css"/>
+    <link rel="stylesheet" href="~/Content/plugins/overlayScrollbars/css/OverlayScrollbars.min.css" />
     <!-- Daterange picker -->
-    <link rel="stylesheet" href="~/Content/plugins/daterangepicker/daterangepicker.css"/>
+    <link rel="stylesheet" href="~/Content/plugins/daterangepicker/daterangepicker.css" />
     <!-- summernote -->
-    <link rel="stylesheet" href="~/Content/plugins/summernote/summernote-bs4.min.css"/>
+    <link rel="stylesheet" href="~/Content/plugins/summernote/summernote-bs4.min.css" />
 
     <link href="~/Content/plugins/toastr/toastr.min.css" rel="stylesheet" />
     <!-- DataTables -->
-    <link rel="stylesheet" href="~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"/>
-    <link rel="stylesheet" href="~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css"/>
-    <link rel="stylesheet" href="~/Content/plugins/datatables-buttons/css/buttons.bootstrap4.min.css"/>
+    <link href="~/Content/plugins/datatables-select/css/select.bootstrap4.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" href="~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css" />
+    <link rel="stylesheet" href="~/Content/plugins/datatables-buttons/css/buttons.bootstrap4.min.css" />
     <!-- Select2 -->
-    <link rel="stylesheet" href="~/Content/plugins/select2/css/select2.min.css"/>
-    <link rel="stylesheet" href="~/Content/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"/>
+    <link rel="stylesheet" href="~/Content/plugins/select2/css/select2.min.css" />
+    <link rel="stylesheet" href="~/Content/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" />
     <!-- iCheck for checkboxes and radio inputs -->
-    <link rel="stylesheet" href="~/Content/plugins/icheck-bootstrap/icheck-bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/Content/plugins/icheck-bootstrap/icheck-bootstrap.min.css" />
     <link href="~/Content/plugins/iCheck/custom.css" rel="stylesheet" />
+
+    <link href="~/Content/plugins/iCheck/blue.css" rel="stylesheet" />
+
     @*<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
         <link href="~/fonts/font-awesome/all.min.css" rel="stylesheet" />
         <link href="@Url.Content("~/Scripts/plugins/jquery-ui/jquery-ui.min.css")" rel="stylesheet" type="text/css" />
@@ -65,8 +72,8 @@
     <div class="wrapper">
         <!-- Preloader -->
         @*<div class="preloader flex-column justify-content-center align-items-center">
-                <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
-            </div>*@
+            <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
+        </div>*@
         @Html.Partial("_TopNavbar")
         @Html.Partial("_Navigation")
         <div class="content-wrapper">
@@ -74,62 +81,98 @@
             <section class="content">
                 <div class="container-fluid">
                     <br />
-                    @RenderBody()
+                    <div class="row">
+                        <div class="col-md-12">
+                            @RenderBody()
+                        </div>
+                    </div>
                 </div>
+
+                <div id="ModalChico" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title"></h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="editModalContent">
+
+                                </div>
+                            </div>
+
+                            <div class="modal-footer"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="ModalMediano" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title"></h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="editModalContent">
+
+                                </div>
+                            </div>
+                            <div class="modal-footer"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="ModalGrande" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title"></h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            @*<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title"></h4>
+        </div>*@
+                            <div class="modal-body">
+                                <div id="editModalContent">
+
+                                </div>
+                            </div>
+                            <div class="modal-footer"></div>
+                        </div>
+                    </div>
+                </div>
+
             </section>
             <!-- /.content -->
 
-            <div id="ModalChico" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content modal-xs">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title"></h4>
-                        </div>
-                        <div class="modal-body">
-                            <div id="editModalContent">
-
-                            </div>
-                        </div>
-
-                        <div class="modal-footer"></div>
-                    </div>
-                </div>
-            </div>
-            <div id="ModalMediano" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content modal-md">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title"></h4>
-                        </div>
-                        <div class="modal-body">
-                            <div id="editModalContent">
-
-                            </div>
-                        </div>
-                        <div class="modal-footer"></div>
-                    </div>
-                </div>
-            </div>
-            <div id="ModalGrande" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog-xl">
-                    <div class="modal-content modal-xl">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title"></h4>
-                        </div>
-                        <div class="modal-body">
-                            <div id="editModalContent">
-
-                            </div>
-                        </div>
-                        <div class="modal-footer"></div>
-                    </div>
-                </div>
-            </div>
             <br />
             <br />
+        </div>
+        <div id="ModalGrande" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+
+                        <div id="editModalContent">
+
+                        </div>
+                    </div>
+                    <div class="modal-footer"></div>
+                </div>
+            </div>
         </div>
 
         @Html.Partial("_Footer")
@@ -142,6 +185,15 @@
 
         @Html.Partial("_RightSidebar")
     </div>
+    @*load modal*@
+    <script>
+        function muestraContenidoModal(accion, controlador, titulo, metodo, data, eventos, tipoModal) {
+            var link = "@Url.Action("varTipo", "varControlador")";
+            tipoModal = tipoModal || "";
+            openModal(accion, controlador, link, titulo, metodo, data, tipoModal, eventos);
+    }
+    </script>
+    @*theme black*@
     <script>
         var toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
         var currentTheme = localStorage.getItem('theme');
@@ -254,9 +306,8 @@
     <script src="~/Content/plugins/iCheck/icheck.min.js"></script>
     <script src="~/Content/plugins/toastr/toastr.min.js"></script>
     <script src="~/Scripts/Utilidades.js"></script>
-    <script src="~/Scripts/toastr.js"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.rut.chileno.js")"></script>
-
+    <script src="~/Scripts/funcionesGenerales.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

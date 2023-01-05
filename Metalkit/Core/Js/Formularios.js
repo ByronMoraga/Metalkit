@@ -10,6 +10,7 @@
 
     
 }
+
 function Continuar() {
     //llaves para id
     var rut = $('#tbRutBusqueda').val();
@@ -55,56 +56,10 @@ function Continuar() {
         }, 500);
         //espero y lanzo el foco al primer control de datos
         setTimeout(function () {
-            $('#iComuna').val(data.IdComuna);
+            $('#icomuna').val(data.IdComuna);
             $('#itipoproyecto').focus();
 
         }, 500);
-    });
-}
-$("#iComuna").change(function () {
-    $("#ComunaSelected").val($("#iComuna").val());
-});
-
-function cargaGrilla() {
-    var oTable = $("#tabla_Producto").DataTable({
-        "processing": false,
-        "serverSide": true,
-        "filter": false,
-        "orderMulti": false,
-        "pagingType": "full_numbers",
-        "paging": false,
-        "language": datatableIdioma(),
-        "ajax": {
-            "url": url_datatable,
-            "data": function (d) {
-                d.filtro = "";
-            },
-            "type": "POST",
-            "datatype": "json"
-        },
-        "columns": [
-            { "data": "id", "name": "id", "autoWidth": true },
-            { "data": "codigo", "title": "Código", "name": "codigo", "autoWidth": true },
-            { "data": "descripcion", "title": "Descripción", "name": "Descripción", "autoWidth": true },
-            { "data": "superficie", "title": "Superficie", "name": "Superficie", "autoWidth": true },
-            { "data": "precio", "title": "Precio", "name": "Precio", "autoWidth": true }
-        ]
-    });
-}
-
-function CargarProyecto() {
-    var identificador = $("#iproyecto :selected").val();
-    $.get(url_cargarproyecto, { id: identificador }, function (data) {
-        var id_control_foco = '#L14_NUMRUT';
-        console.log(data);
-
-        switch (data) {
-            case "Ok":
-                cargaGrilla();
-                break;
-            default:
-                console.log(data.responseText);
-        }
     });
 }
 
@@ -121,7 +76,29 @@ function CargaComunas() {
             if (!response.error) {
                 $.each(response, function (i, e) {
                     $('#icomuna').append($("<option></option>").val(e.Value).html(e.Text));
-                    //$('#icomuna').append('<option> </option>'.val(e.Value).html(e.Text));
+                });
+            }
+        },
+        error: function (xhr) {
+            //$this.loadingButton({ accion: "reset" });
+        }
+    });
+}
+
+function GetDetails(identificador) {
+    var identificador = $("#iregion :selected").val();
+    $.ajax({
+        url: url_carga_subparametros,
+        type: "post",
+        data: {
+            id: identificador
+        },
+        success: function (response) {
+            if (!response.error) {
+                $.each(response, function (i, e) {
+                    $("#contenido_Grilla_SubParametros")
+                        .append("<tr><td>" + '<div class="form-group row"><div class="col-lg-3"><div class="i-checks"><div class="icheckbox_square-blue cClases"><input type="checkbox" value="" id="' + value.Id + '"></div></div></div></div>'
+                            + "</td ><td>" + value.Descripcion + "</td><td>" + value.Valor + "</td></tr > ");
                 });
             }
         },
@@ -164,10 +141,15 @@ function MostrarProyectoSeleccionado() {
             case "CotizacionEstandar":
                 $.get(url_createEstandar, function (data) {
                     ////lleno y despliego el dialogo de edición
-                    $('#container').html(data);
+                    $('#container_Cotizacion').html(data);
+                    Carga_GrillaProductoSeleccionado();
+                    Carga_GrillaParametros();
+                    $('#my-card').CardWidget('toggle')
+
                     //$('#div_EditModal').modal('show');
                     //espero y lanzo el foco al primer control de datos
                     setTimeout(function () {
+
                         //$('#Clases').focus();
                         //$('#Nombres').prop('readonly', true);
 
@@ -177,11 +159,13 @@ function MostrarProyectoSeleccionado() {
             case "CotizacionPersonalizada":
                 $.get(url_createPersonalizada, function (data) {
                     ////lleno y despliego el dialogo de edición
-                    $('#container').html(data);
+                    $('#container_Cotizacion').html(data);
                     //$('#div_EditModal').modal('show');
+                    $('#my-card').CardWidget('toggle')
 
                     //espero y lanzo el foco al primer control de datos
                     setTimeout(function () {
+
                         //$('#Clases').focus();
                         //$('#Nombres').prop('readonly', true);
                         //$('#L14_FECDURAC').prop('readonly', true);
@@ -195,6 +179,77 @@ function MostrarProyectoSeleccionado() {
     });
 }
 
+function Carga_GrillaProductoSeleccionado(identificador) {
+    $.ajax({
+        url: url_carga_productoSeleccionado,
+        datatype: "html",
+        type: "get",
+        data: {
+            id: identificador
+        },
+        success: function (response) {
+            console.log(response)
+            $("#div_grilla_productoSeleccionado").html('').html(response);
+            $('#ModalMediano').modal('hide');
+        },
+        error: function (xhr) {
+            //$this.loadingButton({ accion: "reset" });
+        }
+    });
+}
+function Carga_GrillaParametros(identificador) {
+    $.ajax({
+        url: url_carga_parametros,
+        datatype: "html",
+        type: "get",
+        data: {
+            id: identificador
+        },
+        success: function (response) {
+            console.log(response)
+            $("#div_grilla_parametros").html('').html(response);
+            $('#ModalMediano').modal('hide');
+        },
+        error: function (xhr) {
+            //$this.loadingButton({ accion: "reset" });
+        }
+    });
+}
+
+function CargaModal_SubParametros(identificacion) {
+
+    muestraContenidoModal(
+        'GrillaSubParametros',
+        'Formularios',
+        'Sub Parametros',
+        'get',
+        {
+            id: identificacion
+        },
+        {
+            beforeSend: function () { },
+            complete: function () { }
+        },
+        "mediano"
+    );
+}
+function CargaModal_Productos(identificacion) {
+
+    muestraContenidoModal(
+        'GrillaProductos',
+        'Formularios',
+        'Productos',
+        'get',
+        {
+            id: identificacion
+        },
+        {
+            beforeSend: function () { },
+            complete: function () { }
+        },
+        "mediano"
+    );
+}
 $("#b_editar").click(function () {
     $("#b_guardar").removeClass("disabled");
     $("#b_editar").addClass("disabled");
@@ -202,41 +257,88 @@ $("#b_editar").click(function () {
     desbloqueaDatos('#div_datos_cliente');
     bloqueaDatos('#div_tipo_proyecto');
 });
-$('#b_guardar').on('click', function (e) {
-    e.preventDefault();
 
-    $.ajax({
-        type: "POST",
-        url: url_createCliente,
-        data: $('#formSolcitud').serialize(),
-        success: function (data) {
-            if (data.status) {
+//function SubmitForm(form) {
+//    $.ajax({
+//        type: "POST",
+//        url: form.action,
+//        data: $(form).serialize(),
+//        success: function (data) {
+//            if (data.success) {
+//                alert_success('Dato almacenado con éxito.');//exito);
+//                //alert_success(data.message);
+//                console.log("data.success")
+//                bloqueaDatos('#div_datos_empresa');
+//                bloqueaDatos('#div_datos_cliente');
+//                $("#b_editar").removeClass("disabled");
+//                $("#b_guardar").addClass("disabled");
+//                desbloqueaDatos('#div_tipo_proyecto');
+//            } else {
+//                alert_error(data.message);
+//            }
+//        }
+//    });
 
-                alert_success('Dato almacenado con éxito.');//exito);
-                bloqueaDatos('#div_datos_empresa');
-                bloqueaDatos('#div_datos_cliente');
-                $("#b_editar").removeClass("disabled");
-                $("#b_guardar").addClass("disabled");
-                desbloqueaDatos('#div_tipo_proyecto');
-            }
-            else {
-                alert_error(data.error);
-            }
+//    return false;
 
-        }
-    });
-});
-//$("#b_guardar").click(function () {
-//    $("#formSolcitud").submit();
-//    bloqueaDatos('#div_datos_empresa');
-//    bloqueaDatos('#div_datos_cliente');
-//    $("#b_editar").removeClass("disabled");
-//    $("#b_guardar").addClass("disabled");
-//    desbloqueaDatos('#div_tipo_proyecto');
-    
+//};
+    //$.ajax({
+    //    type: "POST",
+    //    url: url_createCliente,
+    //    data: $('#formSolcitud').submit(),
+    //    success: function (data) {
+    //        if (data.status) {
+    //            debugger;
+    //            alert_success('Dato almacenado con éxito.');//exito);
+    //            bloqueaDatos('#div_datos_empresa');
+    //            bloqueaDatos('#div_datos_cliente');
+    //            $("#b_editar").removeClass("disabled");
+    //            $("#b_guardar").addClass("disabled");
+    //            desbloqueaDatos('#div_tipo_proyecto');
+    //        }
+    //        else {
+    //            alert_error(data.error);
+    //        }
+
+    //    }
+    //});
 //});
+$("#b_guardar").click(function () {
+    $("#formSolcitud").submit();
+    bloqueaDatos('#div_datos_empresa');
+    bloqueaDatos('#div_datos_cliente');
+    $("#b_editar").removeClass("disabled");
+    $("#b_guardar").addClass("disabled");
+    desbloqueaDatos('#div_tipo_proyecto');
+    
+});
 
 ///**** Create Ajax Form CallBack ********/
+
+function OnBeginRequest() {
+
+    alert('On Begin');
+
+}
+
+function OnCompleteRequest() {
+
+    alert('On Completed');
+
+}
+
+function OnSuccessRequest() {
+
+    alert('On Success');
+
+}
+
+function OnFailureRequest() {
+
+    alert('On Failure');
+
+}
+
 function CreateEstandar_Success(data) {
     console.log("CreateEstandar_Success");
     console.log(data.status);
@@ -308,8 +410,6 @@ function Delete_Success(data) {
     Grid_VM.refresh();
     mensaje('OK', 'Registro Eliminado Exitosamente.');
 }
-
-
 //$("#Agregar").on("click", function () {
 //    $('#editModalContentAgregar').load(this.href, function () {
 //        $('#ModalAgregar').modal({

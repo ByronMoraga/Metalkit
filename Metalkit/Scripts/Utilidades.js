@@ -48,11 +48,6 @@ function desbloqueaDatos(nombre_div) {
     //$(nombre_div).children().attr("disabled", "disabled");    
 }
 
-function muestraContenidoModal(accion, controlador, titulo, metodo, data, eventos, tipoModal) {
-    var link = "@Url.Action('varTipo', 'varControlador')";
-    tipoModal = tipoModal || "";
-    openModal(accion, controlador, link, titulo, metodo, data, tipoModal, eventos);
-}
 function openModal(accion, controlador, url, tituloModal, metodo, datos, tipoModal, eventos) {
     var link = "";
     var dataPost = null;
@@ -103,7 +98,6 @@ function openModal(accion, controlador, url, tituloModal, metodo, datos, tipoMod
     }
 
     link = link.replace("varTipo", accion).replace("varControlador", controlador);
-
     $.ajax({
         cache: false,
         dataType: 'text',
@@ -121,11 +115,13 @@ function openModal(accion, controlador, url, tituloModal, metodo, datos, tipoMod
                 callbacks.afterDraw();
 
                 if (callbacks.hasOwnProperty("afterShow")) {
+
                     $(claseModal).on('shown', function () {
                         callbacks.afterShow();
                     });
                 }
             } else {
+
                 Html.modalDinamico({
                     html: response,
                     afterDraw: function () {
@@ -142,6 +138,7 @@ function openModal(accion, controlador, url, tituloModal, metodo, datos, tipoMod
                 });
             }
         },
+
         complete: callbacks.complete()
     });
 
