@@ -7,8 +7,8 @@
     $("#b_editar").removeClass("disabled");
     $("#b_guardar").addClass("disabled");
     $('.input_rut').rut();
+    $('.search-select').select2();
 
-    
 }
 
 function Continuar() {
@@ -23,21 +23,12 @@ function Continuar() {
 
     $.get(url, function (data) {
         if (data == "") {
-            alert_warning('debe ingresar un rut valido');
-            return;
-        }
-        console.log(data);
-            bloqueaDatos('#div_cabecera');
-        if (data == "") {
             $("#b_guardar").removeClass("disabled");
             $("#b_editar").addClass("disabled");
             desbloqueaDatos('#div_datos_empresa');
             desbloqueaDatos('#div_datos_cliente');
         } else {
-            bloqueaDatos('#div_datos_empresa');
-            bloqueaDatos('#div_datos_cliente');
-            desbloqueaDatos('#div_tipo_proyecto');
-
+            $('#txtidCliente').val(data.Id);
             $('#tbRazonSocial').val(data.RazonSocial);
             $('#tbDireccion').val(data.Direccion);
             $('#iregion').val(data.IdRegion);
@@ -53,52 +44,42 @@ function Continuar() {
         setTimeout(function () {
             CargaComunas();
 
+
         }, 500);
         //espero y lanzo el foco al primer control de datos
         setTimeout(function () {
-            $('#icomuna').val(data.IdComuna);
+            $("#icomuna").val(data.IdComuna);
             $('#itipoproyecto').focus();
 
+            bloqueaDatos('#div_cabecera');
+            bloqueaDatos('#div_datos_empresa');
+            bloqueaDatos('#div_datos_cliente');
+            desbloqueaDatos('#div_tipo_proyecto');
         }, 500);
     });
 }
-
 function CargaComunas() {
     $("#icomuna").empty();
     var identificador = $("#iregion :selected").val();
+    var rut = $('#tbRutBusqueda').val();
     $.ajax({
         url: url_cargarcomunas,
         type: "post",
         data: {
-            id: identificador
+            id: identificador,
+            rut: rut
         },
         success: function (response) {
             if (!response.error) {
-                $.each(response, function (i, e) {
-                    $('#icomuna').append($("<option></option>").val(e.Value).html(e.Text));
-                });
-            }
-        },
-        error: function (xhr) {
-            //$this.loadingButton({ accion: "reset" });
-        }
-    });
-}
+                $.each(response.Resultados, function (i, e) {
 
-function GetDetails(identificador) {
-    var identificador = $("#iregion :selected").val();
-    $.ajax({
-        url: url_carga_subparametros,
-        type: "post",
-        data: {
-            id: identificador
-        },
-        success: function (response) {
-            if (!response.error) {
-                $.each(response, function (i, e) {
-                    $("#contenido_Grilla_SubParametros")
-                        .append("<tr><td>" + '<div class="form-group row"><div class="col-lg-3"><div class="i-checks"><div class="icheckbox_square-blue cClases"><input type="checkbox" value="" id="' + value.Id + '"></div></div></div></div>'
-                            + "</td ><td>" + value.Descripcion + "</td><td>" + value.Valor + "</td></tr > ");
+                    //if (e.Selected === true) {
+                    //    $('#icomuna').append('<option Selected="Selected" value="' + e.Value + '">' + e.Text + '</option>');
+                    //} else {
+                    //    $('#icomuna').append('<option value="' + e.Value + '">' + e.Text + '</option>');
+                    //}
+                    $('#icomuna').append($("<option></option>").val(e.Value).html(e.Text));
+
                 });
             }
         },
@@ -131,9 +112,10 @@ function CargaComunasEnvio() {
 }
 
 function MostrarProyectoSeleccionado() {
-    var identificador = $("#itipoproyecto :selected").val();
+    var tp = $("#itipoproyecto :selected").val();
+    var rut = $('#tbRutBusqueda').val();
 
-    $.get(url_mostrarproyecto, { id: identificador }, function (data) {
+    $.get(url_mostrarproyecto, { tipoProyecto: tp, rut: rut }, function (data) {
         var id_control_foco = '#L14_NUMRUT';
         console.log(data);
 
@@ -256,6 +238,7 @@ $("#b_editar").click(function () {
     desbloqueaDatos('#div_datos_empresa');
     desbloqueaDatos('#div_datos_cliente');
     bloqueaDatos('#div_tipo_proyecto');
+    
 });
 
 //function SubmitForm(form) {
@@ -303,15 +286,15 @@ $("#b_editar").click(function () {
     //    }
     //});
 //});
-$("#b_guardar").click(function () {
-    $("#formSolcitud").submit();
-    bloqueaDatos('#div_datos_empresa');
-    bloqueaDatos('#div_datos_cliente');
-    $("#b_editar").removeClass("disabled");
-    $("#b_guardar").addClass("disabled");
-    desbloqueaDatos('#div_tipo_proyecto');
+//$("#b_guardar").click(function () {
+//    $("#formSolcitud").submit();
+//    bloqueaDatos('#div_datos_empresa');
+//    bloqueaDatos('#div_datos_cliente');
+//    $("#b_editar").removeClass("disabled");
+//    $("#b_guardar").addClass("disabled");
+//    desbloqueaDatos('#div_tipo_proyecto');
     
-});
+//});
 
 ///**** Create Ajax Form CallBack ********/
 

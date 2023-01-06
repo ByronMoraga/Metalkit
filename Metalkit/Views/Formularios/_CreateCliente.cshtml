@@ -4,136 +4,194 @@
     Layout = null;
 
 }
-@using (Ajax.BeginForm("CreateCliente", "Formularios", null, new AjaxOptions { HttpMethod = "POST", OnBegin = "OnBeginRequest", OnSuccess = "OnSuccessRequest", OnComplete = "OnCompleteRequest", OnFailure = "OnFailureRequest", Confirm = "¿Desea agregar un país?" }, new { @class = "form-horizontal", role = "form" }))
+@*@using (Html.BeginForm("CreateCliente", "Formularios", FormMethod.Post, new { @class = "formModal form-validacion ", id = "form", name = "form" }))*@
+@using (Ajax.BeginForm("AddressTypePartial", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "CreateAddress", InsertionMode = InsertionMode.Replace }))
 {
     @Html.AntiForgeryToken()
 
-<div class="card card-primary" id="my-card">
-    <div class="card-header">
-        <div class="card-title">
-            Formulario contacto
+    <div class="card card-primary" id="my-card">
+        <div class="card-header">
+            <div class="card-title">
+                Formulario contacto
+            </div>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
         </div>
-        <div class="card-tools">
-            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                <i class="fas fa-minus"></i>
-            </button>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card card-fijo">
+                        <div class="card-header">
+                            <div class="card-title">Datos de la empresa</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row" id="div_cabecera">
+                                <input id="txtidCliente" type="hidden" value="0" />
+                                <label for="tbRutBusqueda" class="col-md-3 col-form-label">Rut</label>
+                                <div class="col-md-7">
+                                    <input type="text" class="form-control input_rut" id="tbRutBusqueda" name="tbRutBusqueda" placeholder="Ingrese rut">
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-success" onclick="Continuar()" id="btnContinuar" title="Continuar">Continuar</button>
+                                </div>
+                            </div>
+                            <div id="div_datos_empresa">
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label">Razón Social</label>
+
+                                    <div class="col-lg-9">
+                                        <input type="text" placeholder="Razón Social" class="form-control" id="tbRazonSocial" name="tbRazonSocial">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label">Dirección</label>
+                                    <div class="col-lg-9">
+                                        <input type="text" placeholder="Dirección" class="form-control" id="tbDireccion" name="tbDireccion">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label">Región</label>
+                                    <div class="col-lg-9">
+                                        @Html.DropDownList("iregion", null, "Seleccione", htmlAttributes: new { @class = "form-control Select2  search-select", @onchange = "CargaComunas()" })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label">Comuna</label>
+                                    <div class="col-lg-9">
+                                        @Html.DropDownList("icomuna", null, "Seleccione", htmlAttributes: new { @class = "form-control Select2  search-select" })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label">Giro</label>
+                                    <div class="col-lg-9">
+                                        <input type="text" placeholder="Giro" class="form-control" id="tbGiro" name="tbGiro">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6" id="div_datos_cliente">
+                    <div class="card card-fijo">
+                        <div class="card-header">
+                            <div class="card-title">Datos de Contacto</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label">Nombre</label>
+
+                                <div class="col-lg-9">
+                                    <input type="text" placeholder="Nombre" class="form-control" id="tbNombre" name="tbNombre">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label">Apellido</label>
+
+                                <div class="col-lg-9">
+                                    <input type="text" placeholder="Apellido" class="form-control" id="tbApellido" name="tbApellido">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label">Correo</label>
+                                <div class="col-lg-9">
+                                    <input type="text" placeholder="Correo" class="form-control" id="tbCorreo" name="tbCorreo">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label">Teléfono</label>
+                                <div class="col-lg-9">
+                                    <input type="text" placeholder="Telefono" class="form-control" id="tbTelefono" name="tbTelefono">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-lg-2 col-form-label">Tipo Proyecto</label>
+                                <div class="col-lg-4">
+                                    @Html.DropDownList("itipoproyecto", null, "Seleccione", htmlAttributes: new { @class = "form-control", @onchange = "MostrarProyectoSeleccionado()" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-right">
+                                <button class="btn btn-primary disabled" type="button" id="b_guardar" onclick="GuardarCliente()"><i class="fa fa-check"></i>&nbsp;Guardar</button>
+                                <button class="btn btn-primary" type="button" id="b_editar" name="b_editar"><i class="fa fa-edit"></i>&nbsp;Editar</button>
+                                <button class="btn btn-default" type="button" id="b_Limpiar" onclick="location.reload();"><i class="fa fa-trash"></i>&nbsp;Limpiar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card card-fijo">
-                    <div class="card-header">
-                        <div class="card-title">Datos de la empresa</div>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-group row" id="div_cabecera">
-                            <label for="tbRutBusqueda" class="col-md-3 col-form-label">Rut</label>
-                            <div class="col-md-7">
-                                <input type="text" class="form-control input_rut" id="tbRutBusqueda" name="tbRutBusqueda" placeholder="Ingrese rut">
-                            </div>
-                            <div class="col-md-2">
-                                <button type="button" class="btn btn-success" onclick="Continuar()" id="btnContinuar" title="Continuar">Continuar</button>
-                            </div>
-                        </div>
-                        <div id="div_datos_empresa">
-                            <div class="form-group row">
-                                <label class="col-lg-3 col-form-label">Razón Social</label>
-
-                                <div class="col-lg-9">
-                                    <input type="text" placeholder="Razón Social" class="form-control" id="tbRazonSocial" name="tbRazonSocial">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-lg-3 col-form-label">Dirección</label>
-                                <div class="col-lg-9">
-                                    <input type="text" placeholder="Dirección" class="form-control" id="tbDireccion" name="tbDireccion">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-lg-3 col-form-label">Región</label>
-                                <div class="col-lg-9">
-                                    @Html.DropDownList("iregion", null, "Seleccione", htmlAttributes: new { @class = "form-control  search-select", @onchange = "CargaComunas()" })
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-lg-3 col-form-label">Comuna</label>
-                                <div class="col-lg-9">
-                                    @Html.DropDownList("icomuna", null, "Seleccione", htmlAttributes: new { @class = "form-control  search-select" })
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-lg-3 col-form-label">Giro</label>
-                                <div class="col-lg-9">
-                                    <input type="text" placeholder="Giro" class="form-control" id="tbGiro" name="tbGiro">
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6" id="div_datos_cliente">
-                <div class="card card-fijo">
-                    <div class="card-header">
-                        <div class="card-title">Datos de Contacto</div>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-form-label">Nombre</label>
-
-                            <div class="col-lg-9">
-                                <input type="text" placeholder="Nombre" class="form-control" id="tbNombre" name="tbNombre">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-form-label">Apellido</label>
-
-                            <div class="col-lg-9">
-                                <input type="text" placeholder="Apellido" class="form-control" id="tbApellido" name="tbApellido">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-form-label">Correo</label>
-                            <div class="col-lg-9">
-                                <input type="text" placeholder="Correo" class="form-control" id="tbCorreo" name="tbCorreo">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-form-label">Teléfono</label>
-                            <div class="col-lg-9">
-                                <input type="text" placeholder="Telefono" class="form-control" id="tbTelefono" name="tbTelefono">
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-form-label">Tipo Proyecto</label>
-                            <div class="col-lg-4">
-                                @Html.DropDownList("itipoproyecto", null, "Seleccione", htmlAttributes: new { @class = "form-control  search-select", @onchange = "MostrarProyectoSeleccionado()" })
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="text-right">
-                            <button class="btn btn-primary disabled" type="submit" id="b_guardar" name="b_guardar"><i class="fa fa-check"></i>&nbsp;Guardar</button>
-                            <button class="btn btn-primary" type="button" id="b_editar" name="b_editar"><i class="fa fa-edit"></i>&nbsp;Editar</button>
-                            <button class="btn btn-default" type="button" id="b_Limpiar" onclick="location.reload();"><i class="fa fa-trash"></i>&nbsp;Limpiar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 }
 
+    <script>
+        //if (!$("#contenedor").valid()) {
+        //    return;
+        //}
+        function GuardarCliente() {
+            var Cliente = {
+                ApellidoContacto: $('#tbApellido').val(),
+                CorreoContacto: $('#tbCorreo').val(),
+                Direccion: $('#tbDireccion').val(),
+                Giro: $('#tbGiro').val(),
+                Id: $("#txtidCliente").val(),
+                IdComuna: $('#icomuna').val(),
+                NombreContacto: $('#tbNombre').val(),
+                RazonSocial: $('#tbRazonSocial').val(),
+                Rut: $('#tbRutBusqueda').val(),
+                TelefonoContacto: $('#tbTelefono').val(),
+            }
+            console.log(JSON.stringify({ objeto: Cliente }))
+           jQuery.ajax({
+                url: '@Url.Action("GuardarCliente", "Formularios")',
+                type: "POST",
+               data: JSON.stringify({ objeto: Cliente }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+               success: function (data) {
+                   if (data.respuesta) {
+                       alert_success(data.mensaje);
+                       bloqueaDatos('#div_datos_empresa');
+                       bloqueaDatos('#div_datos_cliente');
+                       desbloqueaDatos('#div_tipo_proyecto');
+                       $("#b_editar").removeClass("disabled");
+                       $("#b_guardar").addClass("disabled");
 
-@section Scripts {
+                   }
+                },
+               error: function (error) {
+                   console.log(error)
+                   //$(".modal-body").LoadingOverlay("hide");
+                   //$("#mensajeError").text("Error Ajax");
+                   //$("#mensajeError").show();
+                },
+                beforeSend: function () {
+                    //$(".modal-body").LoadingOverlay("show", {
+                    //    imageResizeFactor: 2,
+                    //    text: "Cargando...",
+                    //    size: 14
+                    //})
+                }
+            });
 
-}
+
+
+
+        }
+
+
+
+    </script>
+
+

@@ -10,6 +10,7 @@ using Metalkit.Models;
 using Metalkit.Core.Negocio;
 using Proyecto.Utilitarios;
 using System.Linq.Dynamic;
+using Newtonsoft.Json;
 
 namespace Metalkit.Controllers
 {
@@ -149,40 +150,39 @@ namespace Metalkit.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult CreateCliente(FormCollection form)
+        public JsonResult GuardarCliente(Cliente objeto)
         {
             Cliente cliente = new Cliente();
-            bool success = false;
-            string message = "";
+            bool respuesta = false;
+            string mensaje = "";
             try
             {
-                cliente = ClienteBLL.TraerPorRut(Utilidades.RutSinDV(form["tbRutBusqueda"]));
-                cliente.Rut = Utilidades.RutSinDV(form["tbRutBusqueda"]);
-                cliente.Dv = Utilidades.DV(form["tbRutBusqueda"]);
-                cliente.RazonSocial = form["tbRazonSocial"];
-                cliente.Direccion = form["tbDireccion"];
-                cliente.IdComuna = Convert.ToByte(form["icomuna"]);
-                cliente.Giro = form["tbGiro"];
-                cliente.NombreContacto = form["tbNombre"];
-                cliente.ApellidoContacto = form["tbApellido"];
-                cliente.CorreoContacto = form["tbCorreo"];
-                cliente.TelefonoContacto = form["tbTelefono"];
 
-                ClienteBLL.Guardar(cliente);
-                message = "Registro almacenado Correctamente";
-                success = true;
+                Cliente oProducto = new Cliente();
+                //oProducto = JsonConvert.DeserializeObject<Cliente>(objeto);
+                //cliente = ClienteBLL.TraerPorRut(Utilidades.RutSinDV(form["tbRutBusqueda"]));
+                //cliente.Rut = Utilidades.RutSinDV(form["tbRutBusqueda"]);
+                //cliente.Dv = Utilidades.DV(form["tbRutBusqueda"]);
+                //cliente.RazonSocial = form["tbRazonSocial"];
+                //cliente.Direccion = form["tbDireccion"];
+                //cliente.IdComuna = Convert.ToByte(form["icomuna"]);
+                //cliente.Giro = form["tbGiro"];
+                //cliente.NombreContacto = form["tbNombre"];
+                //cliente.ApellidoContacto = form["tbApellido"];
+                //cliente.CorreoContacto = form["tbCorreo"];
+                //cliente.TelefonoContacto = form["tbTelefono"];
+
+                ClienteBLL.Guardar(objeto);
+                mensaje = "Registro almacenado Correctamente";
+                respuesta = true;
             }
             catch (Exception ex)
             {
-                message = ex.Message;
-                success = false;
+                mensaje = ex.Message;
+                respuesta = false;
             }
 
-            return PartialView("_CreateCliente", cliente);
-
-            //return new JsonResult { Data = new { success, message } };
-
+            return Json(new { respuesta= respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
         }
         // GET: CotizacionEstandar/Edit/5
         public ActionResult Edit(int? id)
@@ -254,11 +254,11 @@ namespace Metalkit.Controllers
               });
             return Json(listaTeo);
         }
-        public ActionResult MostrarProyecto(int id)
+        public ActionResult MostrarProyecto(int tipoProyecto, string rut)
         {
             var obj = TipoProyectoBLL.TraerTodos();
 
-            if (id == 1)
+            if (tipoProyecto == 1)
             {
                 return Content("CotizacionEstandar");
 
@@ -270,7 +270,31 @@ namespace Metalkit.Controllers
             }
         }
         [HttpPost]
-        public JsonResult CargarComunas(int id)
+        public JsonResult CargarComunas(int id, string rut)
+        {
+            var obj = ComunaBLL.TraerTodos().Where(a => a.IdRegion == id);
+            List<SelectListItem> listado = new List<SelectListItem>();
+            
+            foreach (var p in obj)
+            {
+                SelectListItem objItem = new SelectListItem();
+                objItem.Text = p.Nombre.ToString();
+                objItem.Value = p.Id.ToString();
+                objItem.Selected = false;
+
+                if (p.Id== ClienteBLL.TraerPorRut(Utilidades.RutSinDV(rut)).IdComuna)
+                {
+                    objItem.Selected = true;
+                }
+                listado.Add(objItem);
+            }
+            
+            
+
+            return Json(new { Error = false, Resultados = listado, }, JsonRequestBehavior.AllowGet);
+
+        }
+        public JsonResult CargarComunas2(int id)
         {
             var obj = ComunaBLL.TraerTodos().Where(a => a.IdRegion == id);
 
@@ -279,7 +303,8 @@ namespace Metalkit.Controllers
                 Value = p.Id.ToString(),
                 Text = p.Nombre.ToString()
             }).ToList();
-            return Json(listado, JsonRequestBehavior.AllowGet);
+            return Json(new { Error = false, Resultados = listado, }, JsonRequestBehavior.AllowGet);
+
         }
         public JsonResult Continuar(string rut)
         {
