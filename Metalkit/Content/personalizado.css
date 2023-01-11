@@ -337,8 +337,6 @@ input.error {
 
 
 .iconoTitulo {
-    background-color: #ffffff;
-    border-color: #ffffff;
     color: #1c84c6;
     font-size: 27px !important;
     padding-right: 10px;
@@ -450,3 +448,12 @@ input.error {
 /*.table tr td:nth-child(1), .table th:nth-child(1) {
     display: none;
 }*/
+
+.dark-mode .table td, .dark-mode .table th {
+    border-top-color: #6c757d;
+    background: #454d55;
+}
+.dark-mode {
+    background-color: #454d55 !important;
+    color: #fff;
+}

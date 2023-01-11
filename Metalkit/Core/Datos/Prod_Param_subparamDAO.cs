@@ -7,18 +7,18 @@ using System.Web;
 
 namespace Metalkit.Core.Datos
 {
-    public class EntregaDAO: DbContext
+    public class Prod_Param_subparamDAO : DbContext
     {
-        //private MetalkitEntities _dbContext;
-        private MetalkitEntities _dbContext = new MetalkitEntities();
-        public EntregaDAO()
+        private MetalkitEntities _dbContext;
+
+        public Prod_Param_subparamDAO()
         {
             if (_dbContext == null)
                 _dbContext = new MetalkitEntities();
         }
-        internal IQueryable<Entrega> ObtenerQueryPrincipal(string filtro, string sortColumn, string sortCulumnDir, string searchValue)
+        internal IQueryable<Prod_Param_subparam> ObtenerQueryPrincipal(string filtro, string sortColumn, string sortCulumnDir, string searchValue)
         {
-            IQueryable<Entrega> query = (from a in _dbContext.Entrega select a);
+            IQueryable<Prod_Param_subparam> query = (from a in _dbContext.Prod_Param_subparam select a);
 
             try
             {
@@ -33,12 +33,11 @@ namespace Metalkit.Core.Datos
 
             return query;
         }
-        internal Entrega Traer(int id)
+        internal Prod_Param_subparam Traer(int id)
         {
+            var entidad = (Prod_Param_subparam)null;
 
-            var entidad = (Entrega)null;
-
-            var query = from ent in _dbContext.Entrega
+            var query = from ent in _dbContext.Prod_Param_subparam
                         where ent.Id == id
                         select ent;
 
@@ -46,23 +45,24 @@ namespace Metalkit.Core.Datos
 
             return entidad;
         }
-        internal List<Entrega> TraerTodos()
-        {
-            var lista = new List<Entrega>();
 
-            var query = from ent in _dbContext.Entrega
+        internal List<Prod_Param_subparam> TraerTodos()
+        {
+            var lista = new List<Prod_Param_subparam>();
+
+            var query = from ent in _dbContext.Prod_Param_subparam
                         select ent;
             lista = query.ToList();
             return lista;
         }
 
-        internal bool Guardar(Entrega data)
+        internal bool Guardar(Prod_Param_subparam data)
         {
             var guardado = false;
 
             try
             {
-                if (_dbContext.Entrega.Any(o => o.Id == data.Id))
+                if (_dbContext.Prod_Param_subparam.Any(o => o.Id == data.Id))
                 {
                     _dbContext.Entry(data).State = EntityState.Modified;
                 }
@@ -78,12 +78,12 @@ namespace Metalkit.Core.Datos
             }
             return guardado;
         }
-        internal bool Eliminar(Entrega data) 
+        internal bool Eliminar(Prod_Param_subparam data) 
         {
             var guardado = false;
             try
             {
-                _dbContext.Entrega.Remove(data);
+                _dbContext.Prod_Param_subparam.Remove(data);
                 _dbContext.SaveChanges();
                 var contador = _dbContext.SaveChanges();
                 guardado = contador > 0;

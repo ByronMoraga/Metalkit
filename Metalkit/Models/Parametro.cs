@@ -14,13 +14,6 @@ namespace Metalkit.Models
     
     public partial class Parametro
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Parametro()
-        {
-            this.Parametro_SubParametro = new HashSet<Parametro_SubParametro>();
-            this.Parametro_SubParametro1 = new HashSet<Parametro_SubParametro>();
-        }
-    
         public int Id { get; set; }
         public string Descripcion { get; set; }
         public Nullable<int> Valor { get; set; }
@@ -29,10 +22,6 @@ namespace Metalkit.Models
         public Nullable<int> IdTipoParametro { get; set; }
         public Nullable<int> IdUsuario { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Parametro_SubParametro> Parametro_SubParametro { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Parametro_SubParametro> Parametro_SubParametro1 { get; set; }
-        public virtual Usuario Usuario { get; set; }
+        public virtual TipoParametro TipoParametro { get; set; }
     }
 }

@@ -11,6 +11,8 @@ using Metalkit.Core.Negocio;
 using Proyecto.Utilitarios;
 using System.Linq.Dynamic;
 using Newtonsoft.Json;
+using System.Web.Configuration;
+using System.Web.Script.Serialization;
 
 namespace Metalkit.Controllers
 {
@@ -84,11 +86,11 @@ namespace Metalkit.Controllers
 
             return PartialView("_CreateCliente");
         }
-        public ActionResult CreateEstandar()
+        public ActionResult CotizacionEstandar()
         {
             List<Region> region = RegionBLL.TraerTodos();
             List<Comuna> comuna = new List<Comuna>();
-           
+
             ViewBag.iregionEnvio = new SelectList(region, "Id", "Nombre");
             ViewBag.icomunaEnvio = new SelectList(comuna, "Id", "Nombre");
 
@@ -111,42 +113,73 @@ namespace Metalkit.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateEstandar(FormCollection form)
         {
+            bool respuesta = false;
+            string mensaje = "";
+            int idProducto = 0;
             Cliente cliente = new Cliente();
             Cotizacion cotizacion = new Cotizacion();
             Despacho despacho = new Despacho();
             EstadoOT estado = new EstadoOT();
-            Parametro_SubParametro parametro_subparametro;
-            Producto_Parametro producto_Parametro;
-            List<SubParametro> listSubParam = new List<SubParametro>();
+            Producto producto = new Producto();
+            Parametro parametro = new Parametro();
+            SubParametro subparametro = new SubParametro();
+            Param_Subparam parametro_subparametro = new Param_Subparam();
+            Prod_Param_subparam producto_Parametro = new Prod_Param_subparam();
             try
             {
-                cliente = ClienteBLL.TraerPorRut(Utilidades.RutSinDV(form["tbRutBusqueda"]));
-                foreach (var item in listSubParam)
+                cliente = ClienteBLL.TraerPorRut(Utilidades.RutSinDV(Session["rut"].ToString()));
+                var regionEnvio = form["iRegionEnvio"];
+                idProducto = int.Parse(form["iIdProducto"]);
+                var listaVM_Parametros = (string[])new JavaScriptSerializer().Deserialize(form["iparametros"], typeof(string[]));
+                var listaVM_SubParametros = (List<VMSubParametro>)new JavaScriptSerializer().Deserialize(form["isubparametros"], typeof(List<VMSubParametro>));
+
+                DespachoBLL.Guardar(despacho = new Despacho()
                 {
-                    Parametro_SubParametroBLL.Guardar(parametro_subparametro = new Parametro_SubParametro()
+                    Direccion = form["iDireccionEnvio"],
+                    FechaDespacho = DateTime.Parse(form["iFechaEntrega"]),
+                    IdTipoDespacho = form["iTipoEntrega"] == "option1"?1:2,
+                    IdComuna = int.Parse(form["iComunaEnvio"])
+                });
+                CotizacionBLL.Guardar(cotizacion = new Cotizacion()
+                {
+                    IdDespacho = despacho.Id,
+                    IdTipoProyecto = 1,
+                    IdCliente = cliente.Id
+                });
+                foreach (var p in listaVM_Parametros)
+                {
+
+                    foreach (var sp in listaVM_SubParametros)
                     {
-                        IdParametro = 1,
-                        IdSubParametro = item.Id
-                    });
-                    Producto_ParametroBLL.Guardar(producto_Parametro = new Producto_Parametro()
-                    {
-                        Id = 1,
-                        IdProducto = int.Parse(form["iproducto"]),
-                        IdParametro = parametro_subparametro.Id
-                    });
+                        Param_SubparamBLL.Guardar(parametro_subparametro = new Param_Subparam()
+                        {
+                            IdParametro = int.Parse(p),
+                            IdSubParametro = sp.Id
+                        });
+
+                        Prod_Param_subparamBLL.Guardar(producto_Parametro = new Prod_Param_subparam()
+                        {
+                            IdProducto = idProducto,
+                            IdParametro_SubParametro = parametro_subparametro.Id,
+                            IdCotizacion = cotizacion.Id
+                        });
+                    }
+
+                    
                 }
-
-
-                cotizacion.IdTipoProyecto = 1;
-
+                mensaje = "Correcto";
+                respuesta = true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                mensaje = ex.Message;
+                respuesta = false;
+                //throw;
             }
+            //Mensajeria.SetMensaje("Datos Almacenados exitosamente.", Mensajeria.TiposMensajes.Error);
+            //return View("Index");
+            return Json(new { respuesta = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
 
-            return View();
         }
 
         [HttpPost]
@@ -159,18 +192,7 @@ namespace Metalkit.Controllers
             {
 
                 Cliente oProducto = new Cliente();
-                //oProducto = JsonConvert.DeserializeObject<Cliente>(objeto);
-                //cliente = ClienteBLL.TraerPorRut(Utilidades.RutSinDV(form["tbRutBusqueda"]));
-                //cliente.Rut = Utilidades.RutSinDV(form["tbRutBusqueda"]);
-                //cliente.Dv = Utilidades.DV(form["tbRutBusqueda"]);
-                //cliente.RazonSocial = form["tbRazonSocial"];
-                //cliente.Direccion = form["tbDireccion"];
-                //cliente.IdComuna = Convert.ToByte(form["icomuna"]);
-                //cliente.Giro = form["tbGiro"];
-                //cliente.NombreContacto = form["tbNombre"];
-                //cliente.ApellidoContacto = form["tbApellido"];
-                //cliente.CorreoContacto = form["tbCorreo"];
-                //cliente.TelefonoContacto = form["tbTelefono"];
+
 
                 ClienteBLL.Guardar(objeto);
                 mensaje = "Registro almacenado Correctamente";
@@ -181,8 +203,8 @@ namespace Metalkit.Controllers
                 mensaje = ex.Message;
                 respuesta = false;
             }
-
-            return Json(new { respuesta= respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
+            ViewBag.iIdCliente = objeto.Id;
+            return Json(new { respuesta = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
         }
         // GET: CotizacionEstandar/Edit/5
         public ActionResult Edit(int? id)
@@ -270,31 +292,31 @@ namespace Metalkit.Controllers
             }
         }
         [HttpPost]
-        public JsonResult CargarComunas(int id, string rut)
-        {
-            var obj = ComunaBLL.TraerTodos().Where(a => a.IdRegion == id);
-            List<SelectListItem> listado = new List<SelectListItem>();
-            
-            foreach (var p in obj)
-            {
-                SelectListItem objItem = new SelectListItem();
-                objItem.Text = p.Nombre.ToString();
-                objItem.Value = p.Id.ToString();
-                objItem.Selected = false;
+        //public JsonResult CargarComunas(int id, string rut)
+        //{
+        //    var obj = ComunaBLL.TraerTodos().Where(a => a.IdRegion == id);
+        //    List<SelectListItem> listado = new List<SelectListItem>();
 
-                if (p.Id== ClienteBLL.TraerPorRut(Utilidades.RutSinDV(rut)).IdComuna)
-                {
-                    objItem.Selected = true;
-                }
-                listado.Add(objItem);
-            }
-            
-            
+        //    foreach (var p in obj)
+        //    {
+        //        SelectListItem objItem = new SelectListItem();
+        //        objItem.Text = p.Nombre.ToString();
+        //        objItem.Value = p.Id.ToString();
+        //        objItem.Selected = false;
 
-            return Json(new { Error = false, Resultados = listado, }, JsonRequestBehavior.AllowGet);
+        //        if (p.Id== ClienteBLL.TraerPorRut(Utilidades.RutSinDV(rut)).IdComuna)
+        //        {
+        //            objItem.Selected = true;
+        //        }
+        //        listado.Add(objItem);
+        //    }
 
-        }
-        public JsonResult CargarComunas2(int id)
+
+
+        //    return Json(new { Error = false, Resultados = listado, }, JsonRequestBehavior.AllowGet);
+
+        //}
+        public JsonResult CargarComunas(int id)
         {
             var obj = ComunaBLL.TraerTodos().Where(a => a.IdRegion == id);
 
@@ -308,6 +330,7 @@ namespace Metalkit.Controllers
         }
         public JsonResult Continuar(string rut)
         {
+            Session["rut"] = rut;
             try
             {
                 int numeroRut = Utilidades.RutSinDV(rut);
@@ -350,7 +373,7 @@ namespace Metalkit.Controllers
         [HttpGet]
         public ActionResult GrillaParametros()
         {
-            List<Parametro> listaParametros = ParametroBLL.TraerTodos();
+            List<Parametro> listaParametros = ParametroBLL.TraerTodos().Where(a=>a.IdTipoParametro==1).ToList();
             List<VMParametro> listaVMParametro = new List<VMParametro>();
             foreach (var item in listaParametros)
             {
@@ -359,63 +382,88 @@ namespace Metalkit.Controllers
                 vm.Descripcion = item.Descripcion;
                 vm.Valor = item.Valor;
                 vm.Total_SubParametros = SubParametroBLL.TraerPorParametro(item.Id).Count;
-                vm.Total_SubParametros_guardados = Parametro_SubParametroBLL.TraerPorParametro(item.Id).Count;
+                vm.Total_SubParametros_guardados = Param_SubparamBLL.TraerPorParametro(item.Id).Count;
                 listaVMParametro.Add(vm);
             }
 
             return View("_GrillaParametros", listaVMParametro);
         }
-        [HttpPost]
-        public ActionResult GrillaSubParametros(int idParametro, string[] arrid)
+        public ActionResult GrillaParametrosConObj(string listado)
         {
-            //Session["IdsSubParametros"] = arrid;
+            List<Parametro> listaParametros = ParametroBLL.TraerTodos().Where(a=>a.IdTipoParametro==1).ToList();
+            List<VMParametro> listaVMParametro = new List<VMParametro>();
 
-            foreach (var item in arrid)
+            Session["listadoSubParametros"] = null;
+            Session["listadoSubParametros"] = listado;
+            var listado_subparametros_nuevos = (List<VMSubParametro>)new JavaScriptSerializer().Deserialize(listado, typeof(List<VMSubParametro>));
+
+            foreach (var item in listaParametros)
             {
-                string idTr = item.Replace("[", "").Replace("\"", "").Replace("]", "");
+                VMParametro vm = new VMParametro();
+                vm.Id = item.Id;
+                vm.Descripcion = item.Descripcion;
+                vm.Valor = item.Valor;
+                vm.Total_SubParametros = SubParametroBLL.TraerPorParametro(item.Id).Count;
+                vm.Total_SubParametros_guardados = listado_subparametros_nuevos.Where(a=>a.IdParametro == item.Id).Count();
 
-                Parametro_SubParametro dato = new Parametro_SubParametro();
-                dato.IdParametro = idParametro;
-                dato.IdSubParametro = int.Parse(idTr);
-                Parametro_SubParametroBLL.Guardar(dato);
+                listaVMParametro.Add(vm);
             }
-            //var listado_subParametros = SubParametroBLL.TraerTodos();
-            //foreach (var item in lista_VMSubParametros)
-            //{
-            //    Parametro_SubParametro dato = new Parametro_SubParametro();
-            //    dato.IdParametro = item.Id;
-            //    dato.IdSubParametro = item.Id;
-            //}
 
-            //return PartialView("_GrillaSubParametros", lista_VMSubParametros);
-            return PartialView("_GrillaSubParametros");
+            return View("_GrillaParametros", listaVMParametro);
         }
         [HttpGet]
         public ActionResult GrillaSubParametros(int id)
         {
-            var listado_subParametros = SubParametroBLL.TraerTodos();
+
+            var listado_subParametros = SubParametroBLL.TraerTodos().Where(a=>a.IdParametro== id);
             List<VMSubParametro> lista_VMSubParametros = new List<VMSubParametro>();
-            List<Parametro_SubParametro> lista_Parametro_SubParametros = new List<Parametro_SubParametro>();
-            lista_Parametro_SubParametros = Parametro_SubParametroBLL.TraerPorParametro(id);
-            foreach (var item in listado_subParametros)
+            List<Param_Subparam> lista_Parametro_SubParametros = new List<Param_Subparam>();
+
+
+            lista_Parametro_SubParametros = Param_SubparamBLL.TraerPorParametro(id);
+            var listado = Session["listadoSubParametros"] as string;
+            if (!string.IsNullOrEmpty(listado))
             {
-                VMSubParametro dato = new VMSubParametro();
-                dato.Id = item.Id;
-                dato.IdParametro = item.IdParametro;
-                dato.Descripcion = item.Descripcion;
-                dato.Valor = item.Valor;
-                dato.Seleccionado = false;
-                foreach (var item2 in lista_Parametro_SubParametros)
+                    var listado_subparametros_nuevos = (List<VMSubParametro>)new JavaScriptSerializer().Deserialize(listado, typeof(List<VMSubParametro>));
+
+                    foreach (var item in listado_subParametros)
+                    {
+                        VMSubParametro dato = new VMSubParametro();
+                        dato.Id = item.Id;
+                        dato.IdParametro = item.IdParametro;
+                        dato.Descripcion = item.Descripcion;
+                        dato.Valor = item.Valor;
+                        dato.Seleccionado = false;
+                        foreach (var item2 in listado_subparametros_nuevos)
+                        {
+                            if (item2.Id == item.Id && item.IdParametro == item2.IdParametro)
+                            {
+                                dato.Seleccionado = true;
+                            }
+                        }
+                        lista_VMSubParametros.Add(dato);
+                    }
+            }
+            else
+            {
+
+                foreach (var item in listado_subParametros)
                 {
-                    if (item2.IdSubParametro==item.Id)
+                    VMSubParametro dato = new VMSubParametro();
+                    dato.Id = item.Id;
+                    dato.IdParametro = item.IdParametro;
+                    dato.Descripcion = item.Descripcion;
+                    dato.Valor = item.Valor;
+                    dato.Seleccionado = false;
+                    if (dato.Id == item.Id)
                     {
                         dato.Seleccionado = true;
                     }
+                    lista_VMSubParametros.Add(dato);
                 }
-                lista_VMSubParametros.Add(dato);
+
             }
             ViewBag.IdParametro = id;
-
             return PartialView("_GrillaSubParametros", lista_VMSubParametros);
         }
         public ActionResult GrillaProductos(int id=0)
@@ -475,6 +523,93 @@ namespace Metalkit.Controllers
                 });
             return Json(listaTeo);
         }
+        //[OutputCache(Location = OutputCacheLocation.None, NoStore = true)]
+        public string ListadoPdf(string Filtro, string rutContribuyente = "")
+        {
+            //Log.Debug("listado PDF: " + Filtro + ", " + rutContribuyente);
+
+            string sftp_TemporalDescargas = WebConfigurationManager.AppSettings["sftp_TemporalDescargas"].ToString();
+            string sftp_TemporalVisualizacion = WebConfigurationManager.AppSettings["sftp_TemporalVisualizacion"].ToString();
+
+            string nombreDocumento = "Solicitud.pdf";
+            string NombreDocCompleto = rutContribuyente + '_' + Filtro + '_' + nombreDocumento;
+
+            DateTime fechahoy = DateTime.Now;
+            string CarpetaPorDia = fechahoy.ToString("yyyyMMdd");
+            string temporalLocal = sftp_TemporalDescargas + CarpetaPorDia;
+            string archivoLocal = temporalLocal + "\\" + NombreDocCompleto;
+            string archicoPublico = sftp_TemporalVisualizacion + '/' + CarpetaPorDia + '/' + NombreDocCompleto;
+            //ReportDocument rd = new ReportDocument();
+
+            try
+            {
+                //if (System.IO.File.Exists(archivoLocal))
+                //{
+                //    Log.Debug("Antes de eliminar documentos: nomnbres");
+                //    Log.Debug(NombreDocCompleto);
+                //    //eliminar documentos
+                //    var respuestas = UtilDocumentos.EliminaDocumentos(NombreDocCompleto);
+                //    //archivo local ->archivoLocal
+                //    Log.Debug("creo file, con archivo local");
+                //    Log.Debug(archivoLocal);
+                //    FileInfo file = new FileInfo(archivoLocal);
+                //    file.Delete();
+                //    Log.Debug("salgo del delete");
+
+                //}
+                //// acá vamos a tener que validar queen el sftp esté el docuemnto.
+                //BOSubidaSFTP bOSubidaSFTP = new BOSubidaSFTP();
+                //bool respuesta = bOSubidaSFTP.ValidaArchivoSFTP(NombreDocCompleto, 1, temporalLocal);
+                //if (respuesta == false)
+                //{
+
+                //    rd.Load(Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/Report"), "solicitud.rpt"));
+
+                //    ConnectionInfo crConnInfo = new ConnectionInfo();
+                //    TableLogOnInfo crLogOnInfo;
+
+                //    SqlConnectionStringBuilder con = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["licenciasEntitiesInforme"].ConnectionString);
+                //    string strUsuario = con.UserID, strContrasena = con.Password, strServidor = con.DataSource, strBaseDatos = con.InitialCatalog;
+
+                //    rd.SetDatabaseLogon(strUsuario, strContrasena, strServidor, strBaseDatos);
+
+                //    Table crTable2 = rd.Database.Tables[0];
+                //    crConnInfo.ServerName = strServidor;
+                //    crConnInfo.DatabaseName = strBaseDatos;
+                //    crConnInfo.UserID = strUsuario;
+                //    crConnInfo.Password = strContrasena;
+                //    crLogOnInfo = crTable2.LogOnInfo;
+                //    crLogOnInfo.ConnectionInfo = crConnInfo;
+                //    crTable2.ApplyLogOnInfo(crLogOnInfo);
+
+                //    rd.SetParameterValue("@idMaestro", Filtro);
+
+
+                //    Response.Buffer = false;
+                //    Response.ClearContent();
+                //    Response.ClearHeaders();
+
+                //    if (!Directory.Exists(temporalLocal))
+                //    {
+                //        Directory.CreateDirectory(temporalLocal);
+                //    }
+                //    Log.Debug("pdf");
+
+                //    rd.ExportToDisk(ExportFormatType.PortableDocFormat, archivoLocal);
+                //    Log.Debug("sftp");
+                //    bOSubidaSFTP.SubidaSFTP(NombreDocCompleto, 1, temporalLocal);
+                //    Log.Debug("fin");
+                //}
+            }
+            catch (Exception ex)
+            {
+
+                Mensajeria.SetMensaje("No se ha generado el Informe.", Mensajeria.TiposMensajes.Error);
+            }
+
+            return archicoPublico;
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

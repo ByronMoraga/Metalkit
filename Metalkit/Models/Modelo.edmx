@@ -28,14 +28,14 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nombre" Type="nvarchar" MaxLength="225" />
           <Property Name="IdRegion" Type="int" />
+          <Property Name="Valor" Type="int" />
         </EntityType>
         <EntityType Name="Cotizacion">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="IdProductoParametro" Type="int" />
-          <Property Name="IdEntrega" Type="int" />
+          <Property Name="IdDespacho" Type="int" />
           <Property Name="IdTipoProyecto" Type="int" />
           <Property Name="IdCliente" Type="int" />
         </EntityType>
@@ -46,17 +46,9 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Direccion" Type="nvarchar" MaxLength="225" />
           <Property Name="IdComuna" Type="int" />
-          <Property Name="ValorUF" Type="int" />
           <Property Name="IdTipoDespacho" Type="int" />
           <Property Name="FechaDespacho" Type="datetime2" Precision="7" />
-        </EntityType>
-        <EntityType Name="Entrega">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="IdTipoEntrega" Type="int" />
-          <Property Name="FechaEntrega" Type="datetime2" Precision="7" />
+          <Property Name="Valor" Type="nchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="EstadoOT">
           <Key>
@@ -76,6 +68,14 @@
           <Property Name="FechaModificacion" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="IdUsuario" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="Param_Subparam">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdParametro" Type="int" />
+          <Property Name="IdSubParametro" Type="int" />
+        </EntityType>
         <EntityType Name="Parametro">
           <Key>
             <PropertyRef Name="Id" />
@@ -88,20 +88,21 @@
           <Property Name="IdTipoParametro" Type="int" />
           <Property Name="IdUsuario" Type="int" />
         </EntityType>
-        <EntityType Name="Parametro_SubParametro">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="IdParametro" Type="int" />
-          <Property Name="IdSubParametro" Type="int" />
-        </EntityType>
         <EntityType Name="Perfil">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nombre" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Prod_Param_subparam">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdProducto" Type="int" />
+          <Property Name="IdParametro_SubParametro" Type="int" />
+          <Property Name="IdCotizacion" Type="int" />
         </EntityType>
         <EntityType Name="Producto">
           <Key>
@@ -113,14 +114,6 @@
           <Property Name="Superficie" Type="int" />
           <Property Name="Valor" Type="int" />
           <Property Name="Imagen" Type="image" />
-        </EntityType>
-        <EntityType Name="Producto_Parametro">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="IdProducto" Type="int" />
-          <Property Name="IdParametro" Type="int" />
         </EntityType>
         <EntityType Name="Region">
           <Key>
@@ -138,6 +131,8 @@
           <Property Name="Valor" Type="int" />
           <Property Name="Vigente" Type="bit" />
           <Property Name="IdParametro" Type="int" />
+          <Property Name="FechaModificacion" Type="datetime2" Precision="7" />
+          <Property Name="IdUsuario" Type="int" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -149,8 +144,6 @@
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
-        <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="TipoCliente">
           <Key>
             <PropertyRef Name="Id" />
@@ -158,7 +151,7 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Tipo" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <EntityType Name="TipoEntrega">
+        <EntityType Name="TipoDespacho">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -215,54 +208,6 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Cotizacion_Cliente">
-          <End Role="Cliente" Type="Self.Cliente" Multiplicity="0..1" />
-          <End Role="Cotizacion" Type="Self.Cotizacion" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Cliente">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Cotizacion">
-              <PropertyRef Name="IdCliente" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Cotizacion_Entrega">
-          <End Role="Entrega" Type="Self.Entrega" Multiplicity="0..1" />
-          <End Role="Cotizacion" Type="Self.Cotizacion" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Entrega">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Cotizacion">
-              <PropertyRef Name="IdEntrega" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Cotizacion_Producto_Parametro">
-          <End Role="Producto_Parametro" Type="Self.Producto_Parametro" Multiplicity="0..1" />
-          <End Role="Cotizacion" Type="Self.Cotizacion" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Producto_Parametro">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Cotizacion">
-              <PropertyRef Name="IdProductoParametro" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Cotizacion_TipoProyecto">
-          <End Role="TipoProyecto" Type="Self.TipoProyecto" Multiplicity="1" />
-          <End Role="Cotizacion" Type="Self.Cotizacion" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="TipoProyecto">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Cotizacion">
-              <PropertyRef Name="Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_EstadoOT_VersionOT_EstadoOT">
           <End Role="EstadoOT" Type="Self.EstadoOT" Multiplicity="1" />
           <End Role="EstadoOT_VersionOT" Type="Self.EstadoOT_VersionOT" Multiplicity="*" />
@@ -287,39 +232,27 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Parametro_ParametroNvl2_Parametro">
-          <End Role="Parametro" Type="Self.Parametro" Multiplicity="0..1" />
-          <End Role="Parametro_SubParametro" Type="Self.Parametro_SubParametro" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Parametro">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Parametro_SubParametro">
-              <PropertyRef Name="IdParametro" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Parametro_ParametroNvl2_ParametroNivel2">
-          <End Role="Parametro" Type="Self.Parametro" Multiplicity="0..1" />
-          <End Role="Parametro_SubParametro" Type="Self.Parametro_SubParametro" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Parametro">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Parametro_SubParametro">
-              <PropertyRef Name="IdParametro" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Parametro_Usuario">
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+        <Association Name="FK_Parametro_TipoParametro">
+          <End Role="TipoParametro" Type="Self.TipoParametro" Multiplicity="0..1" />
           <End Role="Parametro" Type="Self.Parametro" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Usuario">
+            <Principal Role="TipoParametro">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Parametro">
-              <PropertyRef Name="IdUsuario" />
+              <PropertyRef Name="IdTipoParametro" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Prod_Param_subparam_Cotizacion">
+          <End Role="Cotizacion" Type="Self.Cotizacion" Multiplicity="0..1" />
+          <End Role="Prod_Param_subparam" Type="Self.Prod_Param_subparam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cotizacion">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Prod_Param_subparam">
+              <PropertyRef Name="IdCotizacion" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -352,47 +285,25 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           <EntitySet Name="Comuna" EntityType="Self.Comuna" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cotizacion" EntityType="Self.Cotizacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Despacho" EntityType="Self.Despacho" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Entrega" EntityType="Self.Entrega" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EstadoOT" EntityType="Self.EstadoOT" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EstadoOT_VersionOT" EntityType="Self.EstadoOT_VersionOT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Param_Subparam" EntityType="Self.Param_Subparam" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Parametro" EntityType="Self.Parametro" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Parametro_SubParametro" EntityType="Self.Parametro_SubParametro" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Perfil" EntityType="Self.Perfil" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Prod_Param_subparam" EntityType="Self.Prod_Param_subparam" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Producto" EntityType="Self.Producto" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Producto_Parametro" EntityType="Self.Producto_Parametro" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Region" EntityType="Self.Region" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubParametro" EntityType="Self.SubParametro" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="TipoEntrega" EntityType="Self.TipoEntrega" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TipoCliente" EntityType="Self.TipoCliente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TipoDespacho" EntityType="Self.TipoDespacho" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TipoParametro" EntityType="Self.TipoParametro" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TipoProyecto" EntityType="Self.TipoProyecto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VersionOT" EntityType="Self.VersionOT" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="TipoCliente" EntityType="Self.TipoCliente" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [TipoCliente].[Id] AS [Id], 
-    [TipoCliente].[Tipo] AS [Tipo]
-    FROM [dbo].[TipoCliente] AS [TipoCliente]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_Comuna_Region" Association="Self.FK_Comuna_Region">
             <End Role="Region" EntitySet="Region" />
             <End Role="Comuna" EntitySet="Comuna" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Cotizacion_Cliente" Association="Self.FK_Cotizacion_Cliente">
-            <End Role="Cliente" EntitySet="Cliente" />
-            <End Role="Cotizacion" EntitySet="Cotizacion" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Cotizacion_Entrega" Association="Self.FK_Cotizacion_Entrega">
-            <End Role="Entrega" EntitySet="Entrega" />
-            <End Role="Cotizacion" EntitySet="Cotizacion" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Cotizacion_Producto_Parametro" Association="Self.FK_Cotizacion_Producto_Parametro">
-            <End Role="Producto_Parametro" EntitySet="Producto_Parametro" />
-            <End Role="Cotizacion" EntitySet="Cotizacion" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Cotizacion_TipoProyecto" Association="Self.FK_Cotizacion_TipoProyecto">
-            <End Role="TipoProyecto" EntitySet="TipoProyecto" />
-            <End Role="Cotizacion" EntitySet="Cotizacion" />
           </AssociationSet>
           <AssociationSet Name="FK_EstadoOT_VersionOT_EstadoOT" Association="Self.FK_EstadoOT_VersionOT_EstadoOT">
             <End Role="EstadoOT" EntitySet="EstadoOT" />
@@ -402,17 +313,13 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
             <End Role="Usuario" EntitySet="Usuario" />
             <End Role="EstadoOT_VersionOT" EntitySet="EstadoOT_VersionOT" />
           </AssociationSet>
-          <AssociationSet Name="FK_Parametro_ParametroNvl2_Parametro" Association="Self.FK_Parametro_ParametroNvl2_Parametro">
+          <AssociationSet Name="FK_Parametro_TipoParametro" Association="Self.FK_Parametro_TipoParametro">
+            <End Role="TipoParametro" EntitySet="TipoParametro" />
             <End Role="Parametro" EntitySet="Parametro" />
-            <End Role="Parametro_SubParametro" EntitySet="Parametro_SubParametro" />
           </AssociationSet>
-          <AssociationSet Name="FK_Parametro_ParametroNvl2_ParametroNivel2" Association="Self.FK_Parametro_ParametroNvl2_ParametroNivel2">
-            <End Role="Parametro" EntitySet="Parametro" />
-            <End Role="Parametro_SubParametro" EntitySet="Parametro_SubParametro" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Parametro_Usuario" Association="Self.FK_Parametro_Usuario">
-            <End Role="Usuario" EntitySet="Usuario" />
-            <End Role="Parametro" EntitySet="Parametro" />
+          <AssociationSet Name="FK_Prod_Param_subparam_Cotizacion" Association="Self.FK_Prod_Param_subparam_Cotizacion">
+            <End Role="Cotizacion" EntitySet="Cotizacion" />
+            <End Role="Prod_Param_subparam" EntitySet="Prod_Param_subparam" />
           </AssociationSet>
           <AssociationSet Name="FK_VersionOT_EstadoVersion" Association="Self.FK_VersionOT_EstadoVersion">
             <End Role="EstadoOT_VersionOT" EntitySet="EstadoOT_VersionOT" />
@@ -443,7 +350,6 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           <Property Name="ApellidoContacto" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CorreoContacto" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="TelefonoContacto" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Cotizacion" Relationship="Self.FK_Cotizacion_Cliente" FromRole="Cliente" ToRole="Cotizacion" />
         </EntityType>
         <EntityType Name="Comuna">
           <Key>
@@ -452,6 +358,7 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nombre" Type="String" MaxLength="225" FixedLength="false" Unicode="true" />
           <Property Name="IdRegion" Type="Int32" />
+          <Property Name="Valor" Type="Int32" />
           <NavigationProperty Name="Region" Relationship="Self.FK_Comuna_Region" FromRole="Comuna" ToRole="Region" />
         </EntityType>
         <EntityType Name="Cotizacion">
@@ -459,14 +366,10 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdProductoParametro" Type="Int32" />
-          <Property Name="IdEntrega" Type="Int32" />
+          <Property Name="IdDespacho" Type="Int32" />
           <Property Name="IdTipoProyecto" Type="Int32" />
           <Property Name="IdCliente" Type="Int32" />
-          <NavigationProperty Name="Cliente" Relationship="Self.FK_Cotizacion_Cliente" FromRole="Cotizacion" ToRole="Cliente" />
-          <NavigationProperty Name="Entrega" Relationship="Self.FK_Cotizacion_Entrega" FromRole="Cotizacion" ToRole="Entrega" />
-          <NavigationProperty Name="Producto_Parametro" Relationship="Self.FK_Cotizacion_Producto_Parametro" FromRole="Cotizacion" ToRole="Producto_Parametro" />
-          <NavigationProperty Name="TipoProyecto" Relationship="Self.FK_Cotizacion_TipoProyecto" FromRole="Cotizacion" ToRole="TipoProyecto" />
+          <NavigationProperty Name="Prod_Param_subparam" Relationship="Self.FK_Prod_Param_subparam_Cotizacion" FromRole="Cotizacion" ToRole="Prod_Param_subparam" />
         </EntityType>
         <EntityType Name="Despacho">
           <Key>
@@ -475,18 +378,9 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Direccion" Type="String" MaxLength="225" FixedLength="false" Unicode="true" />
           <Property Name="IdComuna" Type="Int32" />
-          <Property Name="ValorUF" Type="Int32" />
           <Property Name="IdTipoDespacho" Type="Int32" />
           <Property Name="FechaDespacho" Type="DateTime" Precision="7" />
-        </EntityType>
-        <EntityType Name="Entrega">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdTipoEntrega" Type="Int32" />
-          <Property Name="FechaEntrega" Type="DateTime" Precision="7" />
-          <NavigationProperty Name="Cotizacion" Relationship="Self.FK_Cotizacion_Entrega" FromRole="Entrega" ToRole="Cotizacion" />
+          <Property Name="Valor" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="EstadoOT">
           <Key>
@@ -510,6 +404,14 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           <NavigationProperty Name="Usuario" Relationship="Self.FK_EstadoOT_VersionOT_VersionOT" FromRole="EstadoOT_VersionOT" ToRole="Usuario" />
           <NavigationProperty Name="VersionOT" Relationship="Self.FK_VersionOT_EstadoVersion" FromRole="EstadoOT_VersionOT" ToRole="VersionOT" />
         </EntityType>
+        <EntityType Name="Param_Subparam">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdParametro" Type="Int32" />
+          <Property Name="IdSubParametro" Type="Int32" />
+        </EntityType>
         <EntityType Name="Parametro">
           <Key>
             <PropertyRef Name="Id" />
@@ -521,19 +423,7 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           <Property Name="FechaModificacion" Type="DateTime" Precision="7" />
           <Property Name="IdTipoParametro" Type="Int32" />
           <Property Name="IdUsuario" Type="Int32" />
-          <NavigationProperty Name="Parametro_SubParametro" Relationship="Self.FK_Parametro_ParametroNvl2_Parametro" FromRole="Parametro" ToRole="Parametro_SubParametro" />
-          <NavigationProperty Name="Parametro_SubParametro1" Relationship="Self.FK_Parametro_ParametroNvl2_ParametroNivel2" FromRole="Parametro" ToRole="Parametro_SubParametro" />
-          <NavigationProperty Name="Usuario" Relationship="Self.FK_Parametro_Usuario" FromRole="Parametro" ToRole="Usuario" />
-        </EntityType>
-        <EntityType Name="Parametro_SubParametro">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdParametro" Type="Int32" />
-          <Property Name="IdSubParametro" Type="Int32" />
-          <NavigationProperty Name="Parametro" Relationship="Self.FK_Parametro_ParametroNvl2_Parametro" FromRole="Parametro_SubParametro" ToRole="Parametro" />
-          <NavigationProperty Name="Parametro1" Relationship="Self.FK_Parametro_ParametroNvl2_ParametroNivel2" FromRole="Parametro_SubParametro" ToRole="Parametro" />
+          <NavigationProperty Name="TipoParametro" Relationship="Self.FK_Parametro_TipoParametro" FromRole="Parametro" ToRole="TipoParametro" />
         </EntityType>
         <EntityType Name="Perfil">
           <Key>
@@ -541,6 +431,16 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Prod_Param_subparam">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdProducto" Type="Int32" />
+          <Property Name="IdParametro_SubParametro" Type="Int32" />
+          <Property Name="IdCotizacion" Type="Int32" />
+          <NavigationProperty Name="Cotizacion" Relationship="Self.FK_Prod_Param_subparam_Cotizacion" FromRole="Prod_Param_subparam" ToRole="Cotizacion" />
         </EntityType>
         <EntityType Name="Producto">
           <Key>
@@ -552,15 +452,6 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           <Property Name="Superficie" Type="Int32" />
           <Property Name="Valor" Type="Int32" />
           <Property Name="Imagen" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
-        <EntityType Name="Producto_Parametro">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdProducto" Type="Int32" />
-          <Property Name="IdParametro" Type="Int32" />
-          <NavigationProperty Name="Cotizacion" Relationship="Self.FK_Cotizacion_Producto_Parametro" FromRole="Producto_Parametro" ToRole="Cotizacion" />
         </EntityType>
         <EntityType Name="Region">
           <Key>
@@ -579,6 +470,8 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           <Property Name="Valor" Type="Int32" />
           <Property Name="Vigente" Type="Boolean" />
           <Property Name="IdParametro" Type="Int32" />
+          <Property Name="FechaModificacion" Type="DateTime" Precision="7" />
+          <Property Name="IdUsuario" Type="Int32" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -590,7 +483,14 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
-        <EntityType Name="TipoEntrega">
+        <EntityType Name="TipoCliente">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Tipo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TipoDespacho">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -603,6 +503,7 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Parametro" Relationship="Self.FK_Parametro_TipoParametro" FromRole="TipoParametro" ToRole="Parametro" />
         </EntityType>
         <EntityType Name="TipoProyecto">
           <Key>
@@ -610,7 +511,6 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Tipo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Cotizacion" Relationship="Self.FK_Cotizacion_TipoProyecto" FromRole="TipoProyecto" ToRole="Cotizacion" />
         </EntityType>
         <EntityType Name="Usuario">
           <Key>
@@ -626,7 +526,6 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           <Property Name="idPerfil" Type="Int32" />
           <Property Name="Estado" Type="Boolean" />
           <NavigationProperty Name="EstadoOT_VersionOT" Relationship="Self.FK_EstadoOT_VersionOT_VersionOT" FromRole="Usuario" ToRole="EstadoOT_VersionOT" />
-          <NavigationProperty Name="Parametro" Relationship="Self.FK_Parametro_Usuario" FromRole="Usuario" ToRole="Parametro" />
           <NavigationProperty Name="VersionOT" Relationship="Self.FK_VersionOT_Usuario" FromRole="Usuario" ToRole="VersionOT" />
         </EntityType>
         <EntityType Name="VersionOT">
@@ -641,25 +540,6 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           <NavigationProperty Name="EstadoOT_VersionOT" Relationship="Self.FK_VersionOT_EstadoVersion" FromRole="VersionOT" ToRole="EstadoOT_VersionOT" />
           <NavigationProperty Name="Usuario" Relationship="Self.FK_VersionOT_Usuario" FromRole="VersionOT" ToRole="Usuario" />
         </EntityType>
-        <EntityType Name="TipoCliente">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Tipo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <Association Name="FK_Cotizacion_Cliente">
-          <End Role="Cliente" Type="Self.Cliente" Multiplicity="0..1" />
-          <End Role="Cotizacion" Type="Self.Cotizacion" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Cliente">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Cotizacion">
-              <PropertyRef Name="IdCliente" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Comuna_Region">
           <End Role="Region" Type="Self.Region" Multiplicity="0..1" />
           <End Role="Comuna" Type="Self.Comuna" Multiplicity="*" />
@@ -672,39 +552,15 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Cotizacion_Entrega">
-          <End Role="Entrega" Type="Self.Entrega" Multiplicity="0..1" />
-          <End Role="Cotizacion" Type="Self.Cotizacion" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Entrega">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Cotizacion">
-              <PropertyRef Name="IdEntrega" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Cotizacion_Producto_Parametro">
-          <End Role="Producto_Parametro" Type="Self.Producto_Parametro" Multiplicity="0..1" />
-          <End Role="Cotizacion" Type="Self.Cotizacion" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Producto_Parametro">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Cotizacion">
-              <PropertyRef Name="IdProductoParametro" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Cotizacion_TipoProyecto">
-          <End Role="TipoProyecto" Type="Self.TipoProyecto" Multiplicity="1" />
+        <Association Name="FK_Prod_Param_subparam_Cotizacion">
           <End Role="Cotizacion" Type="Self.Cotizacion" Multiplicity="0..1" />
+          <End Role="Prod_Param_subparam" Type="Self.Prod_Param_subparam" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="TipoProyecto">
+            <Principal Role="Cotizacion">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Cotizacion">
-              <PropertyRef Name="Id" />
+            <Dependent Role="Prod_Param_subparam">
+              <PropertyRef Name="IdCotizacion" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -744,39 +600,15 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Parametro_ParametroNvl2_Parametro">
-          <End Role="Parametro" Type="Self.Parametro" Multiplicity="0..1" />
-          <End Role="Parametro_SubParametro" Type="Self.Parametro_SubParametro" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Parametro">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Parametro_SubParametro">
-              <PropertyRef Name="IdParametro" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Parametro_ParametroNvl2_ParametroNivel2">
-          <End Role="Parametro" Type="Self.Parametro" Multiplicity="0..1" />
-          <End Role="Parametro_SubParametro" Type="Self.Parametro_SubParametro" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Parametro">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Parametro_SubParametro">
-              <PropertyRef Name="IdParametro" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Parametro_Usuario">
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+        <Association Name="FK_Parametro_TipoParametro">
+          <End Role="TipoParametro" Type="Self.TipoParametro" Multiplicity="0..1" />
           <End Role="Parametro" Type="Self.Parametro" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Usuario">
+            <Principal Role="TipoParametro">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Parametro">
-              <PropertyRef Name="IdUsuario" />
+              <PropertyRef Name="IdTipoParametro" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -797,42 +629,29 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
           <EntitySet Name="Comuna" EntityType="Self.Comuna" />
           <EntitySet Name="Cotizacion" EntityType="Self.Cotizacion" />
           <EntitySet Name="Despacho" EntityType="Self.Despacho" />
-          <EntitySet Name="Entrega" EntityType="Self.Entrega" />
           <EntitySet Name="EstadoOT" EntityType="Self.EstadoOT" />
           <EntitySet Name="EstadoOT_VersionOT" EntityType="Self.EstadoOT_VersionOT" />
+          <EntitySet Name="Param_Subparam" EntityType="Self.Param_Subparam" />
           <EntitySet Name="Parametro" EntityType="Self.Parametro" />
-          <EntitySet Name="Parametro_SubParametro" EntityType="Self.Parametro_SubParametro" />
           <EntitySet Name="Perfil" EntityType="Self.Perfil" />
+          <EntitySet Name="Prod_Param_subparam" EntityType="Self.Prod_Param_subparam" />
           <EntitySet Name="Producto" EntityType="Self.Producto" />
-          <EntitySet Name="Producto_Parametro" EntityType="Self.Producto_Parametro" />
           <EntitySet Name="Region" EntityType="Self.Region" />
           <EntitySet Name="SubParametro" EntityType="Self.SubParametro" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
-          <EntitySet Name="TipoEntrega" EntityType="Self.TipoEntrega" />
+          <EntitySet Name="TipoCliente" EntityType="Self.TipoCliente" />
+          <EntitySet Name="TipoDespacho" EntityType="Self.TipoDespacho" />
           <EntitySet Name="TipoParametro" EntityType="Self.TipoParametro" />
           <EntitySet Name="TipoProyecto" EntityType="Self.TipoProyecto" />
           <EntitySet Name="Usuario" EntityType="Self.Usuario" />
           <EntitySet Name="VersionOT" EntityType="Self.VersionOT" />
-          <EntitySet Name="TipoCliente" EntityType="Self.TipoCliente" />
-          <AssociationSet Name="FK_Cotizacion_Cliente" Association="Self.FK_Cotizacion_Cliente">
-            <End Role="Cliente" EntitySet="Cliente" />
-            <End Role="Cotizacion" EntitySet="Cotizacion" />
-          </AssociationSet>
           <AssociationSet Name="FK_Comuna_Region" Association="Self.FK_Comuna_Region">
             <End Role="Region" EntitySet="Region" />
             <End Role="Comuna" EntitySet="Comuna" />
           </AssociationSet>
-          <AssociationSet Name="FK_Cotizacion_Entrega" Association="Self.FK_Cotizacion_Entrega">
-            <End Role="Entrega" EntitySet="Entrega" />
+          <AssociationSet Name="FK_Prod_Param_subparam_Cotizacion" Association="Self.FK_Prod_Param_subparam_Cotizacion">
             <End Role="Cotizacion" EntitySet="Cotizacion" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Cotizacion_Producto_Parametro" Association="Self.FK_Cotizacion_Producto_Parametro">
-            <End Role="Producto_Parametro" EntitySet="Producto_Parametro" />
-            <End Role="Cotizacion" EntitySet="Cotizacion" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Cotizacion_TipoProyecto" Association="Self.FK_Cotizacion_TipoProyecto">
-            <End Role="TipoProyecto" EntitySet="TipoProyecto" />
-            <End Role="Cotizacion" EntitySet="Cotizacion" />
+            <End Role="Prod_Param_subparam" EntitySet="Prod_Param_subparam" />
           </AssociationSet>
           <AssociationSet Name="FK_EstadoOT_VersionOT_EstadoOT" Association="Self.FK_EstadoOT_VersionOT_EstadoOT">
             <End Role="EstadoOT" EntitySet="EstadoOT" />
@@ -846,16 +665,8 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
             <End Role="EstadoOT_VersionOT" EntitySet="EstadoOT_VersionOT" />
             <End Role="VersionOT" EntitySet="VersionOT" />
           </AssociationSet>
-          <AssociationSet Name="FK_Parametro_ParametroNvl2_Parametro" Association="Self.FK_Parametro_ParametroNvl2_Parametro">
-            <End Role="Parametro" EntitySet="Parametro" />
-            <End Role="Parametro_SubParametro" EntitySet="Parametro_SubParametro" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Parametro_ParametroNvl2_ParametroNivel2" Association="Self.FK_Parametro_ParametroNvl2_ParametroNivel2">
-            <End Role="Parametro" EntitySet="Parametro" />
-            <End Role="Parametro_SubParametro" EntitySet="Parametro_SubParametro" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Parametro_Usuario" Association="Self.FK_Parametro_Usuario">
-            <End Role="Usuario" EntitySet="Usuario" />
+          <AssociationSet Name="FK_Parametro_TipoParametro" Association="Self.FK_Parametro_TipoParametro">
+            <End Role="TipoParametro" EntitySet="TipoParametro" />
             <End Role="Parametro" EntitySet="Parametro" />
           </AssociationSet>
           <AssociationSet Name="FK_VersionOT_Usuario" Association="Self.FK_VersionOT_Usuario">
@@ -892,6 +703,7 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="IdRegion" ColumnName="IdRegion" />
+                <ScalarProperty Name="Valor" ColumnName="Valor" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -899,8 +711,7 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
             <EntityTypeMapping TypeName="MetalkitModel.Cotizacion">
               <MappingFragment StoreEntitySet="Cotizacion">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="IdProductoParametro" ColumnName="IdProductoParametro" />
-                <ScalarProperty Name="IdEntrega" ColumnName="IdEntrega" />
+                <ScalarProperty Name="IdDespacho" ColumnName="IdDespacho" />
                 <ScalarProperty Name="IdTipoProyecto" ColumnName="IdTipoProyecto" />
                 <ScalarProperty Name="IdCliente" ColumnName="IdCliente" />
               </MappingFragment>
@@ -912,18 +723,9 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Direccion" ColumnName="Direccion" />
                 <ScalarProperty Name="IdComuna" ColumnName="IdComuna" />
-                <ScalarProperty Name="ValorUF" ColumnName="ValorUF" />
                 <ScalarProperty Name="IdTipoDespacho" ColumnName="IdTipoDespacho" />
                 <ScalarProperty Name="FechaDespacho" ColumnName="FechaDespacho" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Entrega">
-            <EntityTypeMapping TypeName="MetalkitModel.Entrega">
-              <MappingFragment StoreEntitySet="Entrega">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="IdTipoEntrega" ColumnName="IdTipoEntrega" />
-                <ScalarProperty Name="FechaEntrega" ColumnName="FechaEntrega" />
+                <ScalarProperty Name="Valor" ColumnName="Valor" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -947,6 +749,15 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Param_Subparam">
+            <EntityTypeMapping TypeName="MetalkitModel.Param_Subparam">
+              <MappingFragment StoreEntitySet="Param_Subparam">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdParametro" ColumnName="IdParametro" />
+                <ScalarProperty Name="IdSubParametro" ColumnName="IdSubParametro" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Parametro">
             <EntityTypeMapping TypeName="MetalkitModel.Parametro">
               <MappingFragment StoreEntitySet="Parametro">
@@ -960,20 +771,21 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Parametro_SubParametro">
-            <EntityTypeMapping TypeName="MetalkitModel.Parametro_SubParametro">
-              <MappingFragment StoreEntitySet="Parametro_SubParametro">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="IdParametro" ColumnName="IdParametro" />
-                <ScalarProperty Name="IdSubParametro" ColumnName="IdSubParametro" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Perfil">
             <EntityTypeMapping TypeName="MetalkitModel.Perfil">
               <MappingFragment StoreEntitySet="Perfil">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Prod_Param_subparam">
+            <EntityTypeMapping TypeName="MetalkitModel.Prod_Param_subparam">
+              <MappingFragment StoreEntitySet="Prod_Param_subparam">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
+                <ScalarProperty Name="IdParametro_SubParametro" ColumnName="IdParametro_SubParametro" />
+                <ScalarProperty Name="IdCotizacion" ColumnName="IdCotizacion" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -986,15 +798,6 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
                 <ScalarProperty Name="Superficie" ColumnName="Superficie" />
                 <ScalarProperty Name="Valor" ColumnName="Valor" />
                 <ScalarProperty Name="Imagen" ColumnName="Imagen" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Producto_Parametro">
-            <EntityTypeMapping TypeName="MetalkitModel.Producto_Parametro">
-              <MappingFragment StoreEntitySet="Producto_Parametro">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
-                <ScalarProperty Name="IdParametro" ColumnName="IdParametro" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1014,6 +817,8 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
                 <ScalarProperty Name="Valor" ColumnName="Valor" />
                 <ScalarProperty Name="Vigente" ColumnName="Vigente" />
                 <ScalarProperty Name="IdParametro" ColumnName="IdParametro" />
+                <ScalarProperty Name="FechaModificacion" ColumnName="FechaModificacion" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1028,9 +833,17 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="TipoEntrega">
-            <EntityTypeMapping TypeName="MetalkitModel.TipoEntrega">
-              <MappingFragment StoreEntitySet="TipoEntrega">
+          <EntitySetMapping Name="TipoCliente">
+            <EntityTypeMapping TypeName="MetalkitModel.TipoCliente">
+              <MappingFragment StoreEntitySet="TipoCliente">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TipoDespacho">
+            <EntityTypeMapping TypeName="MetalkitModel.TipoDespacho">
+              <MappingFragment StoreEntitySet="TipoDespacho">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Tipo" ColumnName="Tipo" />
               </MappingFragment>
@@ -1075,14 +888,6 @@ advertencia 6002: La tabla o vista 'Metalkit.dbo.TipoCliente' no tiene definida 
                 <ScalarProperty Name="IdEstadoVersion" ColumnName="IdEstadoVersion" />
                 <ScalarProperty Name="Fecha" ColumnName="Fecha" />
                 <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="TipoCliente">
-            <EntityTypeMapping TypeName="MetalkitModel.TipoCliente">
-              <MappingFragment StoreEntitySet="TipoCliente">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

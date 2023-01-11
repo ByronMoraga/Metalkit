@@ -18,7 +18,6 @@ namespace Metalkit.Models
         public Usuario()
         {
             this.EstadoOT_VersionOT = new HashSet<EstadoOT_VersionOT>();
-            this.Parametro = new HashSet<Parametro>();
             this.VersionOT = new HashSet<VersionOT>();
         }
     
@@ -34,8 +33,6 @@ namespace Metalkit.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EstadoOT_VersionOT> EstadoOT_VersionOT { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Parametro> Parametro { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<VersionOT> VersionOT { get; set; }
     }

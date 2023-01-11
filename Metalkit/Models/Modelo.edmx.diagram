@@ -4,39 +4,33 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="971d8a09e9b849868785eecead9fa709" Name="Diagram1">
-        <EntityTypeShape EntityType="MetalkitModel.Cliente" Width="1.5" PointX="0.75" PointY="2.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="MetalkitModel.Comuna" Width="1.5" PointX="5" PointY="12.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="MetalkitModel.Cotizacion" Width="1.5" PointX="3" PointY="2.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="MetalkitModel.Despacho" Width="1.5" PointX="2.75" PointY="7.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="MetalkitModel.Entrega" Width="1.5" PointX="0.75" PointY="6.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="MetalkitModel.EstadoOT" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MetalkitModel.EstadoOT_VersionOT" Width="1.5" PointX="8" PointY="3.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="MetalkitModel.Parametro" Width="1.5" PointX="8" PointY="7.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="MetalkitModel.Parametro_SubParametro" Width="1.5" PointX="10.25" PointY="8" IsExpanded="true" />
-        <EntityTypeShape EntityType="MetalkitModel.Perfil" Width="1.5" PointX="4.75" PointY="8.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="MetalkitModel.Producto" Width="1.5" PointX="7.75" PointY="12.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="MetalkitModel.Producto_Parametro" Width="1.5" PointX="0.75" PointY="9.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="MetalkitModel.Region" Width="1.5" PointX="2.75" PointY="12.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="MetalkitModel.SubParametro" Width="1.5" PointX="10.75" PointY="11.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="MetalkitModel.sysdiagrams" Width="1.5" PointX="12.75" PointY="2.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="MetalkitModel.TipoEntrega" Width="1.5" PointX="12.75" PointY="5.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="MetalkitModel.TipoParametro" Width="1.5" PointX="12.75" PointY="8.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="MetalkitModel.TipoProyecto" Width="1.5" PointX="0.75" PointY="11.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="MetalkitModel.Usuario" Width="1.5" PointX="5.75" PointY="4" IsExpanded="true" />
-        <EntityTypeShape EntityType="MetalkitModel.VersionOT" Width="1.5" PointX="10.25" PointY="4.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="MetalkitModel.TipoCliente" Width="1.5" PointX="12.75" PointY="11.125" IsExpanded="true" />
-        <AssociationConnector Association="MetalkitModel.FK_Cotizacion_Cliente" ManuallyRouted="false" />
+      <Diagram DiagramId="9104b97d218f4c47b0b84cedcd831050" Name="Diagram1">
+        <EntityTypeShape EntityType="MetalkitModel.Cliente" Width="1.5" PointX="7.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetalkitModel.Comuna" Width="1.5" PointX="10" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetalkitModel.Cotizacion" Width="1.5" PointX="7.75" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetalkitModel.Despacho" Width="1.5" PointX="0.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetalkitModel.EstadoOT" Width="1.5" PointX="0.75" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetalkitModel.EstadoOT_VersionOT" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetalkitModel.Param_Subparam" Width="1.5" PointX="2.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetalkitModel.Parametro" Width="1.5" PointX="5" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetalkitModel.Perfil" Width="1.5" PointX="4.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetalkitModel.Prod_Param_subparam" Width="1.5" PointX="10" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetalkitModel.Producto" Width="1.5" PointX="9.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetalkitModel.Region" Width="1.5" PointX="7.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetalkitModel.SubParametro" Width="1.5" PointX="9.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetalkitModel.sysdiagrams" Width="1.5" PointX="6.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetalkitModel.TipoCliente" Width="1.5" PointX="0.75" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetalkitModel.TipoDespacho" Width="1.5" PointX="2.75" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetalkitModel.TipoParametro" Width="1.5" PointX="2.75" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetalkitModel.TipoProyecto" Width="1.5" PointX="11.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetalkitModel.Usuario" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="MetalkitModel.VersionOT" Width="1.5" PointX="5.25" PointY="1.375" IsExpanded="true" />
         <AssociationConnector Association="MetalkitModel.FK_Comuna_Region" ManuallyRouted="false" />
-        <AssociationConnector Association="MetalkitModel.FK_Cotizacion_Entrega" ManuallyRouted="false" />
-        <AssociationConnector Association="MetalkitModel.FK_Cotizacion_Producto_Parametro" ManuallyRouted="false" />
-        <AssociationConnector Association="MetalkitModel.FK_Cotizacion_TipoProyecto" ManuallyRouted="false" />
+        <AssociationConnector Association="MetalkitModel.FK_Prod_Param_subparam_Cotizacion" ManuallyRouted="false" />
         <AssociationConnector Association="MetalkitModel.FK_EstadoOT_VersionOT_EstadoOT" ManuallyRouted="false" />
         <AssociationConnector Association="MetalkitModel.FK_EstadoOT_VersionOT_VersionOT" ManuallyRouted="false" />
         <AssociationConnector Association="MetalkitModel.FK_VersionOT_EstadoVersion" ManuallyRouted="false" />
-        <AssociationConnector Association="MetalkitModel.FK_Parametro_ParametroNvl2_Parametro" ManuallyRouted="false" />
-        <AssociationConnector Association="MetalkitModel.FK_Parametro_ParametroNvl2_ParametroNivel2" ManuallyRouted="false" />
-        <AssociationConnector Association="MetalkitModel.FK_Parametro_Usuario" ManuallyRouted="false" />
+        <AssociationConnector Association="MetalkitModel.FK_Parametro_TipoParametro" ManuallyRouted="false" />
         <AssociationConnector Association="MetalkitModel.FK_VersionOT_Usuario" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>

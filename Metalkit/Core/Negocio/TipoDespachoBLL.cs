@@ -7,29 +7,29 @@ using System.Web;
 
 namespace Metalkit.Core.Negocio
 {
-    public class Producto_ParametroBLL
+    public class TipoDespachoBLL
     {
-        private static Producto_ParametroDAO _objDAO = new Producto_ParametroDAO();
-        public static IQueryable<Producto_Parametro> ObtenerQueryPrincipal(string filtro, string sortColumn, string sortCulumnDir, string searchValue)
+        private static TipoDespachoDAO _objDAO = new TipoDespachoDAO();
+        public static IQueryable<TipoDespacho> ObtenerQueryPrincipal(string filtro, string sortColumn, string sortCulumnDir, string searchValue)
         {
             return _objDAO.ObtenerQueryPrincipal(filtro, sortColumn, sortCulumnDir, searchValue);
         }
 
-        public static Producto_Parametro Traer(int id)
+        public static TipoDespacho Traer(int id)
         {
             return _objDAO.Traer(id);
         }
 
-        public static List<Producto_Parametro> TraerTodos()
+        public static List<TipoDespacho> TraerTodos()
         {
             return _objDAO.TraerTodos();
         }
-
-        public static bool Guardar(Producto_Parametro obj)
+      
+        public static bool Guardar(TipoDespacho obj)
         {
             return _objDAO.Guardar(obj);
         }
-        public static bool Eliminar(Producto_Parametro obj)
+        public static bool Eliminar(TipoDespacho obj)
         {
             return _objDAO.Eliminar(obj);
         }

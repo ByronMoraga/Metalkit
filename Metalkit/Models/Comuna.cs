@@ -17,6 +17,7 @@ namespace Metalkit.Models
         public int Id { get; set; }
         public string Nombre { get; set; }
         public Nullable<int> IdRegion { get; set; }
+        public Nullable<int> Valor { get; set; }
     
         public virtual Region Region { get; set; }
     }

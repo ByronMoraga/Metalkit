@@ -6,11 +6,8 @@
     Layout = null;
 
 }
-@using (Html.BeginForm("GrillaSubParametros", "Formularios", FormMethod.Post, new { @class = "form-horizontal", id = "form", name = "form", role = "form" }))
-{
-    @Html.AntiForgeryToken()
     <input id="tbIdParametro" value="@ViewBag.idParametro" hidden/>
-    <table id="grilla_parametros" class="table table-gral table-sm table-hover table-bordered">
+    <table id="grilla_subparametros" class="table table-gral table-sm table-hover table-bordered">
         <thead class="table-head">
             <tr>
                 <th class="oculto">id</th>
@@ -24,11 +21,11 @@
             {
                                 <tr>
                                     <td class="oculto">
-                                        @Html.HiddenFor(modelItem => item.Id)
+                                        @Html.DisplayFor(modelItem => item.Id)
                                     </td>
                                     <td>
                                         @*@Html.CheckBoxFor(modelItem => item.Seleccionado)*@
-                                        <input type="checkbox" name="checks[]" value="@item.Id" checked="@item.Seleccionado" class="custom-checkbox chkCheckBoxId" />
+                                        <input type="checkbox" name="checks[]" id="chk+@item.Id" value="@item.Id" checked="@item.Seleccionado" class="custom-checkbox checkboxes" />
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Descripcion)
@@ -53,7 +50,6 @@
         </div>
     </div>
 
-}
 <script>
     $(".modal-footer").html("");
     $("#botonesFooter").appendTo(".modal-footer");
@@ -85,17 +81,74 @@
     });
 
     function grabarSubParametro() {
-        var arr = $('[name="checks[]"]:checked').map(function () {
-            return this.value;
-        }).get();
+        //var arr = $('[name="checks[]"]:checked').map(function () {
+        //    return this.value;
+        //}).get();
+       
+        var idSubParametro = 0;
+        var arrIdSubParametro = [];
+        $('.checkboxes:checked').each(
+            function () {
+                arrIdSubParametro.push($(this).val());
+            }
+        );
+        console.log("aplicando filter")
+        console.log(subparametros)
 
-        $.ajax({
-            type: "GET",
-            url: url_carga_subparametros,
-            data: $('#form').serialize() + "&idParametro=" + tbIdParametro.value + "&arrid=" + JSON.stringify(arr),
-            success: function (data) {
-                alert_success('Dato almacenado con éxito.');//exito);
+        var listado = subparametros.filter(item => item.IdParametro != $(tbIdParametro).val())
+        subparametros = []
+        subparametros = listado;
+        var descripcion = "";
+
+        console.log(subparametros)
+        $("#grilla_subparametros tbody tr").each(function (index) {
+
+            $(this).children("td").each(function (index2) {
+                var objSubParametro = {};
+
+                switch (index2) {
+                    case 0:
+                        idSubParametro = 0;
+                        if (arrIdSubParametro.includes($(this).text().replace('\n', '').trim())) {
+                            idSubParametro = $(this).text().replace('\n', '').trim();
+                        }
+                        break;
+                    case 2:
+                        if (idSubParametro!=0) {
+                            descripcion = $(this).text().replace('\n', '').trim();
+                        }
+                        break;
+                    case 3:
+                        if (idSubParametro != 0) {
+                            objSubParametro.Id = idSubParametro;
+                            objSubParametro.Descripcion = descripcion;
+                            objSubParametro.Valor = $(this).text().replace('$', '').replace('\n', '').trim();
+                            objSubParametro.IdParametro = $(tbIdParametro).val();
+                            objSubParametro.Seleccionado = "true";
+                            subparametros.push(objSubParametro);
+                        }
+                        break;
+                }
+               
+            });
+        });
+
+        $("#isubparametros").val(JSON.stringify(subparametros));
+        console.log(JSON.stringify(subparametros))
+        jQuery.ajax({
+            contentType: "application/json; charset=utf-8",
+            data: $('#ActualizarParamC').serialize() + "&listado=" + $("#isubparametros").val(),
+            url: url_carga_parametrosObj,
+            type: "get",
+            success: function (response) {
+                console.log(response)
+                $("#div_grilla_parametros").html('').html(response);
+                $('#ModalMediano').modal('hide');
+            },
+            error: function (xhr) {
+                //$this.loadingButton({ accion: "reset" });
             }
         });
+      
     }
 </script>

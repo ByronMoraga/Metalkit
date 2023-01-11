@@ -19,5 +19,7 @@ namespace Metalkit.Models
         public Nullable<int> Valor { get; set; }
         public Nullable<bool> Vigente { get; set; }
         public Nullable<int> IdParametro { get; set; }
+        public Nullable<System.DateTime> FechaModificacion { get; set; }
+        public Nullable<int> IdUsuario { get; set; }
     }
 }

@@ -7,8 +7,7 @@ namespace Metalkit.Models
     {
         public int Id { get; set; }
         public string Descripcion { get; set; }
-
-        [DisplayFormat(DataFormatString="{0:C}")]
+        [DisplayFormat(DataFormatString = "{0:C}")]
         public int? Valor { get; set; }
         public int? IdParametro { get; set; }
         public bool Seleccionado { get; set; }

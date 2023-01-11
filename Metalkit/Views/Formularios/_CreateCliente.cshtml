@@ -5,7 +5,7 @@
 
 }
 @*@using (Html.BeginForm("CreateCliente", "Formularios", FormMethod.Post, new { @class = "formModal form-validacion ", id = "form", name = "form" }))*@
-@using (Ajax.BeginForm("AddressTypePartial", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "CreateAddress", InsertionMode = InsertionMode.Replace }))
+@using (Ajax.BeginForm("CreateCliente", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "CreateAddress", InsertionMode = InsertionMode.Replace }))
 {
     @Html.AntiForgeryToken()
 
@@ -29,9 +29,8 @@
                         </div>
                         <div class="card-body">
                             <div class="form-group row" id="div_cabecera">
-                                <input id="txtidCliente" type="hidden" value="0" />
                                 <label for="tbRutBusqueda" class="col-md-3 col-form-label">Rut</label>
-                                <div class="col-md-7">
+                                <div class="col-md-6">
                                     <input type="text" class="form-control input_rut" id="tbRutBusqueda" name="tbRutBusqueda" placeholder="Ingrese rut">
                                 </div>
                                 <div class="col-md-2">
@@ -145,7 +144,7 @@
                 CorreoContacto: $('#tbCorreo').val(),
                 Direccion: $('#tbDireccion').val(),
                 Giro: $('#tbGiro').val(),
-                Id: $("#txtidCliente").val(),
+                Id: $("#idCliente").val(),
                 IdComuna: $('#icomuna').val(),
                 NombreContacto: $('#tbNombre').val(),
                 RazonSocial: $('#tbRazonSocial').val(),

@@ -7,18 +7,18 @@ using System.Web;
 
 namespace Metalkit.Core.Datos
 {
-    public class Producto_ParametroDAO: DbContext
+    public class TipoDespachoDAO: DbContext
     {
-        private MetalkitEntities _dbContext;
-
-        public Producto_ParametroDAO()
+        //private MetalkitEntities _dbContext;
+        private MetalkitEntities _dbContext = new MetalkitEntities();
+        public TipoDespachoDAO()
         {
             if (_dbContext == null)
                 _dbContext = new MetalkitEntities();
         }
-        internal IQueryable<Producto_Parametro> ObtenerQueryPrincipal(string filtro, string sortColumn, string sortCulumnDir, string searchValue)
+        internal IQueryable<TipoDespacho> ObtenerQueryPrincipal(string filtro, string sortColumn, string sortCulumnDir, string searchValue)
         {
-            IQueryable<Producto_Parametro> query = (from a in _dbContext.Producto_Parametro select a);
+            IQueryable<TipoDespacho> query = (from a in _dbContext.TipoDespacho select a);
 
             try
             {
@@ -33,11 +33,12 @@ namespace Metalkit.Core.Datos
 
             return query;
         }
-        internal Producto_Parametro Traer(int id)
+        internal TipoDespacho Traer(int id)
         {
-            var entidad = (Producto_Parametro)null;
 
-            var query = from ent in _dbContext.Producto_Parametro
+            var entidad = (TipoDespacho)null;
+
+            var query = from ent in _dbContext.TipoDespacho
                         where ent.Id == id
                         select ent;
 
@@ -46,23 +47,23 @@ namespace Metalkit.Core.Datos
             return entidad;
         }
 
-        internal List<Producto_Parametro> TraerTodos()
+        internal List<TipoDespacho> TraerTodos()
         {
-            var lista = new List<Producto_Parametro>();
+            var lista = new List<TipoDespacho>();
 
-            var query = from ent in _dbContext.Producto_Parametro
+            var query = from ent in _dbContext.TipoDespacho
                         select ent;
             lista = query.ToList();
             return lista;
         }
 
-        internal bool Guardar(Producto_Parametro data)
+        internal bool Guardar(TipoDespacho data)
         {
             var guardado = false;
 
             try
             {
-                if (_dbContext.Producto_Parametro.Any(o => o.Id == data.Id))
+                if (_dbContext.TipoDespacho.Any(o => o.Id == data.Id))
                 {
                     _dbContext.Entry(data).State = EntityState.Modified;
                 }
@@ -78,12 +79,12 @@ namespace Metalkit.Core.Datos
             }
             return guardado;
         }
-        internal bool Eliminar(Producto_Parametro data) 
+        internal bool Eliminar(TipoDespacho data) 
         {
             var guardado = false;
             try
             {
-                _dbContext.Producto_Parametro.Remove(data);
+                _dbContext.TipoDespacho.Remove(data);
                 _dbContext.SaveChanges();
                 var contador = _dbContext.SaveChanges();
                 guardado = contador > 0;

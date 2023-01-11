@@ -10,46 +10,52 @@
     lista_parametros = ViewBag.lista_parametros;
 
 }
-
-@using (Html.BeginForm("CreateEstandar", "Formularios", FormMethod.Post, new { @class = "form-horizontal", id = "formEstandar", name = "formEstandar", role = "formEstandar" }))
+@using (Html.BeginForm("CreateEstandar", "Formularios", FormMethod.Post, new { @class = "form-validacion ", id = "formSolcitud", name = "formSolcitud" }))
 {
     @Html.AntiForgeryToken()
+    <input hidden="hidden" id="iIdCliente" name="iIdCliente" />
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="card card-primary card-fijo">
-            <div class="card-header">
-                <div class="card-title">
-                    Productos
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card card-primary card-fijo">
+                <div class="card-header">
+                    <div class="card-title">
+                        Productos
+                    </div>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
                 </div>
-                <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                        <i class="fas fa-minus"></i>
-                    </button>
+                <div class="card-body">
+                    <div id="div_grilla_productoSeleccionado"></div>
+                    <input hidden="hidden" id="iIdProducto" name="iIdProducto" />
+                    <input hidden="hidden" id="iproducto" name="iproducto" />
                 </div>
             </div>
-            <div class="card-body" id="div_grilla_productoSeleccionado">
+        </div>
+        <div class="col-md-6">
+            <div class="card card-primary card-fijo">
+                <div class="card-header">
+                    <div class="card-title">
+                        Productos
+                    </div>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="div_grilla_parametros"></div>
+                    <input hidden="hidden" id="iparametros" name="iparametros" />
+                    <input hidden="hidden" id="isubparametros" name="isubparametros" />
+
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="card card-primary card-fijo">
-            <div class="card-header">
-                <div class="card-title">
-                    Productos
-                </div>
-                <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                        <i class="fas fa-minus"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="card-body">
-                   <div id="div_grilla_parametros"></div>
-            </div>
-        </div>
-    </div>
-</div>
 
     <div class="card card-primary">
         <div class="card-header">
@@ -63,61 +69,26 @@
             </div>
         </div>
         <div class="card-body">
-            <div class="form-group row">
-                <label class="col-lg-2 col-form-label">Fecha Entrega</label>
-                <div class="col-lg-10">
-                    <div class="input-group date col-md-5">
-                        <input type="date" class="form-control" value="03/04/2014">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-lg-2 col-form-label">Tipo Entrega</label>
-                <div class="col-lg-10">
-                    <div class="i-checks"><label> <input type="radio" value="option1" id="rdTipoEntrega" name="rdTipoEntrega"> <i></i> Retira Cliente </label></div>
-                    <div class="i-checks"><label> <input type="radio" value="option2" id="rdTipoEntrega" name="rdTipoEntrega"> <i></i> Despacha Metalkit </label></div>
-
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-lg-2 col-form-label">Dirección</label>
-                <div class="col-lg-10">
-                    <input type="text" placeholder="Dirección" class="form-control" id="tbDireccion" name="tbDireccion">
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label class="col-lg-2 col-form-label">Región</label>
-                <div class="col-sm-10">
-                    @Html.DropDownList("iregionEnvio", null, "Seleccione", htmlAttributes: new { @class = "form-control  search-select", @onchange = "CargaComunasEnvio()" })
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-lg-2 col-form-label">Comuna</label>
-                <div class="col-sm-10">
-                    @Html.DropDownList("icomunaEnvio", null, "Seleccione", htmlAttributes: new { @class = "form-control  search-select" })
-                </div>
-            </div>
+            @Html.Partial("_Despacho")
         </div>
     </div>
 
     <div class="col-md-12">
         <div class="text-right">
-            <button class="btn btn-primary hidden" type="button" id="btnGuardar"><i class="fa fa-check"></i>&nbsp;Guardar</button>
+            <button class="btn btn-primary" id="btnGuardar" type="button"><i class="fa fa-check"></i>&nbsp;Guardar</button>
             <button class="btn btn-primary" type="button" onclick="validarClases()" id="b_calcular"><i class="fa fa-edit"></i>&nbsp;Calcular</button>
             <button class="btn btn-default" type="button" id="btnLimpiar" onclick="location.reload();"><i class="fa fa-trash"></i>&nbsp;Limpiar</button>
         </div>
     </div>
-    }
+}
 
-    <script type="text/javascript">
-        $('.i-checks').iCheck({
-            checkboxClass: 'icheckbox_square-blue',
-            radioClass: 'iradio_square-blue',
-        });
+<script type="text/javascript">
+    var producto = [];
+    var parametros = [];
+    var subparametros = [];
 
         $(document).ready(function () {
-            var table = $('#grilla_productoSeleccionado').DataTable({
+            var grilla_productoSeleccionado = $('#grilla_productoSeleccionado').DataTable({
                 filter: false,
                 orderMulti: false,
                 "ordering": false,
@@ -126,7 +97,7 @@
                 paging: false,
                 language: datatableIdioma()
             });
-            var table = $('#grilla_parametros').DataTable({
+            var grilla_parametros = $('#grilla_parametros').DataTable({
                 filter: false,
                 orderMulti: false,
                 "ordering": false,
@@ -136,7 +107,7 @@
                 language: datatableIdioma()
             });
 
-            var table = $('#grilla_productos').DataTable({
+            var grilla_productos = $('#grilla_productos').DataTable({
                 filter: false,
                 orderMulti: false,
                 "ordering": false,
@@ -144,8 +115,171 @@
                 pagingType: "full_numbers",
                 paging: false,
                 language: datatableIdioma()
+            });
+            var grilla_productos = $('#grilla_subparametros ').DataTable({
+                filter: false,
+                orderMulti: false,
+                "ordering": false,
+                info: false,
+                pagingType: "full_numbers",
+                paging: false,
+                language: datatableIdioma()
+            });
 
+        });
+    var idProducto = 0;
+    var idParametro = 0;
+    var idSubParametro = 0;
+    $("#btnGuardar").on("click", function () {
+        producto = [];
+        parametros = [];
+        console.log("1. CLICK BTN GUARDAR");
+        $("#grilla_productoSeleccionado tbody tr").each(function (index) {
+            console.log("EACH 1");
+            $(this).children("td").each(function (index2) {
+                switch (index2) {
+                    case 0:
+                        producto.push($(this).text().replace('\n', '').trim());
+                        $("#iIdProducto").val($(this).text().replace('\n', '').trim());
+
+                        break;
+                    //case 1: campo2 = $(this).text(); break;
+                    //case 2: campo3 = $(this).text(); break;
+                }
+            });
+            //console.log(campo1 + ' - ' + campo2 + ' - ' + campo3);
+        });
+        $("#grilla_parametros tbody tr").each(function (index) {
+            console.log("EACH 2");
+            $(this).children("td").each(function (index2) {
+                switch (index2) {
+                    case 0:
+                        parametros.push($(this).text().replace('\n', '').trim());
+                        break;
+                }
             });
         });
-       
-    </script>
+        //$("#grilla_subparametros tbody tr").each(function (index) {
+        //    console.log("EACH 3");
+        //    $(this).children("td").each(function (index2) {
+        //        switch (index2) {
+        //            case 0:
+        //                console.log($(this).text())
+        //                subparametros.push($(this).text().replace('\n', '').trim());
+        //                break;
+        //        }
+        //    });
+        //});
+        $("#iproducto").val(JSON.stringify(producto));
+        $("#iparametros").val(JSON.stringify(parametros));
+        $("#isubparametros").val(JSON.stringify(subparametros));
+
+        EnviarFormulario();
+
+        //validar();
+        ////$("#formSolcitud").valid();
+
+        //if ($("#formSolcitud").valid()) {
+        //    console.log("3.ir a obtener valores si formulario es valido")
+        //    EnviarFormulario()
+        //} else {
+
+        //}
+    });
+
+    function EnviarFormulario() {
+        console.log("12. enviar formulario")
+        $.ajax({
+            url: url_createEstandar,
+            type: 'post',
+            data: $("#formSolcitud").serialize(),
+            dataType: 'json',
+            success: function (data) {
+                console.log("14. retorno desde create");
+                console.log(data);
+                if (data.respuesta) {
+                    alert_success(data.mensaje);
+                    bloqueaDatos('#div_datos_empresa');
+                    bloqueaDatos('#div_datos_cliente');
+                    desbloqueaDatos('#div_tipo_proyecto');
+                    $("#b_editar").removeClass("disabled");
+                    $("#b_guardar").addClass("disabled");
+
+                }
+                //$("#idMaestro").val(data);
+                //verPdfSolicitud();
+            },
+            error: function (xhr) {
+                //VolverAlInicio();
+                console.log(xhr)
+            }
+         });
+    };
+
+    function verPdfSolicitud() {
+        console.log("16 ver pdf")
+        var rut = 0;
+
+        direccion = '@Url.Action("ListadoPdf", "ALCMaestros")',
+
+        $.ajaxSetup({
+            cache: false
+        })
+        $.ajax({
+
+        url: direccion,
+        type: "get",
+        data: {
+            //Filtro: idMaestro,
+            //rutContribuyente: rut
+        },
+        success: function (response) {
+            console.log("response pdf")
+            console.log(response);
+            Modal_muestraPDF(response,"Impresión de Solicitud");
+        },
+        error: function(xhr) {
+        }
+    });
+}
+
+         @*function GuardarCotizacion() {
+
+            console.log(JSON.stringify({ objeto: Cliente }))
+           jQuery.ajax({
+                url: '@Url.Action("GuardarCliente", "Formularios")',
+                type: "POST",
+               data: JSON.stringify({ objeto: Cliente }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+               success: function (data) {
+                   if (data.respuesta) {
+                       alert_success(data.mensaje);
+                       bloqueaDatos('#div_datos_empresa');
+                       bloqueaDatos('#div_datos_cliente');
+                       desbloqueaDatos('#div_tipo_proyecto');
+                       $("#b_editar").removeClass("disabled");
+                       $("#b_guardar").addClass("disabled");
+
+                   }
+                },
+               error: function (error) {
+                   console.log(error)
+                   //$(".modal-body").LoadingOverlay("hide");
+                   //$("#mensajeError").text("Error Ajax");
+                   //$("#mensajeError").show();
+                },
+                beforeSend: function () {
+                    //$(".modal-body").LoadingOverlay("show", {
+                    //    imageResizeFactor: 2,
+                    //    text: "Cargando...",
+                    //    size: 14
+                    //})
+                }
+            });
+
+
+
+
+        }*@
+</script>

@@ -6,9 +6,8 @@
     var lista_productos = ViewBag.lista_productos;
 
 }
-@using (Ajax.BeginForm("CreateProducto", "Formularios", null, new AjaxOptions { HttpMethod = "POST", OnBegin = "OnBeginRequest", OnSuccess = "OnSuccessRequest", OnComplete = "OnCompleteRequest", OnFailure = "OnFailureRequest", Confirm = "¿Desea agregar un país?" }, new { @class = "form-horizontal", role = "form" }))
-{
-    @Html.AntiForgeryToken()
+
+  
     <table id="grilla_productos" class="table table-gral table-chica table-hover table-bordered">
         <thead class="table-head">
             <tr>
@@ -54,7 +53,6 @@
         </div>
     </div>
 
-}
 <script>
     $(".modal-footer").html("");
     $("#botonesFooter").appendTo(".modal-footer");

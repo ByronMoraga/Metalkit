@@ -73,8 +73,9 @@ namespace Metalkit.Core.Datos
                 var contador = _dbContext.SaveChanges();
                 guardado = contador > 0;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                throw;
             }
             return guardado;
         }

@@ -12,19 +12,9 @@ namespace Metalkit.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Entrega
+    public partial class TipoDespacho
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Entrega()
-        {
-            this.Cotizacion = new HashSet<Cotizacion>();
-        }
-    
         public int Id { get; set; }
-        public Nullable<int> IdTipoEntrega { get; set; }
-        public Nullable<System.DateTime> FechaEntrega { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Cotizacion> Cotizacion { get; set; }
+        public string Tipo { get; set; }
     }
 }

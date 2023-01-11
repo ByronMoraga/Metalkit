@@ -8,6 +8,10 @@
     $("#b_guardar").addClass("disabled");
     $('.input_rut').rut();
     $('.search-select').select2();
+    $('.i-checks').iCheck({
+        checkboxClass: 'icheckbox_square-blue',
+        radioClass: 'iradio_square-blue',
+    });
 
 }
 
@@ -28,7 +32,7 @@ function Continuar() {
             desbloqueaDatos('#div_datos_empresa');
             desbloqueaDatos('#div_datos_cliente');
         } else {
-            $('#txtidCliente').val(data.Id);
+            $('#iIdCliente').val(data.Id);
             $('#tbRazonSocial').val(data.RazonSocial);
             $('#tbDireccion').val(data.Direccion);
             $('#iregion').val(data.IdRegion);
@@ -40,6 +44,7 @@ function Continuar() {
 
             $("#b_editar").removeClass("disabled");
             $("#b_guardar").addClass("disabled");
+            console.log($('#iIdCliente').val());
         }
         setTimeout(function () {
             CargaComunas();
@@ -61,23 +66,15 @@ function Continuar() {
 function CargaComunas() {
     $("#icomuna").empty();
     var identificador = $("#iregion :selected").val();
-    var rut = $('#tbRutBusqueda').val();
     $.ajax({
         url: url_cargarcomunas,
         type: "post",
         data: {
-            id: identificador,
-            rut: rut
+            id: identificador
         },
         success: function (response) {
             if (!response.error) {
                 $.each(response.Resultados, function (i, e) {
-
-                    //if (e.Selected === true) {
-                    //    $('#icomuna').append('<option Selected="Selected" value="' + e.Value + '">' + e.Text + '</option>');
-                    //} else {
-                    //    $('#icomuna').append('<option value="' + e.Value + '">' + e.Text + '</option>');
-                    //}
                     $('#icomuna').append($("<option></option>").val(e.Value).html(e.Text));
 
                 });
@@ -88,10 +85,9 @@ function CargaComunas() {
         }
     });
 }
-
 function CargaComunasEnvio() {
-    $("#icomunaEnvio").empty();
-    var identificador = $("#iregionEnvio :selected").val();
+    $("#iComunaEnvio").empty();
+    var identificador = $("#iRegionEnvio :selected").val();
     $.ajax({
         url: url_cargarcomunas,
         type: "post",
@@ -100,8 +96,9 @@ function CargaComunasEnvio() {
         },
         success: function (response) {
             if (!response.error) {
-                $.each(response, function (i, e) {
-                    $('#icomunaEnvio').append('<option value="' + e.Value + '">' + e.Text + '</option>');
+                $.each(response.Resultados, function (i, e) {
+                    $('#iComunaEnvio').append($("<option></option>").val(e.Value).html(e.Text));
+
                 });
             }
         },
@@ -110,6 +107,7 @@ function CargaComunasEnvio() {
         }
     });
 }
+
 
 function MostrarProyectoSeleccionado() {
     var tp = $("#itipoproyecto :selected").val();
@@ -121,7 +119,7 @@ function MostrarProyectoSeleccionado() {
 
         switch (data) {
             case "CotizacionEstandar":
-                $.get(url_createEstandar, function (data) {
+                $.get(url_createEstandarget, function (data) {
                     ////lleno y despliego el dialogo de edición
                     $('#container_Cotizacion').html(data);
                     Carga_GrillaProductoSeleccionado();

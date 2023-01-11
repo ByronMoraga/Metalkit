@@ -7,18 +7,18 @@ using System.Web;
 
 namespace Metalkit.Core.Datos
 {
-    public class TipoEntregaDAO: DbContext
+    public class Param_SubparamDAO: DbContext
     {
-        //private MetalkitEntities _dbContext;
-        private MetalkitEntities _dbContext = new MetalkitEntities();
-        public TipoEntregaDAO()
+        private MetalkitEntities _dbContext;
+
+        public Param_SubparamDAO()
         {
             if (_dbContext == null)
                 _dbContext = new MetalkitEntities();
         }
-        internal IQueryable<TipoEntrega> ObtenerQueryPrincipal(string filtro, string sortColumn, string sortCulumnDir, string searchValue)
+        internal IQueryable<Param_Subparam> ObtenerQueryPrincipal(string filtro, string sortColumn, string sortCulumnDir, string searchValue)
         {
-            IQueryable<TipoEntrega> query = (from a in _dbContext.TipoEntrega select a);
+            IQueryable<Param_Subparam> query = (from a in _dbContext.Param_Subparam select a);
 
             try
             {
@@ -33,12 +33,11 @@ namespace Metalkit.Core.Datos
 
             return query;
         }
-        internal TipoEntrega Traer(int id)
+        internal Param_Subparam Traer(int id)
         {
+            var entidad = (Param_Subparam)null;
 
-            var entidad = (TipoEntrega)null;
-
-            var query = from ent in _dbContext.TipoEntrega
+            var query = from ent in _dbContext.Param_Subparam
                         where ent.Id == id
                         select ent;
 
@@ -47,23 +46,32 @@ namespace Metalkit.Core.Datos
             return entidad;
         }
 
-        internal List<TipoEntrega> TraerTodos()
+        internal List<Param_Subparam> TraerTodos()
         {
-            var lista = new List<TipoEntrega>();
+            var lista = new List<Param_Subparam>();
 
-            var query = from ent in _dbContext.TipoEntrega
+            var query = from ent in _dbContext.Param_Subparam
                         select ent;
             lista = query.ToList();
             return lista;
         }
+        internal List<Param_Subparam> TraerPorParametro(int id)
+        {
+            var lista = new List<Param_Subparam>();
 
-        internal bool Guardar(TipoEntrega data)
+            var query = from ent in _dbContext.Param_Subparam
+                        where ent.IdParametro == id
+                        select ent;
+            lista = query.ToList();
+            return lista;
+        }
+        internal bool Guardar(Param_Subparam data)
         {
             var guardado = false;
 
             try
             {
-                if (_dbContext.TipoEntrega.Any(o => o.Id == data.Id))
+                if (_dbContext.Param_Subparam.Any(o => o.Id == data.Id))
                 {
                     _dbContext.Entry(data).State = EntityState.Modified;
                 }
@@ -79,12 +87,12 @@ namespace Metalkit.Core.Datos
             }
             return guardado;
         }
-        internal bool Eliminar(TipoEntrega data) 
+        internal bool Eliminar(Param_Subparam data) 
         {
             var guardado = false;
             try
             {
-                _dbContext.TipoEntrega.Remove(data);
+                _dbContext.Param_Subparam.Remove(data);
                 _dbContext.SaveChanges();
                 var contador = _dbContext.SaveChanges();
                 guardado = contador > 0;

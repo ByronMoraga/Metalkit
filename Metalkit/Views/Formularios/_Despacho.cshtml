@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Metalkit.Models.Despacho>
+@using Metalkit.Models;
+
+@{
+    ViewBag.Title = "Sub Parametros";
+    Layout = null;
+
+}
+
+    <div class="form-group row">
+        <label class="col-lg-2 col-form-label">Fecha Entrega</label>
+        <div class="col-lg-10">
+            <div class="input-group date col-md-5">
+                <input type="date" class="form-control" value="" id="iFechaEntrega" name="iFechaEntrega">
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-lg-2 col-form-label">Tipo Entrega</label>
+        <div class="col-lg-10">
+            <div class="i-checks"><label> <input type="radio" value="option1" id="iTipoEntrega" name="iTipoEntrega"> <i></i> Retira Cliente </label></div>
+            <div class="i-checks"><label> <input type="radio" value="option2" id="iTipoEntrega" name="iTipoEntrega"> <i></i> Despacha Metalkit </label></div>
+
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-lg-2 col-form-label">Dirección</label>
+        <div class="col-lg-10">
+            <input type="text" placeholder="Dirección" class="form-control" id="iDireccionEnvio" name="iDireccionEnvio">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-lg-2 col-form-label">Región</label>
+        <div class="col-sm-10">
+            @Html.DropDownList("iRegionEnvio", null, "Seleccione", htmlAttributes: new { @class = "form-control  search-select", @onchange = "CargaComunasEnvio()" })
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-lg-2 col-form-label">Comuna</label>
+        <div class="col-sm-10">
+            @Html.DropDownList("iComunaEnvio", null, "Seleccione", htmlAttributes: new { @class = "form-control  search-select" })
+        </div>
+    </div>

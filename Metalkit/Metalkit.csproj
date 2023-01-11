@@ -55,6 +55,10 @@
       <HintPath>..\packages\MvcSiteMapProvider.MVC5.4.6.26\lib\net45\MvcSiteMapProvider.WebActivator.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -115,9 +119,6 @@
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
       <HintPath>..\packages\WebActivatorEx.2.0.1\lib\net40\WebActivatorEx.dll</HintPath>
@@ -196,18 +197,18 @@
     <Compile Include="Controllers\MantProductosController.cs" />
     <Compile Include="Controllers\MantRegionesController.cs" />
     <Compile Include="Controllers\MantUsuariosController.cs" />
-    <Compile Include="Core\Datos\EntregaDAO.cs" />
+    <Compile Include="Core\Datos\DespachoDAO.cs" />
     <Compile Include="Core\Datos\EstadoOTDAO.cs" />
     <Compile Include="Core\Datos\EstadoOT_VersionOTDAO.cs" />
     <Compile Include="Core\Datos\PerfilDAO.cs" />
     <Compile Include="Core\Datos\TipoClienteDAO.cs" />
-    <Compile Include="Core\Datos\TipoEntregaDAO.cs" />
+    <Compile Include="Core\Datos\TipoDespachoDAO.cs" />
     <Compile Include="Core\Datos\TipoParametroDAO.cs" />
     <Compile Include="Core\Datos\VersionOTDAO.cs" />
     <Compile Include="Core\Datos\ClienteDAO.cs" />
-    <Compile Include="Core\Datos\Producto_ParametroDAO.cs" />
+    <Compile Include="Core\Datos\Prod_Param_subparamDAO.cs" />
     <Compile Include="Core\Datos\SubParametroDAO.cs" />
-    <Compile Include="Core\Datos\Parametro_SubParametroDAO.cs" />
+    <Compile Include="Core\Datos\Param_SubparamDAO.cs" />
     <Compile Include="Core\Datos\ParametroDAO.cs" />
     <Compile Include="Core\Datos\ComunaDAO.cs" />
     <Compile Include="Core\Datos\TipoProyectoDAO.cs" />
@@ -216,18 +217,18 @@
     <Compile Include="Core\Datos\CotizacionDAO.cs" />
     <Compile Include="Core\Datos\RegionDAO.cs" />
     <Compile Include="Core\Datos\UsuarioDAO.cs" />
+    <Compile Include="Core\Negocio\DespachoBLL.cs" />
     <Compile Include="Core\Negocio\VersionOT_BLL.cs" />
-    <Compile Include="Core\Negocio\TipoEntregaBLL.cs" />
+    <Compile Include="Core\Negocio\TipoDespachoBLL.cs" />
     <Compile Include="Core\Negocio\TipoClienteBLL.cs" />
     <Compile Include="Core\Negocio\TipoParametroBLL.cs" />
     <Compile Include="Core\Negocio\PerfilBLL.cs" />
     <Compile Include="Core\Negocio\EstadoOT_VersionOTBLL.cs" />
     <Compile Include="Core\Negocio\EstadoOTBLL.cs" />
-    <Compile Include="Core\Negocio\EntregaBLL.cs" />
     <Compile Include="Core\Negocio\ClienteBLL.cs" />
-    <Compile Include="Core\Negocio\Producto_ParametroBLL.cs" />
+    <Compile Include="Core\Negocio\Prod_Param_subparamBLL.cs" />
     <Compile Include="Core\Negocio\SubParametroBLL.cs" />
-    <Compile Include="Core\Negocio\Parametro_SubParametroBLL.cs" />
+    <Compile Include="Core\Negocio\Param_SubparamBLL.cs" />
     <Compile Include="Core\Negocio\ProyectoBLL.cs" />
     <Compile Include="Core\Negocio\TipoProyectoBLL.cs" />
     <Compile Include="Core\Negocio\ParametroBLL.cs" />
@@ -249,9 +250,6 @@
       <DependentUpon>Modelo.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Despacho.cs">
-      <DependentUpon>Modelo.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Entrega.cs">
       <DependentUpon>Modelo.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EstadoOT.cs">
@@ -278,7 +276,7 @@
     <Compile Include="Models\Parametro.cs">
       <DependentUpon>Modelo.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Parametro_SubParametro.cs">
+    <Compile Include="Models\Param_Subparam.cs">
       <DependentUpon>Modelo.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Perfil.cs">
@@ -287,7 +285,7 @@
     <Compile Include="Models\Producto.cs">
       <DependentUpon>Modelo.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Producto_Parametro.cs">
+    <Compile Include="Models\Prod_Param_subparam.cs">
       <DependentUpon>Modelo.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Region.cs">
@@ -302,7 +300,7 @@
     <Compile Include="Models\TipoCliente.cs">
       <DependentUpon>Modelo.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\TipoEntrega.cs">
+    <Compile Include="Models\TipoDespacho.cs">
       <DependentUpon>Modelo.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TipoParametro.cs">
@@ -2482,6 +2480,18 @@
     <Content Include="Scripts\inspinia.js" />
     <Content Include="Scripts\jquery-2.1.1.min.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />
+    <EntityDeploy Include="Models\Modelo.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Modelo.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Modelo.edmx.diagram">
+      <DependentUpon>Modelo.edmx</DependentUpon>
+    </Content>
+    <None Include="Scripts\jquery-3.6.3.intellisense.js" />
+    <Content Include="Scripts\jquery-3.6.3.js" />
+    <Content Include="Scripts\jquery-3.6.3.min.js" />
+    <Content Include="Scripts\jquery-3.6.3.slim.js" />
+    <Content Include="Scripts\jquery-3.6.3.slim.min.js" />
     <Content Include="Scripts\jquery-confirm.js" />
     <Content Include="Scripts\jquery.rut.chileno.js" />
     <Content Include="Scripts\jquery.rut.js" />
@@ -2673,21 +2683,11 @@
     <Content Include="Content\plugins\summernote\summernote.js.map" />
     <Content Include="Content\plugins\summernote\summernote.min.js.map" />
     <Content Include="Content\plugins\toastr\toastr.js.map" />
-    <EntityDeploy Include="Models\Modelo.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Modelo.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\Modelo.edmx.diagram">
-      <DependentUpon>Modelo.edmx</DependentUpon>
-    </Content>
     <None Include="MvcSiteMapSchema.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Scripts\jquery-3.4.1.intellisense.js" />
-    <Content Include="Scripts\jquery-3.4.1.js" />
-    <Content Include="Scripts\jquery-3.4.1.min.js" />
-    <Content Include="Scripts\jquery-3.4.1.slim.js" />
-    <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
+    <Content Include="Scripts\jquery-3.6.3.slim.min.map" />
+    <Content Include="Scripts\jquery-3.6.3.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-confirm.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -2790,6 +2790,7 @@
     <Content Include="Views\Formularios\_GrillaProducto.cshtml" />
     <Content Include="Views\Formularios\_GrillaProductoSeleccionado.cshtml" />
     <Content Include="Views\Formularios\_GrillaParametros.cshtml" />
+    <Content Include="Views\Formularios\_Despacho.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -2800,8 +2801,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="packages.config" />
-    <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

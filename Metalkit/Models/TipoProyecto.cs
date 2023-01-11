@@ -16,7 +16,5 @@ namespace Metalkit.Models
     {
         public int Id { get; set; }
         public string Tipo { get; set; }
-    
-        public virtual Cotizacion Cotizacion { get; set; }
     }
 }

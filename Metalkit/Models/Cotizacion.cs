@@ -14,15 +14,18 @@ namespace Metalkit.Models
     
     public partial class Cotizacion
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Cotizacion()
+        {
+            this.Prod_Param_subparam = new HashSet<Prod_Param_subparam>();
+        }
+    
         public int Id { get; set; }
-        public Nullable<int> IdProductoParametro { get; set; }
-        public Nullable<int> IdEntrega { get; set; }
+        public Nullable<int> IdDespacho { get; set; }
         public Nullable<int> IdTipoProyecto { get; set; }
         public Nullable<int> IdCliente { get; set; }
     
-        public virtual Cliente Cliente { get; set; }
-        public virtual Entrega Entrega { get; set; }
-        public virtual Producto_Parametro Producto_Parametro { get; set; }
-        public virtual TipoProyecto TipoProyecto { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Prod_Param_subparam> Prod_Param_subparam { get; set; }
     }
 }

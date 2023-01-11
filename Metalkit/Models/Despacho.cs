@@ -17,8 +17,8 @@ namespace Metalkit.Models
         public int Id { get; set; }
         public string Direccion { get; set; }
         public Nullable<int> IdComuna { get; set; }
-        public Nullable<int> ValorUF { get; set; }
         public Nullable<int> IdTipoDespacho { get; set; }
         public Nullable<System.DateTime> FechaDespacho { get; set; }
+        public string Valor { get; set; }
     }
 }
